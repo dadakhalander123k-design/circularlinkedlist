@@ -1,0 +1,22 @@
+{
+  "name": "AlgoLearn – Linear Search Learning Guide",
+  "short_name": "AlgoLearn",
+  "description": "Master the Linear Search algorithm with interactive visualizations, step-by-step sequential traversal lessons, time complexity analysis, real-world code implementations, and gamified challenges.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F8FAFC",
+  "theme_color": "#2563EB",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/algolearn-logo.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

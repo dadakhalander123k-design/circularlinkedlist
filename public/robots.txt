@@ -1,0 +1,6 @@
+# Robots.txt for AlgoLearn – Linear Search Learning Guide
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://algolearn-linearsearch.vercel.app/sitemap.xml

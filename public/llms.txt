@@ -1,0 +1,34 @@
+# AlgoLearn – Linear Search Interactive Learning Platform
+
+> An interactive educational platform dedicated to teaching the fundamentals, mechanics, complexity analysis, and implementations of the Linear Search (Sequential Search) algorithm.
+
+## Overview
+- **Name:** AlgoLearn – Linear Search Learning Guide
+- **Focus:** Computer Science, Data Structures & Algorithms (DSA), Sequential Array Traversal
+- **Target Audience:** Computer Science students, software engineering candidates, and developers learning fundamental search techniques.
+- **Access:** Free, web-based, interactive online educational curriculum.
+
+## Public Curriculum Sections
+1. **Overview / Home:** High-level summary of the sequential search mechanism and visual comparisons.
+2. **Theory & Field Notes (12 Modules):**
+   - Module 01: What is Linear Search? (Sequential Search definition & intuition)
+   - Module 02: Step-by-Step Traversal & Element Comparison
+   - Module 03: Detailed Concrete Tracing through Array [12, 45, 78, 23, 56]
+   - Module 04: Formal Pseudocode & Loop Invariants
+   - Module 05: Time Complexity Breakdown (Best Case O(1), Average Case O(n), Worst Case O(n))
+   - Module 06: Space Complexity Analysis (Auxiliary O(1) in-place memory)
+   - Module 07: Multi-Language Code Implementations (C, C++, Java, Python)
+   - Module 08: Algorithmic Advantages & CPU Cache Locality
+   - Module 09: Disadvantages, Limitations & Big-Data Scaling Penalties
+   - Module 10: Practical Selection Rules (When to use Linear Search)
+   - Module 11: Real-World Applications & Edge Cases (Empty lists, duplicates, object lookups)
+   - Module 12: Linear Search vs. Binary Search Head-to-Head Synthesis
+3. **Video Lessons:** Curated walkthrough videos illustrating sequential comparison and search termination.
+4. **Interactive Quest (5 Levels):** Gamified challenges testing search step prediction, comparison counting, and outcome identification.
+5. **Interactive Lab / Sandbox:** Array visualizer allowing custom inputs, target selection, and step-by-step playback.
+6. **Examination Quiz:** 10-question evaluation covering theoretical derivations, syntax, and algorithmic behavior.
+7. **Progress Ledger:** Granular mastery and milestone tracking with local persistence.
+
+## Technical Architecture
+- **Framework:** React 19, TypeScript, Tailwind CSS v4, Vite
+- **Storage:** Local client-side progress tracking without external credential requirements.
