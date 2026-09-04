@@ -6,14 +6,24 @@ import { Level3Gameplay } from './Level3Gameplay';
 import { Level4Gameplay } from './Level4Gameplay';
 import { Level5Gameplay } from './Level5Gameplay';
 
-interface LinearSearchGameplayProps {
+interface CircularLinkedListGameplayProps {
   level: LevelConfig;
   onLevelComplete: (levelId: number, score: number) => void;
   onScoreUpdate: (delta: number) => void;
   onStreakUpdate: (streak: number) => void;
 }
 
-export const LinearSearchGameplay: React.FC<LinearSearchGameplayProps> = ({
+/**
+ * CircularLinkedListGameplay Component
+ * 
+ * Houses and coordinates the 5-level interactive Circular Linked List educational game:
+ * Level 1: Build the Circle
+ * Level 2: Traverse the Circle
+ * Level 3: Insert Into the Circle
+ * Level 4: Delete From the Circle
+ * Level 5: Master the Circle
+ */
+export const CircularLinkedListGameplay: React.FC<CircularLinkedListGameplayProps> = ({
   level,
   onLevelComplete,
   onScoreUpdate,
@@ -23,7 +33,7 @@ export const LinearSearchGameplay: React.FC<LinearSearchGameplayProps> = ({
     case 1:
       return (
         <Level1Gameplay
-          key="ls-lvl-1"
+          key="cll-lvl-1"
           onLevelComplete={onLevelComplete}
           onScoreUpdate={onScoreUpdate}
           onStreakUpdate={onStreakUpdate}
@@ -32,7 +42,7 @@ export const LinearSearchGameplay: React.FC<LinearSearchGameplayProps> = ({
     case 2:
       return (
         <Level2Gameplay
-          key="ls-lvl-2"
+          key="cll-lvl-2"
           onLevelComplete={onLevelComplete}
           onScoreUpdate={onScoreUpdate}
           onStreakUpdate={onStreakUpdate}
@@ -41,7 +51,7 @@ export const LinearSearchGameplay: React.FC<LinearSearchGameplayProps> = ({
     case 3:
       return (
         <Level3Gameplay
-          key="ls-lvl-3"
+          key="cll-lvl-3"
           onLevelComplete={onLevelComplete}
           onScoreUpdate={onScoreUpdate}
           onStreakUpdate={onStreakUpdate}
@@ -50,7 +60,7 @@ export const LinearSearchGameplay: React.FC<LinearSearchGameplayProps> = ({
     case 4:
       return (
         <Level4Gameplay
-          key="ls-lvl-4"
+          key="cll-lvl-4"
           onLevelComplete={onLevelComplete}
           onScoreUpdate={onScoreUpdate}
           onStreakUpdate={onStreakUpdate}
@@ -59,7 +69,7 @@ export const LinearSearchGameplay: React.FC<LinearSearchGameplayProps> = ({
     case 5:
       return (
         <Level5Gameplay
-          key="ls-lvl-5"
+          key="cll-lvl-5"
           onLevelComplete={onLevelComplete}
           onScoreUpdate={onScoreUpdate}
           onStreakUpdate={onStreakUpdate}
@@ -68,7 +78,7 @@ export const LinearSearchGameplay: React.FC<LinearSearchGameplayProps> = ({
     default:
       return (
         <Level1Gameplay
-          key={`ls-lvl-${level.id}`}
+          key={`cll-lvl-${level.id}`}
           onLevelComplete={onLevelComplete}
           onScoreUpdate={onScoreUpdate}
           onStreakUpdate={onStreakUpdate}
@@ -76,3 +86,6 @@ export const LinearSearchGameplay: React.FC<LinearSearchGameplayProps> = ({
       );
   }
 };
+
+// Backwards-compatible export alias for any legacy references
+export const LinearSearchGameplay = CircularLinkedListGameplay;

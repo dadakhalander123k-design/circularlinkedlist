@@ -21,10 +21,10 @@ export const LevelProgressBar: React.FC<LevelProgressBarProps> = ({
   const pState = progressManager.getState();
 
   const steps = [
-    { id: 1, code: '01', name: 'Find Number' },
-    { id: 2, code: '02', name: 'Find Quickly' },
-    { id: 3, code: '03', name: 'Is It There?' },
-    { id: 4, code: '04', name: 'Comparisons' },
+    { id: 1, code: '01', name: 'Build Circle' },
+    { id: 2, code: '02', name: 'Traverse' },
+    { id: 3, code: '03', name: 'Insert' },
+    { id: 4, code: '04', name: 'Delete' },
     { id: 5, code: '05', name: 'Master' },
   ];
 

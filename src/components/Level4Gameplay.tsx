@@ -1,16 +1,8 @@
 import React, { useState } from 'react';
-import { ArrowRight, HelpCircle, CheckCircle2, XCircle, Lightbulb, Sparkles } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Trash2, Lightbulb, Sparkles, AlertCircle } from 'lucide-react';
 import { soundManager } from '../utils/audio';
 import { GuidedSolvePanel } from './GuidedSolvePanel';
-
-interface Level4Challenge {
-  type: 'general' | 'best_case' | 'worst_case_last' | 'worst_case_absent';
-  array: number[];
-  target: number;
-  question: string;
-  options: { id: string; label: string; isCorrect: boolean }[];
-  explanation: string;
-}
+import { CLLCanvas, VisualNodeData } from './cll/CLLCanvas';
 
 interface Level4GameplayProps {
   onLevelComplete: (levelId: number, score: number) => void;
@@ -23,192 +15,174 @@ export const Level4Gameplay: React.FC<Level4GameplayProps> = ({
   onScoreUpdate,
   onStreakUpdate,
 }) => {
-  const challenges: Level4Challenge[] = [
-    {
-      type: 'general',
-      array: [15, 27, 39, 44, 62, 81],
-      target: 44,
-      question: 'How many comparisons were required to find target 44?',
-      options: [
-        { id: 'a', label: '2 Comparisons', isCorrect: false },
-        { id: 'b', label: '3 Comparisons', isCorrect: false },
-        { id: 'c', label: '4 Comparisons', isCorrect: true },
-        { id: 'd', label: '6 Comparisons', isCorrect: false },
-      ],
-      explanation: '4 comparisons were required because 44 is at position 4 (index 3).',
-    },
-    {
-      type: 'best_case',
-      array: [50, 21, 73, 14, 88],
-      target: 50,
-      question: 'Why is this search considered the Best Case in Linear Search?',
-      options: [
-        { id: 'a', label: 'Target is the very 1st element (1 comparison — O(1))', isCorrect: true },
-        { id: 'b', label: 'The array elements are in sorted order', isCorrect: false },
-        { id: 'c', label: 'Linear search jumped directly without checking index 0', isCorrect: false },
-        { id: 'd', label: 'The array has an odd number of items', isCorrect: false },
-      ],
-      explanation: 'This is the best case because the target is at index 0, stopping after exactly 1 comparison (O(1)).',
-    },
-    {
-      type: 'worst_case_last',
-      array: [10, 20, 30, 40, 50],
-      target: 50,
-      question: 'When the target is the last element in an array of size n, how many comparisons are needed?',
-      options: [
-        { id: 'a', label: 'n comparisons (Worst Case — O(n))', isCorrect: true },
-        { id: 'b', label: '1 comparison', isCorrect: false },
-        { id: 'c', label: 'n / 2 comparisons', isCorrect: false },
-        { id: 'd', label: '0 comparisons', isCorrect: false },
-      ],
-      explanation: 'When the target is the last element, Linear Search must compare every single element in the array: O(n).',
-    },
-    {
-      type: 'worst_case_absent',
-      array: [10, 20, 30, 40, 50],
-      target: 99,
-      question: 'Why does an unsuccessful search also take the worst-case number of comparisons?',
-      options: [
-        { id: 'a', label: 'It must check all n elements to verify the target is absent', isCorrect: true },
-        { id: 'b', label: 'It automatically loops back to the start twice', isCorrect: false },
-        { id: 'c', label: 'It divides the array into two halves', isCorrect: false },
-        { id: 'd', label: 'Unsuccessful searches take only 1 comparison', isCorrect: false },
-      ],
-      explanation: 'An unsuccessful search must check all n elements before concluding the item is not present (O(n)).',
-    },
-  ];
+  // 3 progressive stages: 'partA_beginning' -> 'partB_end' -> 'partC_position' -> 'completed'
+  const [stage, setStage] = useState<'partA_beginning' | 'partB_end' | 'partC_position' | 'completed'>('partA_beginning');
 
-  const [challengeIndex, setChallengeIndex] = useState<number>(0);
-  const [pointer, setPointer] = useState<number>(0);
-  const [comparisons, setComparisons] = useState<number>(0);
-  const [status, setStatus] = useState<'searching' | 'question_active' | 'challenge_completed'>('searching');
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [feedback, setFeedback] = useState<string>('Search through the array element by element.');
+  // Sub-step within each stage (1: identify/bypass, 2: fade/update head, 3: completed)
+  const [subStep, setSubStep] = useState<number>(1);
+  const [feedback, setFeedback] = useState<string>(
+    'Part A: Delete beginning node [10]. Tail [30] must point to new HEAD [20], and HEAD must shift to [20].'
+  );
+  const [mistakeText, setMistakeText] = useState<string | null>(null);
+
+  // Guided Solve state
   const [isGuidedSolveActive, setIsGuidedSolveActive] = useState<boolean>(false);
 
-  const currentChallenge = challenges[challengeIndex];
-  const isSearching = status === 'searching';
-  const isQuestionActive = status === 'question_active' || status === 'challenge_completed';
-  const isChallengeDone = status === 'challenge_completed';
-  const isAllChallengesComplete = challengeIndex >= challenges.length - 1 && isChallengeDone;
+  // -------------------------------------------------------------
+  // PART A: Delete 10 from [10, 20, 30]
+  // -------------------------------------------------------------
+  const [partANodes, setPartANodes] = useState<VisualNodeData[]>([
+    { id: 'da-10', value: 10, nextId: 'da-20', isHead: true, customBadge: 'TARGET TO DELETE' },
+    { id: 'da-20', value: 20, nextId: 'da-30', customBadge: 'NEXT HEAD' },
+    { id: 'da-30', value: 30, nextId: 'da-10', customBadge: 'TAIL' },
+  ]);
+  const [partAHeadId, setPartAHeadId] = useState<string>('da-10');
 
-  const handleCheck = (clickedIndex?: number) => {
-    if (status !== 'searching') return;
+  // -------------------------------------------------------------
+  // PART B: Delete 30 from [10, 20, 30]
+  // -------------------------------------------------------------
+  const [partBNodes, setPartBNodes] = useState<VisualNodeData[]>([
+    { id: 'db-10', value: 10, nextId: 'db-20', isHead: true },
+    { id: 'db-20', value: 20, nextId: 'db-30', customBadge: 'PREV NODE' },
+    { id: 'db-30', value: 30, nextId: 'db-10', customBadge: 'TARGET TAIL' },
+  ]);
 
-    if (clickedIndex !== undefined && clickedIndex !== pointer) {
-      soundManager.playError();
-      setFeedback('Check elements in sequential order.');
-      return;
-    }
+  // -------------------------------------------------------------
+  // PART C: Delete 30 from [10, 20, 30, 40]
+  // -------------------------------------------------------------
+  const [partCNodes, setPartCNodes] = useState<VisualNodeData[]>([
+    { id: 'dc-10', value: 10, nextId: 'dc-20', isHead: true },
+    { id: 'dc-20', value: 20, nextId: 'dc-30', isPrev: true, customBadge: 'PREVIOUS' },
+    { id: 'dc-30', value: 30, nextId: 'dc-40', isTarget: true, customBadge: 'TARGET TO BYPASS' },
+    { id: 'dc-40', value: 40, nextId: 'dc-10', customBadge: 'NEXT NODE' },
+  ]);
 
-    const currentVal = currentChallenge.array[pointer];
-    const nextComparisons = comparisons + 1;
-    setComparisons(nextComparisons);
-
-    if (currentVal === currentChallenge.target) {
-      soundManager.playCalcSuccess();
-      setStatus('question_active');
-      setFeedback('Search finished! Now answer the analysis question below.');
-    } else if (pointer >= currentChallenge.array.length - 1) {
-      soundManager.playClick();
-      setStatus('question_active');
-      setFeedback('Reached the end of the array. Now answer the analysis question below.');
-    } else {
-      soundManager.playClick();
-      setPointer((prev) => prev + 1);
-      setFeedback(`Comparison ${nextComparisons}: ${currentVal} ≠ ${currentChallenge.target}.`);
-    }
+  // Handle Part A (Delete Beginning)
+  const handlePartAStep = (action: 'rewire_tail_and_head') => {
+    setMistakeText(null);
+    soundManager.playCalcSuccess();
+    // 1. Shift HEAD to 20, point 30 to 20, fade out 10
+    setPartAHeadId('da-20');
+    setPartANodes((prev) =>
+      prev.map((n) => {
+        if (n.id === 'da-10') return { ...n, isFadingOut: true, isHead: false };
+        if (n.id === 'da-20') return { ...n, isHead: true, customBadge: 'NEW HEAD' };
+        if (n.id === 'da-30') return { ...n, nextId: 'da-20' };
+        return n;
+      })
+    );
+    setSubStep(2);
+    setFeedback('✓ Part A Complete! Node [10] is bypassed and detached. Tail [30] loops directly to new HEAD [20].');
+    onScoreUpdate(20);
+    onStreakUpdate(1);
   };
 
-  const handleOptionSelect = (optionId: string) => {
-    setSelectedOption(optionId);
-    const opt = currentChallenge.options.find((o) => o.id === optionId);
-
-    if (opt?.isCorrect) {
-      soundManager.playCalcSuccess();
-      setStatus('challenge_completed');
-      setFeedback(`Correct! ${currentChallenge.explanation}`);
-      onScoreUpdate(50);
-      onStreakUpdate(challengeIndex + 1);
-    } else {
-      soundManager.playError();
-      setFeedback('Not quite. Review the comparison count and try again!');
-    }
+  // Handle Part B (Delete Ending)
+  const handlePartBStep = (action: 'rewire_prev_to_head') => {
+    setMistakeText(null);
+    soundManager.playCalcSuccess();
+    // Point 20 to HEAD (10) and fade out 30
+    setPartBNodes((prev) =>
+      prev.map((n) => {
+        if (n.id === 'db-20') return { ...n, nextId: 'db-10', customBadge: 'NEW TAIL' };
+        if (n.id === 'db-30') return { ...n, isFadingOut: true };
+        return n;
+      })
+    );
+    setSubStep(2);
+    setFeedback('✓ Part B Complete! Node [20] now points back to HEAD [10]. Tail [30] detached safely.');
+    onScoreUpdate(20);
+    onStreakUpdate(2);
   };
 
-  const handleNextChallenge = () => {
-    if (challengeIndex < challenges.length - 1) {
-      soundManager.playSelect();
-      const nextIdx = challengeIndex + 1;
-      setChallengeIndex(nextIdx);
-      setPointer(0);
-      setComparisons(0);
-      setStatus('searching');
-      setSelectedOption(null);
-      setFeedback(`Challenge ${nextIdx + 1}: Search for target ${challenges[nextIdx].target}.`);
-    } else {
+  // Handle Part C (Delete Position / Middle Bypass)
+  const handlePartCStep = (action: 'bypass_target') => {
+    setMistakeText(null);
+    soundManager.playCalcSuccess();
+    // Bypass 30: 20.next = 40
+    setPartCNodes((prev) =>
+      prev.map((n) => {
+        if (n.id === 'dc-20') return { ...n, nextId: 'dc-40' };
+        if (n.id === 'dc-30') return { ...n, isFadingOut: true };
+        return n;
+      })
+    );
+    setSubStep(2);
+    setFeedback('✓ Part C Complete! Bypassed Node [30]: 20 → 40. The surrounding nodes are cleanly reconnected.');
+    onScoreUpdate(25);
+    onStreakUpdate(3);
+    setTimeout(() => {
+      setStage('completed');
       soundManager.playLevelVictory();
+      onLevelComplete(4, 100);
+    }, 1500);
+  };
+
+  // Guided solve explanation
+  const getGuidedSolveExplanation = () => {
+    if (stage === 'partA_beginning') {
+      if (subStep === 1)
+        return 'Delete Beginning: 1. Identify HEAD [10] and the next node [20]. 2. Update tail [30] to point to [20]. 3. Shift HEAD to [20]. Bypassed node [10] is removed.';
+      return 'Part A Complete! Click "Next Challenge" to proceed to ending deletion.';
+    }
+    if (stage === 'partB_end') {
+      if (subStep === 1)
+        return 'Delete Ending: 1. Find the tail [30] and its previous node [20]. 2. Point [20] directly to HEAD [10]. 3. Remove old tail [30].';
+      return 'Part B Complete! Click "Next Challenge" to proceed to middle node deletion.';
+    }
+    if (stage === 'partC_position') {
+      if (subStep === 1)
+        return 'Delete Any Position: 1. Find previous node [20]. 2. Identify target [30] and next node [40]. 3. Reconnect prev.next = target.next (20 → 40). Target [30] is cleanly bypassed!';
+      return 'Deletion mastery achieved across beginning, ending, and middle!';
+    }
+    return 'Level 4 complete!';
+  };
+
+  const handleGuidedNextStep = () => {
+    if (stage === 'partA_beginning') {
+      if (subStep === 1) handlePartAStep('rewire_tail_and_head');
+      else {
+        setStage('partB_end');
+        setSubStep(1);
+        setFeedback('Part B: Delete ending node [30]. Reconnect previous node [20] to HEAD [10].');
+      }
+    } else if (stage === 'partB_end') {
+      if (subStep === 1) handlePartBStep('rewire_prev_to_head');
+      else {
+        setStage('partC_position');
+        setSubStep(1);
+        setFeedback('Part C: Delete middle node [30]. Bypass it by connecting [20] → [40].');
+      }
+    } else if (stage === 'partC_position') {
+      if (subStep === 1) handlePartCStep('bypass_target');
+      else {
+        onLevelComplete(4, 100);
+      }
+    } else if (stage === 'completed') {
       onLevelComplete(4, 100);
     }
   };
 
-  const getGuidedSolveExplanation = () => {
-    if (status === 'challenge_completed') {
-      if (challengeIndex < challenges.length - 1) {
-        return `Challenge ${challengeIndex + 1} completed! Click Next Step to proceed to Challenge ${challengeIndex + 2}.`;
-      }
-      return `All 4 complexity challenges solved! Level 4 complete.`;
-    }
-    if (status === 'question_active') {
-      const correct = currentChallenge.options.find((o) => o.isCorrect);
-      return `Analysis: "${currentChallenge.question}" — Correct Answer: "${correct?.label}". ${currentChallenge.explanation}`;
-    }
-    const val = currentChallenge.array[pointer];
-    if (val === currentChallenge.target) {
-      return `Index ${pointer} contains target ${currentChallenge.target}! Target reached in ${pointer + 1} comparisons.`;
-    }
-    if (pointer >= currentChallenge.array.length - 1) {
-      return `Checking final index ${pointer} (${val} ≠ ${currentChallenge.target}). Array scan complete.`;
-    }
-    return `Checking index ${pointer} (${val} ≠ ${currentChallenge.target}). Linear Search advances to index ${pointer + 1}.`;
-  };
-
-  const handleGuidedNextStep = () => {
-    if (status === 'searching') {
-      handleCheck();
-    } else if (status === 'question_active') {
-      const correct = currentChallenge.options.find((o) => o.isCorrect);
-      if (correct) handleOptionSelect(correct.id);
-    } else {
-      handleNextChallenge();
-    }
-  };
-
   return (
-    <div className="w-full max-w-4xl mx-auto flex flex-col gap-6 animate-page-enter">
+    <div className="w-full max-w-4xl mx-auto flex flex-col gap-6 animate-page-enter font-sans">
       <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/20 rounded-2xl p-5 sm:p-6 shadow-xs">
+        {/* Mission Header */}
         <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-blue-500/15">
           <div className="flex items-center gap-3">
             <span className="px-3 py-1 bg-[#EFF6FF] dark:bg-blue-950/60 border border-[#DBEAFE] dark:border-blue-500/30 text-[#2563EB] dark:text-[#3B82F6] rounded-lg text-xs font-bold font-mono">
-              CHALLENGE {challengeIndex + 1} OF {challenges.length}
+              {stage === 'partA_beginning' ? 'PART A: DELETE HEAD' : stage === 'partB_end' ? 'PART B: DELETE TAIL' : 'PART C: BYPASS NODE'}
             </span>
             <span className="text-sm sm:text-base font-bold text-slate-800 dark:text-slate-100">
-              Target:{' '}
-              <span className="font-mono text-[#2563EB] dark:text-[#3B82F6] text-lg font-extrabold px-2 py-0.5 bg-[#EFF6FF] dark:bg-blue-900/40 rounded-md border border-[#DBEAFE] dark:border-blue-500/30">
-                {currentChallenge.target}
-              </span>
+              {stage === 'partA_beginning'
+                ? 'Delete Beginning Node [10]'
+                : stage === 'partB_end'
+                ? 'Delete Ending Node [30]'
+                : 'Bypass & Delete Node [30] (Middle Position)'}
             </span>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 font-mono text-xs">
-              <span className="font-semibold text-slate-600 dark:text-slate-400">COMPARISONS:</span>
-              <span className="px-3 py-1 bg-[#2563EB] text-white rounded-lg font-bold text-sm shadow-xs animate-scale">
-                {comparisons}
-              </span>
-            </div>
-
-            {!isGuidedSolveActive && !isAllChallengesComplete && (
+            {!isGuidedSolveActive && stage !== 'completed' && (
               <button
                 id="btn-lvl4-start-guided-solve"
                 type="button"
@@ -216,7 +190,7 @@ export const Level4Gameplay: React.FC<Level4GameplayProps> = ({
                   soundManager.playClick();
                   setIsGuidedSolveActive(true);
                 }}
-                className="btn-modern-secondary px-3 py-1 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs select-none"
+                className="btn-modern-secondary px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs select-none"
                 title="Start Guided Solve step-by-step assistant"
               >
                 <Sparkles className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#3B82F6]" />
@@ -231,22 +205,23 @@ export const Level4Gameplay: React.FC<Level4GameplayProps> = ({
           <div className="pt-4">
             <GuidedSolvePanel
               stepNumber={
-                status === 'challenge_completed'
-                  ? comparisons + 2
-                  : status === 'question_active'
-                  ? comparisons + 1
-                  : pointer + 1
+                stage === 'partA_beginning'
+                  ? subStep
+                  : stage === 'partB_end'
+                  ? 2 + subStep
+                  : 4 + subStep
               }
+              totalSteps={6}
               explanation={getGuidedSolveExplanation()}
-              isComplete={isAllChallengesComplete}
+              isComplete={stage === 'completed'}
               nextButtonLabel={
-                status === 'searching'
-                  ? `Compare [${pointer}] with ${currentChallenge.target}`
-                  : status === 'question_active'
-                  ? 'Answer Analysis Question'
-                  : challengeIndex < challenges.length - 1
-                  ? `Proceed to Challenge ${challengeIndex + 2}`
-                  : 'Complete Level 4'
+                stage === 'completed'
+                  ? 'Complete Level 4'
+                  : subStep === 2 && stage === 'partA_beginning'
+                  ? 'Proceed to Part B'
+                  : subStep === 2 && stage === 'partB_end'
+                  ? 'Proceed to Part C'
+                  : 'Bypass & Reconnect'
               }
               onNextStep={handleGuidedNextStep}
               onStop={() => setIsGuidedSolveActive(false)}
@@ -254,131 +229,145 @@ export const Level4Gameplay: React.FC<Level4GameplayProps> = ({
           </div>
         )}
 
-        {/* Array Visual */}
+        {/* Canvas Display */}
         <div className="pt-6 pb-2">
-          <div className="text-xs font-bold uppercase font-mono tracking-wider text-slate-500 dark:text-slate-400 mb-3 flex items-center justify-between">
-            <span>Array Scan</span>
-            <span className="text-[#2563EB] dark:text-[#3B82F6]">Pointer: Index {pointer}</span>
+          <div className="text-xs font-bold uppercase font-mono tracking-wider text-slate-500 dark:text-slate-400 mb-2 flex items-center justify-between">
+            <span>Pointer Reconnection & Bypassing</span>
+            <span className="text-rose-600 dark:text-rose-400 font-mono font-bold">
+              Rule: prev.next = target.next
+            </span>
           </div>
 
-          <div className="grid grid-cols-5 sm:grid-cols-6 gap-2 sm:gap-3">
-            {currentChallenge.array.map((val, idx) => {
-              const isChecked = idx < pointer || (idx === pointer && !isSearching);
-              const isCurrent = idx === pointer && isSearching;
-              const isMatch = val === currentChallenge.target && !isSearching;
-              const isMismatch = isChecked && !isMatch;
-
-              return (
-                <button
-                  key={idx}
-                  id={`lvl4-array-cell-${idx}`}
-                  onClick={() => handleCheck(idx)}
-                  disabled={!isSearching || idx < pointer}
-                  className={`relative flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all duration-200 select-none ${isMatch
-                      ? 'bg-emerald-50 dark:bg-emerald-950/50 border-emerald-500 text-emerald-700 dark:text-emerald-300 shadow-md scale-105 ring-4 ring-emerald-500/20'
-                      : isMismatch
-                        ? 'bg-slate-50 dark:bg-[#0F172A] border-slate-300 dark:border-blue-500/20 text-slate-400 dark:text-slate-500 opacity-80'
-                        : isCurrent
-                          ? 'bg-[#EFF6FF]/70 dark:bg-blue-950/40 border-[#2563EB] dark:border-[#3B82F6] text-[#2563EB] dark:text-white shadow-md scale-105 ring-4 ring-blue-500/20 cursor-pointer'
-                          : 'bg-white dark:bg-[#111827] border-slate-200 dark:border-blue-500/20 text-slate-700 dark:text-slate-300 opacity-60 cursor-not-allowed'
-                    }`}
-                >
-                  <span className="text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 mb-1">
-                    [{idx}]
-                  </span>
-                  <span className="text-lg sm:text-xl font-bold font-mono">{val}</span>
-                  <div className="mt-1 text-[9px] font-mono font-bold">
-                    {isMatch ? (
-                      <span className="text-emerald-600 dark:text-emerald-400">FOUND</span>
-                    ) : isMismatch ? (
-                      <span className="text-slate-400">≠ {currentChallenge.target}</span>
-                    ) : isCurrent ? (
-                      <span className="text-[#2563EB] dark:text-[#3B82F6] animate-pulse">CHECK</span>
-                    ) : (
-                      <span className="text-slate-400 dark:text-slate-600">WAIT</span>
-                    )}
-                  </div>
-                </button>
-              );
-            })}
+          <div className="bg-slate-50/60 dark:bg-[#0B1120]/60 rounded-2xl border border-slate-200/80 dark:border-blue-500/20 p-2 sm:p-4 my-3">
+            {stage === 'partA_beginning' && (
+              <CLLCanvas nodes={partANodes} headId={partAHeadId} />
+            )}
+            {stage === 'partB_end' && (
+              <CLLCanvas nodes={partBNodes} headId="db-10" />
+            )}
+            {stage === 'partC_position' && (
+              <CLLCanvas nodes={partCNodes} headId="dc-10" />
+            )}
           </div>
         </div>
 
-        {/* Analysis Question Options */}
-        {isQuestionActive && (
-          <div className="mt-6 p-4 sm:p-5 bg-[#EFF6FF]/70 dark:bg-blue-950/40 border border-[#DBEAFE] dark:border-blue-500/30 rounded-xl space-y-4 animate-fadeIn">
-            <div className="flex items-center gap-2 text-xs font-bold text-[#2563EB] dark:text-[#3B82F6] uppercase font-mono tracking-wider">
-              <HelpCircle className="w-4 h-4 text-[#2563EB] dark:text-[#3B82F6]" />
-              <span>Algorithm Analysis Question</span>
-            </div>
-            <h4 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">
-              {currentChallenge.question}
-            </h4>
+        {/* Action Controls for Part A */}
+        {stage === 'partA_beginning' && (
+          <div className="p-5 rounded-2xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-500/30 space-y-4 animate-scale-enter">
+            <p className="text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300">
+              {feedback}
+            </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              {currentChallenge.options.map((opt) => {
-                const isSelected = selectedOption === opt.id;
-                const showSuccess = isSelected && opt.isCorrect;
-                const showError = isSelected && !opt.isCorrect;
-
-                return (
-                  <button
-                    key={opt.id}
-                    id={`lvl4-opt-${opt.id}`}
-                    onClick={() => handleOptionSelect(opt.id)}
-                    disabled={isChallengeDone}
-                    className={`text-left p-3.5 rounded-xl border text-xs sm:text-sm font-semibold transition-all flex items-center justify-between cursor-pointer ${showSuccess
-                        ? 'bg-emerald-50 dark:bg-emerald-950/60 border-emerald-500 text-emerald-800 dark:text-emerald-200 shadow-xs'
-                        : showError
-                          ? 'bg-rose-50 dark:bg-rose-950/60 border-rose-400 text-rose-800 dark:text-rose-200'
-                          : isChallengeDone && opt.isCorrect
-                            ? 'bg-emerald-50 dark:bg-emerald-950/60 border-emerald-500 text-emerald-800 dark:text-emerald-200'
-                            : 'bg-white dark:bg-[#111827] border-slate-200 dark:border-blue-500/20 text-slate-800 dark:text-slate-200 hover:border-[#2563EB] dark:hover:border-[#3B82F6]'
-                      }`}
-                  >
-                    <span>{opt.label}</span>
-                    {showSuccess && (
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                    )}
-                    {showError && <XCircle className="w-4 h-4 text-rose-500 shrink-0" />}
-                  </button>
-                );
-              })}
+            <div className="flex flex-wrap gap-2.5">
+              {subStep === 1 && (
+                <button
+                  onClick={() => handlePartAStep('rewire_tail_and_head')}
+                  className="btn-modern-primary px-4 py-2 text-xs font-bold flex items-center gap-2 cursor-pointer shadow-sm"
+                >
+                  <Trash2 className="w-3.5 h-3.5 text-rose-300" />
+                  <span>Update Tail [30] → [20] & Set HEAD → [20]</span>
+                </button>
+              )}
+              {subStep === 2 && (
+                <button
+                  onClick={() => {
+                    soundManager.playSelect();
+                    setStage('partB_end');
+                    setSubStep(1);
+                    setFeedback('Part B: Delete ending node [30]. Reconnect previous node [20] to HEAD [10].');
+                  }}
+                  className="btn-modern-primary px-5 py-2.5 text-xs font-bold flex items-center gap-2 cursor-pointer shadow-sm"
+                >
+                  <span>Next: Part B (Delete at End)</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
           </div>
         )}
 
-        {/* Footer Controls */}
-        <div className="mt-6 pt-4 border-t border-slate-100 dark:border-blue-500/15 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300 flex items-center gap-2">
-            <Lightbulb className="w-4 h-4 text-amber-500 shrink-0" />
-            <span>{feedback}</span>
+        {/* Action Controls for Part B */}
+        {stage === 'partB_end' && (
+          <div className="p-5 rounded-2xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-500/30 space-y-4 animate-scale-enter">
+            <p className="text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300">
+              {feedback}
+            </p>
+
+            <div className="flex flex-wrap gap-2.5">
+              {subStep === 1 && (
+                <button
+                  onClick={() => handlePartBStep('rewire_prev_to_head')}
+                  className="btn-modern-primary px-4 py-2 text-xs font-bold flex items-center gap-2 cursor-pointer shadow-sm"
+                >
+                  <Trash2 className="w-3.5 h-3.5 text-rose-300" />
+                  <span>Reconnect [20].next → HEAD [10] & Detach [30]</span>
+                </button>
+              )}
+              {subStep === 2 && (
+                <button
+                  onClick={() => {
+                    soundManager.playSelect();
+                    setStage('partC_position');
+                    setSubStep(1);
+                    setFeedback('Part C: Delete middle node [30]. Bypass it by connecting [20] → [40].');
+                  }}
+                  className="btn-modern-primary px-5 py-2.5 text-xs font-bold flex items-center gap-2 cursor-pointer shadow-sm"
+                >
+                  <span>Next: Part C (Delete Position)</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
           </div>
+        )}
 
-          {isSearching && (
-            <button
-              id="btn-lvl4-check-next"
-              onClick={() => handleCheck()}
-              className="btn-modern-primary px-5 py-2.5 text-xs font-semibold flex items-center gap-2 cursor-pointer shadow-sm w-full sm:w-auto justify-center"
-            >
-              <span>
-                Compare [{pointer}] with {currentChallenge.target}
-              </span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          )}
+        {/* Action Controls for Part C */}
+        {stage === 'partC_position' && (
+          <div className="p-5 rounded-2xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-500/30 space-y-4 animate-scale-enter">
+            <p className="text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300">
+              {feedback}
+            </p>
 
-          {isChallengeDone && (
+            <div className="flex flex-wrap gap-2.5">
+              {subStep === 1 && (
+                <button
+                  onClick={() => handlePartCStep('bypass_target')}
+                  className="btn-modern-primary px-4 py-2 text-xs font-bold flex items-center gap-2 cursor-pointer shadow-sm"
+                >
+                  <Trash2 className="w-3.5 h-3.5 text-rose-300" />
+                  <span>Bypass Node [30]: Point [20].next → [40]</span>
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Mistake feedback banner */}
+        {mistakeText && (
+          <div className="mt-3 p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-500/30 text-xs text-rose-700 dark:text-rose-300 font-medium flex items-center gap-2 animate-shake">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            <span>{mistakeText}</span>
+          </div>
+        )}
+
+        {/* Level Complete Final Card */}
+        {stage === 'completed' && (
+          <div className="p-6 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-500/40 text-center space-y-3 animate-page-enter">
+            <CheckCircle2 className="w-10 h-10 text-emerald-600 dark:text-emerald-400 mx-auto" />
+            <h3 className="text-xl font-bold text-emerald-900 dark:text-emerald-100">
+              Level Complete!
+            </h3>
+            <p className="text-xs sm:text-sm text-emerald-800 dark:text-emerald-300 max-w-md mx-auto">
+              Excellent work. You successfully deleted nodes from the beginning, end, and middle by repairing the surrounding connections.
+            </p>
             <button
-              id="btn-lvl4-next-challenge"
-              onClick={handleNextChallenge}
-              className="btn-modern-primary px-6 py-2.5 text-xs font-semibold flex items-center gap-2 cursor-pointer shadow-md w-full sm:w-auto justify-center"
+              onClick={() => onLevelComplete(4, 100)}
+              className="btn-modern-primary px-6 py-2.5 text-xs sm:text-sm font-bold shadow-md cursor-pointer"
             >
-              <span>{isAllChallengesComplete ? 'Complete Level 4' : 'Next Challenge'}</span>
-              <ArrowRight className="w-4 h-4" />
+              Next Level
             </button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

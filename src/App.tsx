@@ -476,9 +476,9 @@ export default function App() {
                           </h1>
                         </div>
 
-                        {/* Linear Search 5-Level Progressive Learning Gameplay */}
+                        {/* Circular Linked List 5-Level Progressive Learning Gameplay */}
                         <LinearSearchGameplay
-                          key={`linear-search-level-${currentLevel.id}`}
+                          key={`cll-game-level-${currentLevel.id}`}
                           level={currentLevel}
                           onLevelComplete={(lvlId, _lvlScore) => {
                             progressManager.markLevelCompleted(lvlId, 100, true);
