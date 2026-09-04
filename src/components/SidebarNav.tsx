@@ -4,7 +4,6 @@ import {
   BookOpen,
   Sparkles,
   Gamepad2,
-  FlaskConical,
   HelpCircle,
   TrendingUp,
   X,
@@ -70,13 +69,6 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
       icon: Gamepad2,
       badge: `${stats.game.completed} / 5`,
       badgeClass: 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-100 dark:border-emerald-500/20',
-    },
-    {
-      id: 'LAB' as MainViewTab,
-      label: 'Lab',
-      icon: FlaskConical,
-      badge: 'Interactive',
-      badgeClass: 'bg-[#EFF6FF] dark:bg-blue-950/50 text-[#2563EB] dark:text-[#3B82F6] border border-[#DBEAFE] dark:border-blue-500/20',
     },
     {
       id: 'QUIZ' as MainViewTab,

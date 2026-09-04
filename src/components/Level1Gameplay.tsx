@@ -172,32 +172,56 @@ export const Level1Gameplay: React.FC<Level1GameplayProps> = ({
 
   // Guided Solve logic
   const getGuidedSolveExplanation = () => {
-    switch (guidedStep) {
-      case 1:
-        return 'Identify HEAD: Node [10] is located at memory address 1000. HEAD stores address 1000.';
-      case 2:
-        return 'Connect Node 1000: Node 1000 stores the address of the next node (1002) in its NEXT field: 1000 → 1002.';
-      case 3:
-        return 'Connect Node 1002: Set Node 1002\'s NEXT field to address 1004: 1002 → 1004.';
-      case 4:
-        return 'Reach the Tail: Set Node 1004\'s NEXT field to address 1006: 1004 → 1006.';
-      case 5:
-        return 'Complete the Circle: The last node at address 1006 must store the address of HEAD (1000) in its NEXT field. TAIL.NEXT = 1000.';
-      default:
-        return 'Level 1 complete! You successfully built the circular linked list using memory addresses.';
+    if (phase === 'completed') {
+      return 'Level 1 complete! You successfully built the circular linked list using memory addresses.';
     }
+    if (nextAddresses[1000] !== 1002) {
+      return 'Connect Node 1000: Node 1000 stores the address of the next node (1002) in its NEXT field: 1000 → 1002.';
+    }
+    if (nextAddresses[1002] !== 1004) {
+      return 'Connect Node 1002: Set Node 1002\'s NEXT field to address 1004: 1002 → 1004.';
+    }
+    if (nextAddresses[1004] !== 1006) {
+      return 'Reach the Tail: Set Node 1004\'s NEXT field to address 1006: 1004 → 1006.';
+    }
+    if (nextAddresses[1006] !== 1000) {
+      return 'Complete the Circle: The last node at address 1006 must store the address of HEAD (1000) in its NEXT field. TAIL.NEXT = 1000.';
+    }
+    return 'Level 1 complete! You successfully built the circular linked list using memory addresses.';
+  };
+
+  const getGuidedNextButtonLabel = () => {
+    if (phase === 'completed') return 'Complete Level 1';
+    if (nextAddresses[1000] !== 1002) return 'Connect 1000 → 1002';
+    if (nextAddresses[1002] !== 1004) return 'Connect 1002 → 1004';
+    if (nextAddresses[1004] !== 1006) return 'Connect 1004 → 1006';
+    if (nextAddresses[1006] !== 1000) return 'Connect 1006 → 1000';
+    return 'Complete Level 1';
+  };
+
+  const getGuidedStepNumber = () => {
+    if (phase === 'completed') return 5;
+    if (nextAddresses[1000] !== 1002) return 1;
+    if (nextAddresses[1002] !== 1004) return 2;
+    if (nextAddresses[1004] !== 1006) return 3;
+    if (nextAddresses[1006] !== 1000) return 4;
+    return 5;
   };
 
   const handleGuidedNextStep = () => {
-    if (guidedStep === 1 || guidedStep === 2) {
+    if (phase === 'completed') {
+      onLevelComplete(1, 100);
+      return;
+    }
+    if (nextAddresses[1000] !== 1002) {
       applyConnection(1000, 1002);
-    } else if (guidedStep === 3) {
+    } else if (nextAddresses[1002] !== 1004) {
       applyConnection(1002, 1004);
-    } else if (guidedStep === 4) {
+    } else if (nextAddresses[1004] !== 1006) {
       applyConnection(1004, 1006);
-    } else if (guidedStep === 5) {
+    } else if (nextAddresses[1006] !== 1000) {
       applyConnection(1006, 1000);
-    } else if (phase === 'completed') {
+    } else {
       onLevelComplete(1, 100);
     }
   };
@@ -239,17 +263,11 @@ export const Level1Gameplay: React.FC<Level1GameplayProps> = ({
         {isGuidedSolveActive && (
           <div className="pt-4">
             <GuidedSolvePanel
-              stepNumber={guidedStep}
+              stepNumber={getGuidedStepNumber()}
               totalSteps={5}
               explanation={getGuidedSolveExplanation()}
               isComplete={phase === 'completed'}
-              nextButtonLabel={
-                phase === 'completed'
-                  ? 'Complete Level 1'
-                  : guidedStep === 5
-                  ? 'Connect 1006 → 1000'
-                  : `Connect ${nodeSpecs[guidedStep - 1].addr} → ${nodeSpecs[guidedStep].addr}`
-              }
+              nextButtonLabel={getGuidedNextButtonLabel()}
               onNextStep={handleGuidedNextStep}
               onStop={() => setIsGuidedSolveActive(false)}
             />
