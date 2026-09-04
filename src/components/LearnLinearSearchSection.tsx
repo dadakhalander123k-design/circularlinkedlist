@@ -120,16 +120,9 @@ export const LearnLinearSearchSection: React.FC<LearnLinearSearchSectionProps> =
     }
   };
 
-  // Next Module Action: Auto-marks current as complete and advances
+  // Next Module Action: Advances to next topic without auto-marking complete
   const handleNextModule = () => {
     soundManager.playNav();
-    if (!isCurrentModuleCompleted) {
-      const newlyCompleted = progressManager.completeTheoryChapter(activeModule.id);
-      if (newlyCompleted) {
-        soundManager.playTheoryComplete();
-      }
-    }
-
     if (activeModuleIndex < LINEAR_SEARCH_MODULES.length - 1) {
       const nextMod = LINEAR_SEARCH_MODULES[activeModuleIndex + 1];
       setActiveChapterId(nextMod.id);
@@ -724,7 +717,6 @@ export const LearnLinearSearchSection: React.FC<LearnLinearSearchSectionProps> =
                 <button
                   id="btn-complete-theory-to-game"
                   onClick={() => {
-                    handleMarkCompleted();
                     onStartLevel(1);
                   }}
                   className="btn-modern-primary px-5 py-2.5 text-xs sm:text-sm font-bold flex items-center gap-1.5 cursor-pointer"
@@ -737,7 +729,7 @@ export const LearnLinearSearchSection: React.FC<LearnLinearSearchSectionProps> =
 
             {/* Curriculum progress indicator */}
             <div className="text-xs sm:text-sm font-mono text-slate-500 dark:text-slate-400 text-center sm:text-right font-medium">
-              Topic {activeModule.number} of 12
+              Topic {activeModule.number} of {LINEAR_SEARCH_MODULES.length}
             </div>
           </div>
         </main>

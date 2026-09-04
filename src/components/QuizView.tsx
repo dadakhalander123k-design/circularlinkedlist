@@ -249,6 +249,9 @@ export const QuizView: React.FC<QuizViewProps> = ({
   // Load persisted student answers
   const [studentAnswers, setStudentAnswers] = useState<Record<number, StudentAnswerRecord>>(() => {
     try {
+      if (!progressManager.getState().quizSubmitted && Object.keys(progressManager.getState().quizScores || {}).length === 0) {
+        return {};
+      }
       const stored = localStorage.getItem(QUIZ_STORAGE_ANSWERS_KEY);
       if (stored) {
         return JSON.parse(stored);
@@ -261,11 +264,14 @@ export const QuizView: React.FC<QuizViewProps> = ({
 
   const [isSubmitted, setIsSubmitted] = useState<boolean>(() => {
     try {
+      if (!progressManager.getState().quizSubmitted) {
+        return false;
+      }
       const storedSub = localStorage.getItem(QUIZ_STORAGE_SUBMITTED_KEY);
       if (storedSub !== null) {
         return storedSub === 'true';
       }
-      return progressManager.getState().quizSubmitted || false;
+      return Boolean(progressManager.getState().quizSubmitted);
     } catch {
       return false;
     }
@@ -298,10 +304,12 @@ export const QuizView: React.FC<QuizViewProps> = ({
       handleResetQuiz();
     };
     window.addEventListener('cll_reset_quiz', handleGlobalQuizReset);
+    window.addEventListener('cll_reset_progress', handleGlobalQuizReset);
 
     return () => {
       unsub();
       window.removeEventListener('cll_reset_quiz', handleGlobalQuizReset);
+      window.removeEventListener('cll_reset_progress', handleGlobalQuizReset);
     };
   }, []);
 

@@ -33,7 +33,7 @@ export const MyProgressView: React.FC<MyProgressViewProps> = ({ onNavigateToTab 
   const [progressState, setProgressState] = useState<UserProgressState>(progressManager.getState());
   const [showResetConfirm, setShowResetConfirm] = useState<boolean>(false);
   const [showCertificateModal, setShowCertificateModal] = useState<boolean>(false);
-  const [activeFilter, setActiveFilter] = useState<'ALL' | 'FOUNDATION' | 'MECHANICS' | 'ANALYSIS' | 'PRACTICE'>('ALL');
+  const [activeFilter, setActiveFilter] = useState<'ALL' | 'FUNDAMENTALS' | 'OPERATIONS' | 'ANALYSIS'>('ALL');
 
   useEffect(() => {
     progressManager.checkAndCompleteCertification();
@@ -50,7 +50,11 @@ export const MyProgressView: React.FC<MyProgressViewProps> = ({ onNavigateToTab 
 
   const filteredModules = activeFilter === 'ALL'
     ? modules
-    : modules.filter((m) => m.category === activeFilter);
+    : activeFilter === 'FUNDAMENTALS'
+      ? modules.filter((m) => ['INTRODUCTION', 'FUNDAMENTALS', 'STRUCTURE', 'VARIATIONS', 'COMPARISON', 'MEMORY', 'POINTERS'].includes(m.category))
+      : activeFilter === 'OPERATIONS'
+        ? modules.filter((m) => m.category === 'OPERATIONS')
+        : modules.filter((m) => ['ANALYSIS', 'APPLICATIONS', 'COMPLEXITY'].includes(m.category));
 
   const handleReset = () => {
     soundManager.playReset();
@@ -176,19 +180,19 @@ export const MyProgressView: React.FC<MyProgressViewProps> = ({ onNavigateToTab 
         )}
       </div>
 
-      {/* Progress Summary Cards & Next Action */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        {/* Card 1: Main Progress Metric */}
+      {/* Overall Progress Summary & Next Action */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        {/* Card 1: Overall Progress Metric */}
         <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/25 rounded-2xl p-6 shadow-xs dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] relative overflow-hidden reveal-on-scroll">
           <div className="text-xs sm:text-sm font-bold font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
-            Overall Completion
+            Overall Progress
           </div>
           <div className="flex items-baseline gap-2 mb-3">
             <span className="text-6xl sm:text-7xl font-extrabold font-mono text-slate-900 dark:text-white leading-none">
               {stats.percentage}%
             </span>
             <span className="text-sm sm:text-base font-medium text-slate-500 dark:text-slate-400 font-mono">
-              ({stats.completed} of {stats.total} Activities)
+              ({stats.completed} of 25 Activities Completed)
             </span>
           </div>
 
@@ -201,40 +205,14 @@ export const MyProgressView: React.FC<MyProgressViewProps> = ({ onNavigateToTab 
           </div>
 
           <div className="flex justify-between items-center text-xs font-mono text-slate-400 dark:text-slate-500 mt-3 font-semibold">
-            <span>0% Beginner</span>
-            <span>100% Master</span>
+            <span>0% (0 / 25)</span>
+            <span>50% (12.5 / 25)</span>
+            <span>100% (25 / 25)</span>
           </div>
         </div>
 
-        {/* Card 2: Stats Breakdown */}
-        <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/25 rounded-2xl p-6 flex flex-col justify-between shadow-xs dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] reveal-on-scroll stagger-1">
-          <div className="text-xs sm:text-sm font-bold font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">
-            Performance Stats
-          </div>
-
-          <div className="grid grid-cols-3 gap-2 py-3 border-y border-slate-100 dark:border-blue-500/15 text-center">
-            <div>
-              <div className="text-3xl sm:text-4xl font-extrabold text-amber-600 dark:text-amber-400 font-mono">{stats.mastered}</div>
-              <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mt-1">Mastered ★</div>
-            </div>
-            <div className="border-x border-slate-100 dark:border-blue-500/15">
-              <div className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white font-mono">{stats.completed} / {stats.total}</div>
-              <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mt-1">Activities</div>
-            </div>
-            <div>
-              <div className="text-3xl sm:text-4xl font-extrabold text-[#2563EB] dark:text-[#3B82F6] font-mono">{progressState.levelsCompleted.length} / 5</div>
-              <div className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase mt-1">Levels Won</div>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-3 font-medium">
-            <Trophy className="w-4 h-4 text-[#2563EB] dark:text-[#3B82F6] shrink-0" />
-            <span className="truncate">Master Challenges: {progressState.masterChallengesCompleted.length >= 4 ? 'All Clear (Master)' : `${progressState.masterChallengesCompleted.length} / 4 Challenges`}</span>
-          </div>
-        </div>
-
-        {/* Card 3: Next Recommended Step */}
-        <div className="bg-gradient-to-br from-[#EFF6FF]/60 to-white dark:from-blue-950/40 dark:to-[#111827] border border-[#DBEAFE] dark:border-blue-500/30 rounded-2xl p-6 flex flex-col justify-between shadow-xs dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] reveal-on-scroll stagger-2">
+        {/* Card 2: Next Recommended Step */}
+        <div className="bg-gradient-to-br from-[#EFF6FF]/60 to-white dark:from-blue-950/40 dark:to-[#111827] border border-[#DBEAFE] dark:border-blue-500/30 rounded-2xl p-6 flex flex-col justify-between shadow-xs dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] reveal-on-scroll stagger-1">
           <div>
             <div className="flex items-center justify-between text-xs sm:text-sm font-bold font-mono uppercase tracking-wider text-[#2563EB] dark:text-[#3B82F6] mb-1.5">
               <span>Recommended Next Step</span>
@@ -256,6 +234,140 @@ export const MyProgressView: React.FC<MyProgressViewProps> = ({ onNavigateToTab 
             <span>Continue Learning</span>
             <ArrowRight className="w-4 h-4" />
           </button>
+        </div>
+      </div>
+
+      {/* 4 Major Learning Stages Category Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        {/* Category 1: THEORY */}
+        <div
+          id="progress-category-theory"
+          onClick={() => {
+            soundManager.playSelect();
+            onNavigateToTab('THEORY', undefined, 'theory-01');
+          }}
+          className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/25 rounded-2xl p-5 shadow-xs hover:border-[#2563EB] dark:hover:border-[#3B82F6] transition-all cursor-pointer group"
+        >
+          <div className="flex items-center justify-between mb-3">
+            <div className="p-2.5 rounded-xl bg-[#EFF6FF] dark:bg-blue-950/50 text-[#2563EB] dark:text-[#3B82F6] border border-[#DBEAFE] dark:border-blue-500/30">
+              <BookOpen className="w-5 h-5" />
+            </div>
+            <span className="text-xs font-bold font-mono px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+              {stats.theory.percentage}%
+            </span>
+          </div>
+          <div className="text-xs font-bold font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
+            THEORY
+          </div>
+          <div className="text-lg font-bold text-slate-900 dark:text-white mb-1">
+            {stats.theory.completed} / 17 Modules Completed
+          </div>
+          <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 mt-3 overflow-hidden">
+            <div
+              className="bg-[#2563EB] dark:bg-[#3B82F6] h-full rounded-full transition-all duration-500"
+              style={{ width: `${stats.theory.percentage}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Category 2: VISUALIZE */}
+        <div
+          id="progress-category-visualize"
+          onClick={() => {
+            soundManager.playSelect();
+            onNavigateToTab('VIDEO');
+          }}
+          className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/25 rounded-2xl p-5 shadow-xs hover:border-[#2563EB] dark:hover:border-[#3B82F6] transition-all cursor-pointer group"
+        >
+          <div className="flex items-center justify-between mb-3">
+            <div className="p-2.5 rounded-xl bg-[#EFF6FF] dark:bg-blue-950/50 text-[#2563EB] dark:text-[#3B82F6] border border-[#DBEAFE] dark:border-blue-500/30">
+              <Video className="w-5 h-5" />
+            </div>
+            <span className="text-xs font-bold font-mono px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+              {stats.video.percentage}%
+            </span>
+          </div>
+          <div className="text-xs font-bold font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
+            VISUALIZE
+          </div>
+          <div className="text-lg font-bold text-slate-900 dark:text-white mb-1">
+            {stats.video.completed} / 2 Videos Completed
+          </div>
+          <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 mt-3 overflow-hidden">
+            <div
+              className="bg-[#2563EB] dark:bg-[#3B82F6] h-full rounded-full transition-all duration-500"
+              style={{ width: `${stats.video.percentage}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Category 3: GAME */}
+        <div
+          id="progress-category-game"
+          onClick={() => {
+            soundManager.playSelect();
+            onNavigateToTab('GAME', 1);
+          }}
+          className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/25 rounded-2xl p-5 shadow-xs hover:border-[#2563EB] dark:hover:border-[#3B82F6] transition-all cursor-pointer group"
+        >
+          <div className="flex items-center justify-between mb-3">
+            <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30">
+              <Gamepad2 className="w-5 h-5" />
+            </div>
+            <span className="text-xs font-bold font-mono px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+              {stats.game.percentage}%
+            </span>
+          </div>
+          <div className="text-xs font-bold font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
+            GAME
+          </div>
+          <div className="text-lg font-bold text-slate-900 dark:text-white mb-1">
+            {stats.game.completed} / 5 Levels Completed
+          </div>
+          <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 mt-3 overflow-hidden">
+            <div
+              className="bg-emerald-600 dark:bg-emerald-500 h-full rounded-full transition-all duration-500"
+              style={{ width: `${stats.game.percentage}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Category 4: QUIZ */}
+        <div
+          id="progress-category-quiz"
+          onClick={() => {
+            soundManager.playSelect();
+            onNavigateToTab('QUIZ');
+          }}
+          className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/25 rounded-2xl p-5 shadow-xs hover:border-[#2563EB] dark:hover:border-[#3B82F6] transition-all cursor-pointer group"
+        >
+          <div className="flex items-center justify-between mb-3">
+            <div className="p-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30">
+              <Award className="w-5 h-5" />
+            </div>
+            <span className={`text-xs font-bold font-mono px-2.5 py-1 rounded-md ${
+              stats.quiz.isSubmitted
+                ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30'
+                : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+            }`}>
+              {stats.quiz.isSubmitted ? '100%' : '0%'}
+            </span>
+          </div>
+          <div className="text-xs font-bold font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
+            QUIZ
+          </div>
+          <div className="text-lg font-bold text-slate-900 dark:text-white mb-1">
+            Quiz: {stats.quiz.isSubmitted ? 'Completed' : 'Not Completed'}
+          </div>
+          <div className="text-xs font-mono text-slate-500 dark:text-slate-400">
+            {stats.quiz.isSubmitted ? `Final Score: ${stats.quiz.finalScore}%` : 'Pending Examination'}
+          </div>
+          <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 mt-2 overflow-hidden">
+            <div
+              className="bg-indigo-600 dark:bg-indigo-500 h-full rounded-full transition-all duration-500"
+              style={{ width: `${stats.quiz.percentage}%` }}
+            />
+          </div>
         </div>
       </div>
 
@@ -292,7 +404,7 @@ export const MyProgressView: React.FC<MyProgressViewProps> = ({ onNavigateToTab 
           {/* Lesson 1 status */}
           <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 dark:bg-[#0F172A] border border-slate-200/80 dark:border-blue-500/20">
             <span className="text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200">
-              Lesson 01: What is Linear Search?
+              Lesson 01: What is Circular Linked List?
             </span>
             {videoStats.isIntroCompleted ? (
               <span className="inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-emerald-600 dark:text-emerald-400">
@@ -308,7 +420,7 @@ export const MyProgressView: React.FC<MyProgressViewProps> = ({ onNavigateToTab 
           {/* Lesson 2 status */}
           <div className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 dark:bg-[#0F172A] border border-slate-200/80 dark:border-blue-500/20">
             <span className="text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200">
-              Lesson 02: How Does Linear Search Work?
+              Lesson 02: Operations of Circular Linked List
             </span>
             {videoStats.isCollisionCompleted ? (
               <span className="inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-emerald-600 dark:text-emerald-400">
@@ -326,7 +438,7 @@ export const MyProgressView: React.FC<MyProgressViewProps> = ({ onNavigateToTab 
       {/* Filter Tabs */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 dark:border-blue-500/20 pb-3 mb-6">
         <div className="flex items-center gap-2 overflow-x-auto py-1">
-          {(['ALL', 'FOUNDATION', 'MECHANICS', 'ANALYSIS', 'PRACTICE'] as const).map((cat) => (
+          {(['ALL', 'FUNDAMENTALS', 'OPERATIONS', 'ANALYSIS'] as const).map((cat) => (
             <button
               key={cat}
               onClick={() => {
@@ -338,7 +450,7 @@ export const MyProgressView: React.FC<MyProgressViewProps> = ({ onNavigateToTab 
                 : 'bg-slate-100 dark:bg-[#0F172A] text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-[#172033]'
                 }`}
             >
-              {cat === 'ALL' ? 'All Modules' : cat.charAt(0) + cat.slice(1).toLowerCase()}
+              {cat === 'ALL' ? 'All 17 Modules' : cat.charAt(0) + cat.slice(1).toLowerCase()}
             </button>
           ))}
         </div>

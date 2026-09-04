@@ -199,7 +199,20 @@ export default function App() {
     const unsubscribe = progressManager.subscribe(() => {
       syncProgress();
     });
-    return unsubscribe;
+
+    const handleGlobalReset = () => {
+      setScore(0);
+      setStreak(0);
+      setCompletedLevels([]);
+      setCurrentLevelIndex(0);
+      initLevel(0);
+    };
+    window.addEventListener('cll_reset_progress', handleGlobalReset);
+
+    return () => {
+      unsubscribe();
+      window.removeEventListener('cll_reset_progress', handleGlobalReset);
+    };
   }, []);
 
   // Strict 5/5 game completion status
@@ -237,21 +250,8 @@ export default function App() {
     const stats = progressManager.getStats();
     const nextMod = stats.nextModule;
 
-    if (!nextMod || nextMod.id === 'fn-01-basics' || nextMod.id === 'fn-02-modulo') {
-      navigateToTab('THEORY', nextMod?.targetChapterId || 'theory-01');
-      return;
-    }
-
-    if (nextMod.id === 'fn-10-completion') {
-      if (isAllLevelsCompleted) {
-        setCurrentLevelIndex(5);
-        navigateToTab('GAME');
-      } else {
-        const targetLvl = Math.min(completedLevels.length, 4);
-        setCurrentLevelIndex(targetLvl);
-        initLevel(targetLvl);
-        navigateToTab('GAME');
-      }
+    if (!nextMod) {
+      navigateToTab('THEORY', 'theory-01');
       return;
     }
 
@@ -269,18 +269,18 @@ export default function App() {
       return;
     }
 
-    if (nextMod.id === 'fn-09-quiz' || nextMod.targetChapterId === 'knowledge-quiz') {
+    if (nextMod.targetTab === 'QUIZ') {
       navigateToTab('QUIZ');
       return;
     }
 
-    if (nextMod.targetTab === 'LEARN' || nextMod.targetTab === 'THEORY') {
-      navigateToTab('THEORY', nextMod.targetChapterId || 'theory-01');
+    if (nextMod.targetTab === 'VIDEO') {
+      navigateToTab('VIDEO');
       return;
     }
 
-    // Default fallback
-    navigateToTab('GAME');
+    // Default to theory chapter
+    navigateToTab('THEORY', nextMod.targetChapterId || 'theory-01');
   };
 
   // Direct trigger to Theory from Topic card
@@ -576,21 +576,14 @@ export default function App() {
       {/* Centered Reset Progress Confirmation Modal */}
       <ResetProgressModal
         isOpen={showResetModal}
-        isQuizMode={activeTab === 'QUIZ'}
         onClose={() => setShowResetModal(false)}
         onConfirm={() => {
-          if (activeTab === 'QUIZ') {
-            progressManager.resetQuizAttempt();
-            window.dispatchEvent(new CustomEvent('cll_reset_quiz'));
-          } else {
-            progressManager.resetProgress();
-            setScore(0);
-            setStreak(0);
-            setCompletedLevels([]);
-            setCurrentLevelIndex(0);
-            initLevel(0);
-            window.dispatchEvent(new CustomEvent('cll_reset_quiz'));
-          }
+          progressManager.resetProgress();
+          setScore(0);
+          setStreak(0);
+          setCompletedLevels([]);
+          setCurrentLevelIndex(0);
+          initLevel(0);
           setShowResetModal(false);
         }}
       />

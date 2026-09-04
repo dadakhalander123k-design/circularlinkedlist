@@ -54,7 +54,7 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
       id: 'THEORY' as MainViewTab,
       label: 'Learn',
       icon: BookOpen,
-      badge: `${stats.theory.completed} / 12`,
+      badge: `${stats.theory.completed} / ${stats.theory.total}`,
       badgeClass: 'bg-[#EFF6FF] dark:bg-blue-950/50 text-[#2563EB] dark:text-[#3B82F6] border border-[#DBEAFE] dark:border-blue-500/20',
     },
     {

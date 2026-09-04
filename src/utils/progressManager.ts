@@ -4,155 +4,197 @@ const STORAGE_KEY = 'hash_quest_field_notes_progress_v2';
 
 export const FIELD_NOTES_MODULES: Omit<ModuleRecord, 'status' | 'progressPercent'>[] = [
   {
-    id: 'fn-01-basics',
+    id: 'theory-01',
     number: '01',
-    code: 'FN-01',
-    title: 'WHAT IS LINEAR SEARCH?',
-    category: 'FOUNDATION',
-    description: 'Core Definition, Intuition & Fundamental Mechanics of Sequential Search.',
-    criteriaDescription: 'Read the foundation theory and complete the interactive array search simulation.',
+    code: 'TH-01',
+    title: 'Introduction to Circular Linked List',
+    category: 'INTRODUCTION',
+    description: 'Core Definition, Continuous Traversal & Absence of NULL in Linked Nodes.',
+    criteriaDescription: 'Read the foundation theory and understand the continuous cycle structure.',
     targetTab: 'THEORY',
     targetChapterId: 'theory-01',
   },
   {
-    id: 'fn-02-modulo',
+    id: 'theory-02',
     number: '02',
-    code: 'FN-02',
-    title: 'HOW LINEAR SEARCH WORKS',
-    category: 'MECHANICS',
-    description: 'Step-by-Step Traversal & Element Comparison from index 0 to n - 1.',
-    criteriaDescription: 'Inspect the sequential scanning pipeline across array slots.',
+    code: 'TH-02',
+    title: 'What is a Circular Linked List?',
+    category: 'FUNDAMENTALS',
+    description: 'Node Anatomy, Data & Next Fields, and lastNode.next == head Condition.',
+    criteriaDescription: 'Inspect node structure and the circular invariant connecting last node to head.',
     targetTab: 'THEORY',
     targetChapterId: 'theory-02',
   },
   {
-    id: 'fn-03-table',
+    id: 'theory-03',
     number: '03',
-    code: 'FN-03',
-    title: 'DETAILED STEP-BY-STEP TRACE',
-    category: 'EXECUTION',
-    description: 'Concrete Tracing Through an Array [12, 45, 78, 23, 56] for Target 23.',
-    criteriaDescription: 'Trace variable states, comparisons, and pointer movements step-by-step.',
+    code: 'TH-03',
+    title: 'Structure of a Circular Linked List',
+    category: 'STRUCTURE',
+    description: 'Head & Last Node Relationships, Memory Continuity and Pointer Loops.',
+    criteriaDescription: 'Understand how head points to the entry node and tail completes the circle.',
     targetTab: 'THEORY',
     targetChapterId: 'theory-03',
   },
   {
-    id: 'fn-04-lifecycle',
+    id: 'theory-04',
     number: '04',
-    code: 'FN-04',
-    title: 'PSEUDOCODE & ALGORITHMIC LOGIC',
-    category: 'LOGIC',
-    description: 'Formal Algorithmic Steps, Invariants, and Condition Handling.',
-    criteriaDescription: 'Examine formal language-agnostic pseudocode and loop invariants.',
+    code: 'TH-04',
+    title: 'Types of Circular Linked Lists',
+    category: 'VARIATIONS',
+    description: 'Circular Singly vs Circular Doubly Linked List Architecture.',
+    criteriaDescription: 'Compare unidirectional next loops against bidirectional next/prev rings.',
     targetTab: 'THEORY',
     targetChapterId: 'theory-04',
   },
   {
-    id: 'fn-05-collision',
+    id: 'theory-05',
     number: '05',
-    code: 'FN-05',
-    title: 'TIME COMPLEXITY ANALYSIS',
-    category: 'ANALYSIS',
-    description: 'Best Case O(1), Average Case O(n), and Worst Case O(n) Breakdown.',
-    criteriaDescription: 'Analyze mathematical Big-O derivations and execution counts.',
+    code: 'TH-05',
+    title: 'Circular Singly vs Circular Doubly',
+    category: 'COMPARISON',
+    description: 'Structural Tradeoffs, Memory Overhead and Bidirectional Traversal.',
+    criteriaDescription: 'Analyze memory overhead, pointer complexity, and navigation directions.',
     targetTab: 'THEORY',
     targetChapterId: 'theory-05',
   },
   {
-    id: 'fn-06-chaining',
+    id: 'theory-06',
     number: '06',
-    code: 'FN-06',
-    title: 'SPACE COMPLEXITY ANALYSIS',
-    category: 'ANALYSIS',
-    description: 'Auxiliary Memory O(1), In-Place Traversal & Memory Footprint.',
-    criteriaDescription: 'Evaluate in-place memory safety and stack vs heap allocation.',
+    code: 'TH-06',
+    title: 'Memory Representation of Circular Linked List',
+    category: 'MEMORY',
+    description: 'Non-Contiguous Heap Allocation, Random Memory Addresses & Next Pointer Addresses.',
+    criteriaDescription: 'Understand explicit pointer addresses linking non-contiguous heap memory.',
     targetTab: 'THEORY',
     targetChapterId: 'theory-06',
   },
   {
-    id: 'fn-07-linear',
+    id: 'theory-07',
     number: '07',
-    code: 'FN-07',
-    title: 'MULTI-LANGUAGE IMPLEMENTATIONS',
-    category: 'CODE',
-    description: 'Standard Production Implementations in C, C++, Java & Python.',
-    criteriaDescription: 'Study cross-language code implementations and syntax patterns.',
+    code: 'TH-07',
+    title: 'Pointer Operations in Circular Linked List',
+    category: 'POINTERS',
+    description: 'HEAD Pointer, TAIL Pointer and NEXT Pointer Invariant Management.',
+    criteriaDescription: 'Master atomic pointer redirection rules during circular updates.',
     targetTab: 'THEORY',
     targetChapterId: 'theory-07',
   },
   {
-    id: 'fn-08-quadratic',
+    id: 'theory-08',
     number: '08',
-    code: 'FN-08',
-    title: 'ADVANTAGES OF LINEAR SEARCH',
-    category: 'BENEFITS',
-    description: 'Simplicity, Zero-Sorting Requirement & Data Structure Versatility.',
-    criteriaDescription: 'Explore key engineering strengths and CPU cache locality.',
+    code: 'TH-08',
+    title: 'Insertion at the Beginning of Circular Linked List',
+    category: 'OPERATIONS',
+    description: 'Creating New Node, Linking to Old Head, and Updating Last Node Next.',
+    criteriaDescription: 'Trace beginning insertion pointer swaps with both head and tail pointers.',
     targetTab: 'THEORY',
     targetChapterId: 'theory-08',
   },
   {
-    id: 'fn-09-double',
+    id: 'theory-09',
     number: '09',
-    code: 'FN-09',
-    title: 'DISADVANTAGES & LIMITATIONS',
-    category: 'LIMITS',
-    description: 'O(n) Scaling Penalties on Large Datasets and Frequent Queries.',
-    criteriaDescription: 'Understand big-data scaling bottlenecks and alternative search options.',
+    code: 'TH-09',
+    title: 'Insertion at the End of Circular Linked List',
+    category: 'OPERATIONS',
+    description: 'Attaching Node After Tail and Connecting New Node to Head in O(1) or O(n).',
+    criteriaDescription: 'Inspect end insertion mechanics and tail pointer performance optimization.',
     targetTab: 'THEORY',
     targetChapterId: 'theory-09',
   },
   {
-    id: 'fn-10-realworld',
+    id: 'theory-10',
     number: '10',
-    code: 'FN-10',
-    title: 'WHEN TO USE LINEAR SEARCH',
-    category: 'GUIDELINES',
-    description: 'Practical Decision Criteria & Engineering Selection Rules.',
-    criteriaDescription: 'Master the rules of thumb for choosing linear search in real software.',
+    code: 'TH-10',
+    title: 'Insertion at a Specific Position',
+    category: 'OPERATIONS',
+    description: 'Traversing to Position p - 1, Interleaving Pointers & Splice Logic.',
+    criteriaDescription: 'Trace mid-list pointer splicing while preserving circular integrity.',
     targetTab: 'THEORY',
     targetChapterId: 'theory-10',
   },
   {
-    id: 'fn-11-advantages',
+    id: 'theory-11',
     number: '11',
-    code: 'FN-11',
-    title: 'REAL-WORLD APPLICATIONS & EDGE CASES',
-    category: 'PRACTICE',
-    description: 'Duplicate Elements, Empty Arrays, Single-Item Lookups & Object Search.',
-    criteriaDescription: 'Explore corner-case resilience, struct search, and multi-match variants.',
+    code: 'TH-11',
+    title: 'Deletion from the Beginning of Circular Linked List',
+    category: 'OPERATIONS',
+    description: 'Bypassing Head, Moving Head Forward, and Updating Last Node Next.',
+    criteriaDescription: 'Trace beginning node deletion and memory cleanup.',
     targetTab: 'THEORY',
     targetChapterId: 'theory-11',
   },
   {
-    id: 'fn-12-tradeoffs',
+    id: 'theory-12',
     number: '12',
-    code: 'FN-12',
-    title: 'LINEAR SEARCH VS. BINARY SEARCH',
-    category: 'SYNTHESIS',
-    description: 'Head-to-Head Comparison, Tradeoff Analysis & Master Synthesis.',
-    criteriaDescription: 'Synthesize linear vs binary search tradeoffs and the master rulebook.',
+    code: 'TH-12',
+    title: 'Deletion from the End of Circular Linked List',
+    category: 'OPERATIONS',
+    description: 'Traversing to Second-Last Node, Pointing to Head, and Freeing Old Tail.',
+    criteriaDescription: 'Evaluate O(n) traversal to find the second-last node and close the loop.',
     targetTab: 'THEORY',
     targetChapterId: 'theory-12',
+  },
+  {
+    id: 'theory-13',
+    number: '13',
+    code: 'TH-13',
+    title: 'Deletion at a Specific Position',
+    category: 'OPERATIONS',
+    description: 'Bypassing Target Node at Position p and Reconnecting Adjacent Nodes.',
+    criteriaDescription: 'Examine interior node deletion and boundary condition validation.',
+    targetTab: 'THEORY',
+    targetChapterId: 'theory-13',
+  },
+  {
+    id: 'theory-14',
+    number: '14',
+    code: 'TH-14',
+    title: 'Advantages of Circular Linked List',
+    category: 'ANALYSIS',
+    description: 'Zero-NULL Safety, Continuous Traversal, Memory Reuse and O(1) Tail Operations.',
+    criteriaDescription: 'Understand key engineering benefits in cyclical systems.',
+    targetTab: 'THEORY',
+    targetChapterId: 'theory-14',
+  },
+  {
+    id: 'theory-15',
+    number: '15',
+    code: 'TH-15',
+    title: 'Disadvantages of Circular Linked List',
+    category: 'ANALYSIS',
+    description: 'Traversal Cautions, Infinite Loop Hazards, Complexity & Linear Search.',
+    criteriaDescription: 'Learn cycle-aware termination conditions to avoid infinite loops.',
+    targetTab: 'THEORY',
+    targetChapterId: 'theory-15',
+  },
+  {
+    id: 'theory-16',
+    number: '16',
+    code: 'TH-16',
+    title: 'Applications of Circular Linked List',
+    category: 'APPLICATIONS',
+    description: 'Round-Robin CPU Scheduling, Looping Playlists, Multiplayer Turns & Ring Buffers.',
+    criteriaDescription: 'Review real-world production use cases in operating systems and games.',
+    targetTab: 'THEORY',
+    targetChapterId: 'theory-16',
+  },
+  {
+    id: 'theory-17',
+    number: '17',
+    code: 'TH-17',
+    title: 'Time Complexity of Circular Linked List Operations',
+    category: 'COMPLEXITY',
+    description: 'Asymptotic Big-O Derivations & The Tail Pointer O(1) Optimization.',
+    criteriaDescription: 'Synthesize the Big-O complexity table for all circular operations.',
+    targetTab: 'THEORY',
+    targetChapterId: 'theory-17',
   },
 ];
 
 const INITIAL_PROGRESS: UserProgressState = {
   version: 2,
-  modules: {
-    'fn-01-basics': 'NOT_STARTED',
-    'fn-02-modulo': 'NOT_STARTED',
-    'fn-03-table': 'NOT_STARTED',
-    'fn-04-lifecycle': 'NOT_STARTED',
-    'fn-05-collision': 'NOT_STARTED',
-    'fn-06-chaining': 'NOT_STARTED',
-    'fn-07-linear': 'NOT_STARTED',
-    'fn-08-quadratic': 'NOT_STARTED',
-    'fn-09-double': 'NOT_STARTED',
-    'fn-10-realworld': 'NOT_STARTED',
-    'fn-11-advantages': 'NOT_STARTED',
-    'fn-12-tradeoffs': 'NOT_STARTED',
-  },
+  modules: {},
   moduleProgress: {},
   completedTheoryChapters: [],
   currentTheoryChapterId: 'theory-01',
@@ -166,7 +208,7 @@ const INITIAL_PROGRESS: UserProgressState = {
   sandboxOperationsCount: 0,
   totalScore: 0,
   streak: 0,
-  currentActiveModuleId: 'fn-01-basics',
+  currentActiveModuleId: 'theory-01',
   lastActiveTimestamp: Date.now(),
   completedVideos: [],
   hasCelebrated100Percent: false,
@@ -174,19 +216,6 @@ const INITIAL_PROGRESS: UserProgressState = {
 
 // Normalized map of chapter aliases to standard IDs
 export const THEORY_ID_MAP: Record<string, string> = {
-  'what-is-hashing': 'theory-01',
-  'hash-function': 'theory-02',
-  'hash-table': 'theory-03',
-  'hashing-lifecycle': 'theory-04',
-  'what-is-a-collision': 'theory-05',
-  'separate-chaining': 'theory-06',
-  'linear-probing': 'theory-07',
-  'quadratic-probing': 'theory-08',
-  'double-hashing': 'theory-09',
-  'real-world-applications': 'theory-10',
-  'core-advantages': 'theory-11',
-  'limitations-tradeoffs': 'theory-12',
-  'load-factor': 'theory-08',
   '01': 'theory-01',
   '02': 'theory-02',
   '03': 'theory-03',
@@ -199,12 +228,30 @@ export const THEORY_ID_MAP: Record<string, string> = {
   '10': 'theory-10',
   '11': 'theory-11',
   '12': 'theory-12',
+  '13': 'theory-13',
+  '14': 'theory-14',
+  '15': 'theory-15',
+  '16': 'theory-16',
+  '17': 'theory-17',
 };
 
 export const normalizeTheoryChapterId = (idOrSlug: string): string => {
   if (!idOrSlug) return 'theory-01';
-  if (idOrSlug.startsWith('theory-')) return idOrSlug;
+  const match = idOrSlug.match(/(\d+)/);
+  if (match) {
+    const num = parseInt(match[1], 10);
+    if (num >= 1 && num <= 17) {
+      return `theory-${num < 10 ? '0' : ''}${num}`;
+    }
+  }
   return THEORY_ID_MAP[idOrSlug] || idOrSlug;
+};
+
+export const normalizeVideoId = (id: string): string => {
+  if (!id) return '';
+  if (id === 'lesson-01' || id === 'introduction' || id === 'video-1' || id === '1') return 'lesson-01';
+  if (id === 'lesson-02' || id === 'operations' || id === 'video-2' || id === '2') return 'lesson-02';
+  return id;
 };
 
 type ProgressListener = (state: UserProgressState) => void;
@@ -224,21 +271,50 @@ class ProgressManager {
       if (!stored) return INITIAL_PROGRESS;
       const parsed = JSON.parse(stored);
       if (parsed && parsed.version === 2) {
+        // Strict filtering of completedTheoryChapters to valid 17 modules
+        const rawTheory = Array.isArray(parsed.completedTheoryChapters)
+          ? parsed.completedTheoryChapters
+          : [];
+        const validTheory = Array.from(
+          new Set(
+            rawTheory
+              .map(normalizeTheoryChapterId)
+              .filter((id: string) => /^theory-(0[1-9]|1[0-7])$/.test(id))
+          )
+        );
+
+        // Strict filtering of completedVideos to 2 lessons
+        const rawVideos = Array.isArray(parsed.completedVideos) ? parsed.completedVideos : [];
+        const validVideos = Array.from(
+          new Set(
+            rawVideos
+              .map(normalizeVideoId)
+              .filter((id: string) => id === 'lesson-01' || id === 'lesson-02')
+          )
+        );
+
+        // Strict filtering of levelsCompleted to levels 1-5
+        const rawLevels = Array.isArray(parsed.levelsCompleted) ? parsed.levelsCompleted : [];
+        const validLevels = Array.from(
+          new Set(
+            rawLevels.filter(
+              (lvl: unknown): lvl is number => typeof lvl === 'number' && lvl >= 1 && lvl <= 5
+            )
+          )
+        );
+
+        const quizSubmitted = Boolean(parsed.quizSubmitted);
+
         return {
           ...INITIAL_PROGRESS,
           ...parsed,
-          completedTheoryChapters: Array.isArray(parsed.completedTheoryChapters)
-            ? Array.from(new Set(parsed.completedTheoryChapters.map(normalizeTheoryChapterId)))
-            : [],
+          completedTheoryChapters: validTheory,
           currentTheoryChapterId: parsed.currentTheoryChapterId
             ? normalizeTheoryChapterId(parsed.currentTheoryChapterId)
             : 'theory-01',
-          completedVideos: Array.isArray(parsed.completedVideos)
-            ? Array.from(new Set(parsed.completedVideos))
-            : [],
-          levelsCompleted: Array.isArray(parsed.levelsCompleted)
-            ? Array.from(new Set(parsed.levelsCompleted))
-            : [],
+          completedVideos: validVideos,
+          levelsCompleted: validLevels,
+          quizSubmitted,
         };
       }
       return INITIAL_PROGRESS;
@@ -278,27 +354,42 @@ class ProgressManager {
   // 1. THEORY STATS (17 Modules)
   public getTheoryStats() {
     const list = Array.isArray(this.state.completedTheoryChapters)
-      ? Array.from(new Set(this.state.completedTheoryChapters))
+      ? Array.from(new Set(this.state.completedTheoryChapters.map(normalizeTheoryChapterId)))
       : [];
+    const validCompleted = list.filter((id) => {
+      const match = id.match(/^theory-(\d+)$/);
+      if (!match) return false;
+      const num = parseInt(match[1], 10);
+      return num >= 1 && num <= 17;
+    });
     const total = 17;
-    const completed = Math.min(total, list.length);
-    const percentage = Math.round((completed / total) * 100);
+    const completed = validCompleted.length;
+    const rawPercent = (completed / total) * 100;
+    const percentage = Number(rawPercent.toFixed(completed === 0 || completed === total ? 0 : 2));
+
     return {
       total,
       completed,
       percentage,
       isComplete: completed >= total,
-      completedIds: [...list],
+      completedIds: [...validCompleted],
       currentChapterId: this.state.currentTheoryChapterId,
     };
   }
 
   // 2. VIDEO STATS (2 Video Lessons)
   public getVideoStats() {
-    const list = Array.isArray(this.state.completedVideos) ? this.state.completedVideos : [];
-    const isIntroCompleted = list.includes('lesson-01') || list.includes('introduction');
-    const isCollisionCompleted = list.includes('lesson-02') || list.includes('collision');
-    const completed = (isIntroCompleted ? 1 : 0) + (isCollisionCompleted ? 1 : 0);
+    const rawList = Array.isArray(this.state.completedVideos) ? this.state.completedVideos : [];
+    const validList = Array.from(
+      new Set(
+        rawList
+          .map(normalizeVideoId)
+          .filter((id) => id === 'lesson-01' || id === 'lesson-02')
+      )
+    );
+    const isIntroCompleted = validList.includes('lesson-01');
+    const isCollisionCompleted = validList.includes('lesson-02');
+    const completed = validList.length;
     const total = 2;
     const percentage = Math.round((completed / total) * 100);
 
@@ -309,15 +400,17 @@ class ProgressManager {
       isIntroCompleted,
       isCollisionCompleted,
       isComplete: completed >= total,
-      completedVideos: [...list],
+      completedVideos: [...validList],
     };
   }
 
   // 3. GAME STATS (5 Levels)
   public getGameStats() {
     const rawList = Array.isArray(this.state.levelsCompleted) ? this.state.levelsCompleted : [];
-    const completedList = Array.from(new Set(rawList.filter((lvl) => lvl >= 1 && lvl <= 5)));
-    const completed = Math.min(5, completedList.length);
+    const completedList = Array.from(
+      new Set(rawList.filter((lvl) => typeof lvl === 'number' && lvl >= 1 && lvl <= 5))
+    );
+    const completed = completedList.length;
     const total = 5;
     const percentage = Math.round((completed / total) * 100);
 
@@ -347,40 +440,14 @@ class ProgressManager {
     };
   }
 
-  // ALL 12 MODULES
+  // ALL 17 CIRCULAR LINKED LIST MODULES
   public getModules(): ModuleRecord[] {
-    const theoryDone = this.state.completedTheoryChapters || [];
-
-    const moduleMapping: Record<string, string> = {
-      'fn-01-basics': 'theory-01',
-      'fn-02-modulo': 'theory-02',
-      'fn-03-table': 'theory-03',
-      'fn-04-lifecycle': 'theory-04',
-      'fn-05-collision': 'theory-05',
-      'fn-06-chaining': 'theory-06',
-      'fn-07-linear': 'theory-07',
-      'fn-08-quadratic': 'theory-08',
-      'fn-09-double': 'theory-09',
-      'fn-10-realworld': 'theory-10',
-      'fn-11-advantages': 'theory-11',
-      'fn-12-tradeoffs': 'theory-12',
-    };
+    const theoryDone = (this.state.completedTheoryChapters || []).map(normalizeTheoryChapterId);
 
     return FIELD_NOTES_MODULES.map((m) => {
-      let status = this.state.modules[m.id] || 'NOT_STARTED';
-      let progressPercent = this.state.moduleProgress[m.id] || 0;
-      const chapterId = moduleMapping[m.id];
-
-      if (chapterId && theoryDone.includes(chapterId)) {
-        status = 'COMPLETED';
-        progressPercent = 100;
-      }
-
-      if (status === 'COMPLETED' || status === 'MASTERED') {
-        progressPercent = 100;
-      } else if (status === 'IN_PROGRESS' && progressPercent === 0) {
-        progressPercent = 50;
-      }
+      const isDone = theoryDone.includes(m.id);
+      const status: ModuleStatus = isDone ? 'COMPLETED' : 'NOT_STARTED';
+      const progressPercent = isDone ? 100 : 0;
 
       return {
         ...m,
@@ -390,35 +457,30 @@ class ProgressManager {
     });
   }
 
-  // OVERALL PROGRESS (20 Unique Activities)
+  // OVERALL PROGRESS (25 Total Measurable Activities: 17 Theory + 2 Videos + 5 Game + 1 Quiz)
   public getStats() {
     const theory = this.getTheoryStats();
     const video = this.getVideoStats();
     const game = this.getGameStats();
     const quiz = this.getQuizStats();
 
-    // Measurable learning activities: 17 Theory Modules + 5 Game Levels + 2 Videos + 1 Quiz
-    const total = theory.total + video.total + game.total + 1;
+    const total = 25;
     const completed = theory.completed + video.completed + game.completed + quiz.completed;
     const isAllComplete =
-      theory.completed >= theory.total &&
-      video.completed >= video.total &&
-      game.completed >= game.total &&
+      theory.completed >= 17 &&
+      video.completed >= 2 &&
+      game.completed >= 5 &&
       quiz.completed >= 1;
 
-    // Strict 100% calculation: exactly 100% ONLY when every activity is finished
-    const percentage = isAllComplete
-      ? 100
-      : Math.min(99, Math.max(0, Math.round((completed / total) * 100)));
+    // Strict calculation: each activity is exactly 4% (25 * 4 = 100)
+    const percentage = completed * 4;
 
     const modules = this.getModules();
-    const mastered = modules.filter((m) => m.status === 'MASTERED').length;
+    const mastered = modules.filter((m) => m.status === 'COMPLETED').length;
 
     // Find next unfinished module
     const currentUnfinished =
-      modules.find(
-        (m) => m.status === 'IN_PROGRESS' || m.status === 'NOT_STARTED'
-      ) || modules[modules.length - 1];
+      modules.find((m) => m.status === 'NOT_STARTED') || modules[modules.length - 1];
 
     return {
       total,
@@ -439,7 +501,8 @@ class ProgressManager {
   // =========================================================================
   public isTheoryChapterCompleted(chapterId: string): boolean {
     const normalized = normalizeTheoryChapterId(chapterId);
-    return (this.state.completedTheoryChapters || []).includes(normalized);
+    const list = (this.state.completedTheoryChapters || []).map(normalizeTheoryChapterId);
+    return list.includes(normalized);
   }
 
   public completeTheoryChapter(chapterId: string): boolean {
@@ -457,26 +520,10 @@ class ProgressManager {
     this.state.completedTheoryChapters.push(normalized);
     this.state.currentTheoryChapterId = normalized;
 
-    // Synchronize underlying module ID
-    const chapterToModuleMap: Record<string, string> = {
-      'theory-01': 'fn-01-basics',
-      'theory-02': 'fn-02-modulo',
-      'theory-03': 'fn-03-table',
-      'theory-04': 'fn-04-lifecycle',
-      'theory-05': 'fn-05-collision',
-      'theory-06': 'fn-06-chaining',
-      'theory-07': 'fn-07-linear',
-      'theory-08': 'fn-08-quadratic',
-      'theory-09': 'fn-09-double',
-      'theory-10': 'fn-10-realworld',
-      'theory-11': 'fn-11-advantages',
-      'theory-12': 'fn-12-tradeoffs',
-    };
-
-    const targetModuleId = chapterToModuleMap[normalized];
-    if (targetModuleId) {
-      this.completeModule(targetModuleId);
-    }
+    if (!this.state.modules) this.state.modules = {};
+    if (!this.state.moduleProgress) this.state.moduleProgress = {};
+    this.state.modules[normalized] = 'COMPLETED';
+    this.state.moduleProgress[normalized] = 100;
 
     this.saveState();
     return true; // Newly completed!
@@ -492,18 +539,25 @@ class ProgressManager {
   // VIDEO SPECIFIC PROGRESS (Idempotent & Independent)
   // =========================================================================
   public isVideoCompleted(videoId: string): boolean {
-    const list = this.state.completedVideos || [];
-    return list.includes(videoId);
+    const normalized = normalizeVideoId(videoId);
+    const list = (this.state.completedVideos || []).map(normalizeVideoId);
+    return list.includes(normalized);
   }
 
   public completeVideo(videoId: string): boolean {
+    const normalized = normalizeVideoId(videoId);
+    if (normalized !== 'lesson-01' && normalized !== 'lesson-02') {
+      return false;
+    }
+
     if (!this.state.completedVideos) {
       this.state.completedVideos = [];
     }
-    if (this.state.completedVideos.includes(videoId)) {
+    const currentList = this.state.completedVideos.map(normalizeVideoId);
+    if (currentList.includes(normalized)) {
       return false; // Already completed
     }
-    this.state.completedVideos.push(videoId);
+    this.state.completedVideos.push(normalized);
     this.saveState();
     return true; // Newly completed!
   }
@@ -544,6 +598,10 @@ class ProgressManager {
   }
 
   public markLevelCompleted(levelId: number, scoreAwarded: number = 100, isPerfect: boolean = false) {
+    if (typeof levelId !== 'number' || levelId < 1 || levelId > 5) {
+      return;
+    }
+
     if (!this.state.levelsCompleted) {
       this.state.levelsCompleted = [];
     }
@@ -626,6 +684,11 @@ class ProgressManager {
         localStorage.removeItem('hash_quest_quiz_submitted_v3');
         localStorage.removeItem('cll_quiz_answers_v1');
         localStorage.removeItem('cll_quiz_submitted_v1');
+        localStorage.removeItem('cll_quiz_answers');
+        localStorage.removeItem('cll_quiz_submitted');
+        localStorage.removeItem('hash_quest_field_notes_progress');
+        localStorage.removeItem('cll_progress_v1');
+        localStorage.removeItem('cll_progress');
       } catch {
         // Ignore storage errors
       }
@@ -633,20 +696,7 @@ class ProgressManager {
 
     this.state = {
       version: 2,
-      modules: {
-        'fn-01-basics': 'NOT_STARTED',
-        'fn-02-modulo': 'NOT_STARTED',
-        'fn-03-table': 'NOT_STARTED',
-        'fn-04-lifecycle': 'NOT_STARTED',
-        'fn-05-collision': 'NOT_STARTED',
-        'fn-06-chaining': 'NOT_STARTED',
-        'fn-07-linear': 'NOT_STARTED',
-        'fn-08-quadratic': 'NOT_STARTED',
-        'fn-09-double': 'NOT_STARTED',
-        'fn-10-realworld': 'NOT_STARTED',
-        'fn-11-advantages': 'NOT_STARTED',
-        'fn-12-tradeoffs': 'NOT_STARTED',
-      },
+      modules: {},
       moduleProgress: {},
       completedTheoryChapters: [],
       currentTheoryChapterId: 'theory-01',
@@ -660,12 +710,17 @@ class ProgressManager {
       sandboxOperationsCount: 0,
       totalScore: 0,
       streak: 0,
-      currentActiveModuleId: 'fn-01-basics',
+      currentActiveModuleId: 'theory-01',
       lastActiveTimestamp: Date.now(),
       completedVideos: [],
       hasCelebrated100Percent: false,
     };
     this.saveState();
+
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('cll_reset_progress'));
+      window.dispatchEvent(new CustomEvent('cll_reset_quiz'));
+    }
   }
 }
 
