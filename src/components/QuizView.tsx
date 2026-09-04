@@ -426,19 +426,19 @@ export const QuizView: React.FC<QuizViewProps> = ({
         scoreSubBorder: 'border-slate-200 dark:border-emerald-500/30',
       };
     } else if (percentage >= 40) {
-      // 🔵 Light Blue / Grade B (40%–79%)
+      // 🔵 Royal Blue / Grade B (40%–79%)
       return {
         grade: 'B',
         badgeText: '★ STRONG PERFORMANCE (GRADE B) ★',
         description:
           'Solid performance! You have a good grasp of Circular Linked List fundamentals. Review any missed questions to master all concepts.',
-        cardBorder: 'border-slate-200 dark:border-sky-500/30',
-        iconBg: 'bg-[#0284C7] dark:bg-sky-500 shadow-sky-500/20 dark:shadow-sky-950/50',
-        badge: 'border-sky-400/40 dark:border-sky-500/40 bg-sky-50 dark:bg-sky-950/60 text-sky-700 dark:text-sky-300',
-        scoreCardBorder: 'border-sky-200 dark:border-sky-500/40',
-        scoreLabel: 'text-sky-600 dark:text-sky-400',
-        scoreAccent: 'text-[#0284C7] dark:text-sky-400',
-        scoreSubBorder: 'border-slate-200 dark:border-sky-500/30',
+        cardBorder: 'border-slate-200 dark:border-blue-500/30',
+        iconBg: 'bg-[#2563EB] dark:bg-[#3B82F6] shadow-blue-500/20 dark:shadow-blue-950/50',
+        badge: 'border-[#DBEAFE] dark:border-blue-500/40 bg-[#EFF6FF] dark:bg-blue-950/60 text-[#1D4ED8] dark:text-[#3B82F6]',
+        scoreCardBorder: 'border-[#DBEAFE] dark:border-blue-500/40',
+        scoreLabel: 'text-[#1D4ED8] dark:text-[#3B82F6]',
+        scoreAccent: 'text-[#2563EB] dark:text-[#3B82F6]',
+        scoreSubBorder: 'border-slate-200 dark:border-blue-500/30',
       };
     } else {
       // 🟡 Yellow / Grade C (0%–39%)

@@ -979,7 +979,7 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                         </div>
                       )}
                       {isNew && (
-                        <div className="px-2.5 py-0.5 rounded-md bg-cyan-600 text-white font-mono font-bold text-xs tracking-wider uppercase shadow-xs flex items-center gap-1 animate-bounce">
+                        <div className="px-2.5 py-0.5 rounded-md bg-[#2563EB] text-white font-mono font-bold text-xs tracking-wider uppercase shadow-xs flex items-center gap-1 animate-bounce">
                           <Sparkles className="w-3 h-3" />
                           <span>NEW</span>
                         </div>
@@ -996,8 +996,8 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                           : isCurrentTraversal
                           ? 'border-emerald-500 ring-4 ring-emerald-500/20 bg-emerald-50/40 dark:bg-emerald-950/30 scale-105'
                           : isNew
-                          ? 'border-cyan-500 ring-4 ring-cyan-500/20 bg-cyan-50/40 dark:bg-cyan-950/30 scale-105'
-                          : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-[#111827] hover:border-blue-400 dark:hover:border-blue-500'
+                          ? 'border-[#2563EB] ring-4 ring-blue-500/20 bg-blue-50/40 dark:bg-blue-950/30 scale-105'
+                          : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-[#111827] hover:border-[#2563EB] dark:hover:border-blue-500'
                       }`}
                     >
                       {/* Tier 1: ADDRESS */}

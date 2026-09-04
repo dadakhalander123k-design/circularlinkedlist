@@ -284,7 +284,7 @@ export const Level1Gameplay: React.FC<Level1GameplayProps> = ({
         <div className="pt-2 pb-2">
           <div className="text-xs font-bold uppercase font-mono tracking-wider text-slate-500 dark:text-slate-400 mb-2 flex items-center justify-between">
             <span>Memory Nodes (Click node or edit NEXT field to enter target address)</span>
-            <span className="text-blue-600 dark:text-blue-400 font-mono font-bold">
+            <span className="text-[#2563EB] dark:text-[#3B82F6] font-mono font-bold">
               HEAD: [ {headAddress} ]
             </span>
           </div>
@@ -314,7 +314,7 @@ export const Level1Gameplay: React.FC<Level1GameplayProps> = ({
         {phase === 'connecting' && (
           <div className="p-4 rounded-xl bg-blue-50/60 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-500/30 flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <Lightbulb className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0" />
+              <Lightbulb className="w-5 h-5 text-[#2563EB] dark:text-[#3B82F6] shrink-0" />
               <p className="text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300">
                 {feedback}
               </p>

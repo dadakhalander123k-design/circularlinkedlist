@@ -545,11 +545,11 @@ export const Level4Gameplay: React.FC<Level4GameplayProps> = ({
             <span className="font-bold text-slate-700 dark:text-slate-300">PROGRESSION:</span>
             {stage === 'partA_beginning' && (
               <div className="flex items-center gap-2">
-                <span className={`px-2 py-0.5 rounded font-bold ${subStep === 1 ? 'bg-blue-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}`}>
+                <span className={`px-2 py-0.5 rounded font-bold ${subStep === 1 ? 'bg-[#2563EB] text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}`}>
                   1. TAIL.NEXT = 1002
                 </span>
                 <span>→</span>
-                <span className={`px-2 py-0.5 rounded font-bold ${subStep === 2 ? 'bg-blue-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}`}>
+                <span className={`px-2 py-0.5 rounded font-bold ${subStep === 2 ? 'bg-[#2563EB] text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}`}>
                   2. HEAD = 1002
                 </span>
                 <span>→</span>

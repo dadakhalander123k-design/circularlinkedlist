@@ -376,7 +376,7 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
         <div className="pt-2 pb-2">
           <div className="text-xs font-bold uppercase font-mono tracking-wider text-slate-500 dark:text-slate-400 mb-2 flex items-center justify-between">
             <span>Pointer Wiring (Type target address into NEXT or click action buttons)</span>
-            <span className="text-blue-600 dark:text-blue-400 font-mono font-bold">
+            <span className="text-[#2563EB] dark:text-[#3B82F6] font-mono font-bold">
               Memory Invariant: TAIL.NEXT === HEAD
             </span>
           </div>

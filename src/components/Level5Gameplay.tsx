@@ -359,7 +359,7 @@ export const Level5Gameplay: React.FC<Level5GameplayProps> = ({
 
             <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-500/30 flex flex-wrap items-center justify-between gap-3">
               <div>
-                <p className="text-xs font-mono font-bold text-blue-600 dark:text-blue-400 uppercase">
+                <p className="text-xs font-mono font-bold text-[#2563EB] dark:text-[#3B82F6] uppercase">
                   Target Value: 30 • Target Address: 1004
                 </p>
                 <p className="text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300">
@@ -535,7 +535,7 @@ export const Level5Gameplay: React.FC<Level5GameplayProps> = ({
         {task === 'task4_master_challenge' && (
           <div className="py-4 space-y-4 animate-scale-enter">
             <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-blue-500/20">
-              <span className="text-xs font-bold font-mono text-blue-600 dark:text-blue-400 uppercase">
+              <span className="text-xs font-bold font-mono text-[#2563EB] dark:text-[#3B82F6] uppercase">
                 Master Practical Synthesis • Step {masterStep} of 5
               </span>
               <span className="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">
@@ -571,7 +571,7 @@ export const Level5Gameplay: React.FC<Level5GameplayProps> = ({
 
             <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-500/30 flex flex-wrap items-center justify-between gap-4">
               <div>
-                <p className="text-xs font-mono font-bold uppercase text-blue-600 dark:text-blue-400">
+                <p className="text-xs font-mono font-bold uppercase text-[#2563EB] dark:text-[#3B82F6]">
                   {masterStep === 1 && 'Step 1: Insert [5] at Address 1006 at Beginning'}
                   {masterStep === 2 && 'Step 2: Insert [25] at Address 1008 between 1002 and 1004'}
                   {masterStep === 3 && 'Step 3: Delete Node [10] at Address 1000'}
