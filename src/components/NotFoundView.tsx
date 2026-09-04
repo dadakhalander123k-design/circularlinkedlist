@@ -33,7 +33,7 @@ export const NotFoundView: React.FC<NotFoundViewProps> = ({
             Page Not Found
           </h1>
           <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-lg mx-auto leading-relaxed">
-            The requested sequential address or learning chapter does not exist in our curriculum index.
+            The requested pointer address or learning module does not exist in our Circular Linked List curriculum index.
           </p>
         </div>
 

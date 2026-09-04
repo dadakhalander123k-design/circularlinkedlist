@@ -142,7 +142,7 @@ export const MyProgressView: React.FC<MyProgressViewProps> = ({ onNavigateToTab 
           Learning Progress & Mastery
         </h1>
         <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mt-2 leading-relaxed">
-          Track your journey through sequential search mechanics, complexity analysis, and interactive lab experiments.
+          Track your journey through circular linked list concepts, pointer manipulation, and interactive lab experiments.
         </p>
 
         {/* 100% Completion Golden Banner if Completed */}

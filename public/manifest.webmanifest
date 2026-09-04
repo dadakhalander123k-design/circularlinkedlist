@@ -1,7 +1,7 @@
 {
-  "name": "AlgoLearn – Linear Search Learning Guide",
+  "name": "AlgoLearn – Circular Linked List Learning Platform",
   "short_name": "AlgoLearn",
-  "description": "Master the Linear Search algorithm with interactive visualizations, step-by-step sequential traversal lessons, time complexity analysis, real-world code implementations, and gamified challenges.",
+  "description": "Master the Circular Linked List data structure with interactive visualizations, step-by-step pointer manipulation lessons, time complexity analysis, and gamified challenges.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#F8FAFC",

@@ -292,7 +292,16 @@ export const LearnCircularLinkedListSection: React.FC<LearnCircularLinkedListSec
         >
           {/* Module Header Bar (Badge, Title, Subtitle, Time) */}
           <div className="border-b border-slate-100 dark:border-blue-500/15 pb-5 space-y-2.5">
-            <div className="flex flex-wrap items-center justify-between gap-3">
+            {/* Breadcrumb Navigation */}
+            <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 font-mono">
+              <a href="#/overview" className="hover:text-[#2563EB] dark:hover:text-[#3B82F6] transition-colors">Home</a>
+              <span>/</span>
+              <a href="#/learn" className="hover:text-[#2563EB] dark:hover:text-[#3B82F6] transition-colors">Theory</a>
+              <span>/</span>
+              <span className="text-slate-800 dark:text-slate-200 font-semibold truncate">Chapter {activeModule.number}: {activeModule.title}</span>
+            </nav>
+
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
               <div className="flex items-center gap-2">
                 <span className="px-3 py-1 bg-[#EFF6FF] dark:bg-blue-950/60 border border-[#DBEAFE] dark:border-blue-500/30 text-[#2563EB] dark:text-[#3B82F6] rounded-md text-xs sm:text-sm font-bold uppercase tracking-wider font-mono">
                   Module {activeModule.number} // {activeModule.category}

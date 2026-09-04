@@ -12,13 +12,13 @@ const envSiteUrl = (
     : undefined
 );
 
-export const SITE_URL = (envSiteUrl || 'https://algolearn-linearsearch.vercel.app').replace(/\/$/, '');
+export const SITE_URL = (envSiteUrl || 'https://algolearn-circularlinkedlist.vercel.app').replace(/\/$/, '');
 
 export const SITE_CONFIG = {
   name: 'AlgoLearn',
-  title: 'AlgoLearn – Interactive Linear Search Learning Platform',
+  title: 'AlgoLearn – Interactive Circular Linked List Learning Platform',
   description:
-    'Master the Linear Search algorithm with interactive visualizations, step-by-step sequential traversal lessons, time complexity analysis, real-world code implementations, and gamified challenges.',
+    'Master the Circular Linked List data structure with interactive visualizations, step-by-step pointer manipulation lessons, time complexity analysis, real-world code implementations, and gamified challenges.',
   url: SITE_URL,
   ogImage: `${SITE_URL}/algolearn-logo.png`,
   logo: `${SITE_URL}/algolearn-logo.png`,
@@ -38,64 +38,64 @@ export interface PageMeta {
 
 export const ROUTE_METADATA: Record<string, PageMeta> = {
   HOME: {
-    title: 'AlgoLearn – Interactive Linear Search Learning Platform',
+    title: 'AlgoLearn – Interactive Circular Linked List Learning Platform',
     description:
-      'Learn Linear Search step-by-step with interactive visualizations, step traces, complexity derivations, and gamified problem-solving challenges.',
+      'Learn Circular Linked Lists step-by-step with interactive visualizations, pointer traces, complexity derivations, and gamified problem-solving challenges.',
     canonicalPath: '/',
     ogType: 'website',
   },
   THEORY: {
-    title: 'Linear Search Algorithm Guide & Theory | AlgoLearn',
+    title: 'Circular Linked List Data Structure Guide & Theory | AlgoLearn',
     description:
-      'Comprehensive 12-module curriculum covering Linear Search mechanics, pseudocode, time complexity O(n), memory footprints, C/C++/Java/Python implementations, and binary search comparisons.',
+      'Comprehensive 17-chapter curriculum covering Circular Linked List mechanics, node pointer structures, memory addresses, C/Java/Python implementations, and Big-O complexity proofs.',
     canonicalPath: '/#learn',
     ogType: 'article',
   },
   VIDEO: {
-    title: 'Linear Search Video Tutorials & Lessons | AlgoLearn',
+    title: 'Circular Linked List Video Tutorials & Lessons | AlgoLearn',
     description:
-      'Watch curated video lessons exploring sequential scanning, array traversal, and how Linear Search compares elements sequentially.',
+      'Watch curated video lessons exploring circular linked list structures, pointer traversal, and step-by-step operations.',
     canonicalPath: '/#visualize',
     ogType: 'article',
   },
   GAME: {
-    title: 'Linear Search Interactive Quest & Challenges | AlgoLearn',
+    title: 'Circular Linked List Interactive Quest & Challenges | AlgoLearn',
     description:
-      'Test and sharpen your algorithmic intuition through 5 progressive Linear Search interactive game levels and earn curriculum mastery.',
+      'Test and sharpen your algorithmic intuition through 5 progressive Circular Linked List interactive pointer manipulation game levels and earn curriculum mastery.',
     canonicalPath: '/#game',
     ogType: 'website',
   },
   QUEST: {
-    title: 'Linear Search Quest Completion & Certificate | AlgoLearn',
+    title: 'Circular Linked List Quest Completion & Certificate | AlgoLearn',
     description:
-      'Milestone achievement and completion certification for mastering sequential search, algorithmic efficiency, and comparison counting.',
+      'Milestone achievement and completion certification for mastering circular linked lists, pointer rewiring, and memory address operations.',
     canonicalPath: '/#game',
     ogType: 'website',
   },
   LAB: {
-    title: 'Linear Search Interactive Lab & Sandbox Explorer | AlgoLearn',
+    title: 'Circular Linked List Interactive Lab & Sandbox Explorer | AlgoLearn',
     description:
-      'Configure custom arrays, choose target search items, and step through the sequential scan execution pipeline in an interactive simulation workbench.',
+      'Build custom circular linked lists, manually update HEAD and TAIL pointers, and step through insertion and deletion operations in an interactive workbench.',
     canonicalPath: '/#lab',
     ogType: 'website',
   },
   QUIZ: {
-    title: 'Linear Search Knowledge Quiz & Examination | AlgoLearn',
+    title: 'Circular Linked List Knowledge Quiz & Examination | AlgoLearn',
     description:
-      'Evaluate your mastery with 10 comprehensive assessment questions covering best/worst case complexity, code syntax, array traversal, and search decision criteria.',
+      'Evaluate your mastery with 10 comprehensive assessment questions covering node connections, circular traversals, pointer manipulations, and time complexity.',
     canonicalPath: '/#quiz',
     ogType: 'website',
   },
   PROGRESS: {
     title: 'Learning Progress & Mastery Ledger | AlgoLearn',
     description:
-      'Track your journey through the 12 Linear Search theory modules, 5 quest levels, interactive lab experiments, and quiz milestones.',
+      'Track your journey through the 17 Circular Linked List theory modules, 5 quest levels, interactive lab experiments, and quiz milestones.',
     canonicalPath: '/#progress',
     ogType: 'website',
   },
   NOT_FOUND: {
     title: '404 Page Not Found | AlgoLearn',
-    description: 'The requested learning resource or section could not be found. Navigate back to the AlgoLearn Linear Search curriculum.',
+    description: 'The requested learning resource or section could not be found. Navigate back to the AlgoLearn Circular Linked List curriculum.',
     canonicalPath: '/#404',
     ogType: 'website',
   },
@@ -122,9 +122,9 @@ export function getStructuredData(tab: string = 'HOME') {
       {
         '@type': 'Course',
         '@id': `${SITE_URL}/#course`,
-        name: 'Mastering the Linear Search Algorithm',
+        name: 'Mastering the Circular Linked List Data Structure',
         description:
-          'A comprehensive interactive course covering sequential search mechanics, Big-O complexity analysis, multi-language implementations, and algorithmic tradeoffs.',
+          'A comprehensive interactive course covering circular linked list mechanics, pointer rewiring, Big-O complexity analysis, multi-language implementations, and algorithmic tradeoffs.',
         provider: {
           '@type': 'Organization',
           name: SITE_CONFIG.name,

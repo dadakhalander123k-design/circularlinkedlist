@@ -21,8 +21,8 @@ export function updateSEO(tabKey: string, chapterTitle?: string) {
 
   // If a specific theory chapter is viewed, tailor title and canonical URL
   if (tabKey === 'THEORY' && chapterTitle) {
-    title = `${chapterTitle} – Linear Search Theory | ${SITE_CONFIG.name}`;
-    description = `Study ${chapterTitle} as part of the AlgoLearn Linear Search curriculum with interactive visualizers, code snippets, and complexity proofs.`;
+    title = `${chapterTitle} – Circular Linked List Theory | ${SITE_CONFIG.name}`;
+    description = `Study ${chapterTitle} as part of the AlgoLearn Circular Linked List curriculum with interactive visualizers, code snippets, and complexity proofs.`;
   }
 
   const absoluteCanonical = `${SITE_URL}${canonicalPath}`;

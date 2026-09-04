@@ -1,34 +1,40 @@
-# AlgoLearn – Linear Search Interactive Learning Platform
+# AlgoLearn – Circular Linked List Interactive Learning Platform
 
-> An interactive educational platform dedicated to teaching the fundamentals, mechanics, complexity analysis, and implementations of the Linear Search (Sequential Search) algorithm.
+> An interactive educational platform dedicated to teaching the fundamentals, pointer structures, memory mechanics, algorithmic operations, and real-world implementations of the Circular Linked List data structure.
 
 ## Overview
-- **Name:** AlgoLearn – Linear Search Learning Guide
-- **Focus:** Computer Science, Data Structures & Algorithms (DSA), Sequential Array Traversal
-- **Target Audience:** Computer Science students, software engineering candidates, and developers learning fundamental search techniques.
+- **Name:** AlgoLearn – Circular Linked List Learning Guide
+- **Focus:** Computer Science, Data Structures & Algorithms (DSA), Linked Lists, Pointer Mechanics
+- **Target Audience:** Computer Science students, software engineering candidates, and developers mastering cyclic data structures and memory manipulation.
 - **Access:** Free, web-based, interactive online educational curriculum.
 
 ## Public Curriculum Sections
-1. **Overview / Home:** High-level summary of the sequential search mechanism and visual comparisons.
-2. **Theory & Field Notes (12 Modules):**
-   - Module 01: What is Linear Search? (Sequential Search definition & intuition)
-   - Module 02: Step-by-Step Traversal & Element Comparison
-   - Module 03: Detailed Concrete Tracing through Array [12, 45, 78, 23, 56]
-   - Module 04: Formal Pseudocode & Loop Invariants
-   - Module 05: Time Complexity Breakdown (Best Case O(1), Average Case O(n), Worst Case O(n))
-   - Module 06: Space Complexity Analysis (Auxiliary O(1) in-place memory)
-   - Module 07: Multi-Language Code Implementations (C, C++, Java, Python)
-   - Module 08: Algorithmic Advantages & CPU Cache Locality
-   - Module 09: Disadvantages, Limitations & Big-Data Scaling Penalties
-   - Module 10: Practical Selection Rules (When to use Linear Search)
-   - Module 11: Real-World Applications & Edge Cases (Empty lists, duplicates, object lookups)
-   - Module 12: Linear Search vs. Binary Search Head-to-Head Synthesis
-3. **Video Lessons:** Curated walkthrough videos illustrating sequential comparison and search termination.
-4. **Interactive Quest (5 Levels):** Gamified challenges testing search step prediction, comparison counting, and outcome identification.
-5. **Interactive Lab / Sandbox:** Array visualizer allowing custom inputs, target selection, and step-by-step playback.
-6. **Examination Quiz:** 10-question evaluation covering theoretical derivations, syntax, and algorithmic behavior.
-7. **Progress Ledger:** Granular mastery and milestone tracking with local persistence.
+1. **Overview / Home:** High-level summary of circular structures, cyclic workflows, and structural comparisons with singly linear linked lists.
+2. **Theory & Field Notes (17 Chapters):**
+   - Chapter 01: What is a Circular Linked List? (Definition, cyclic topology, memory structure)
+   - Chapter 02: Node Structure & Pointer Mechanics (Data field, next pointer, absence of NULL termination)
+   - Chapter 03: Singly Linear vs. Circular Linked List (Comparative architectural analysis)
+   - Chapter 04: Head vs. Tail-Maintained Implementations (Why maintaining a Tail pointer enables O(1) prepend and append)
+   - Chapter 05: Memory Allocation & Dynamic Pointer Wiring (Heap allocation and address references)
+   - Chapter 06: Traversing a Circular Linked List (do-while patterns, termination guards, infinite loop hazards)
+   - Chapter 07: Insertion at the Beginning (Step-by-step rewiring and pointer manipulation)
+   - Chapter 08: Insertion at the End (Tail pointer updates vs. O(n) traversal)
+   - Chapter 09: Insertion at a Specific Position (Boundary validation and link establishment)
+   - Chapter 10: Deletion of the First Node (Updating HEAD, rewiring tail's next pointer)
+   - Chapter 11: Deletion of the Last Node (Traversing to penultimate node and pointer closure)
+   - Chapter 12: Deletion at a Specific Position (Pointer bypass and memory deallocation)
+   - Chapter 13: Searching in a Circular Linked List (Linear scan with loop detection)
+   - Chapter 14: Complete Code Implementations (C, Java, Python with line-by-line breakdown)
+   - Chapter 15: Inherent Advantages of Circular Linked Lists (Cyclic access, no terminating NULLs)
+   - Chapter 16: Disadvantages & Engineering Hazards (Risk of infinite loops, pointer complexity)
+   - Chapter 17: Real-World Applications (Round-robin OS scheduling, multiplayer turn rotations, music playlists)
+3. **Video Masterclass:** Curated walkthrough video tutorials covering introduction to circular linked lists and core pointer operations.
+4. **Interactive Quest (5 Levels):** Gamified challenges testing circular connection building, traversal step prediction, head insertion, tail insertion, and pointer deletion.
+5. **Interactive Lab / Workbench:** Visualizer with manual HEAD & TAIL address input, step-by-step execution, and live pointer rewiring inspection.
+6. **Examination Quiz:** 10-question evaluation covering cyclic mechanics, time complexities, boundary cases, and pointer logic.
+7. **Progress Ledger:** Granular mastery and milestone tracking with local persistence and full reset support.
 
 ## Technical Architecture
 - **Framework:** React 19, TypeScript, Tailwind CSS v4, Vite
 - **Storage:** Local client-side progress tracking without external credential requirements.
+- **Security:** CSP, HSTS, secure frame options, and strict privacy by design.
