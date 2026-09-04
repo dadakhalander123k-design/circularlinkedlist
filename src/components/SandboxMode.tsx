@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
-import { LinearSearchLab } from './LinearSearchLab';
+import { CircularLinkedListLab } from './CircularLinkedListLab';
 import { soundManager } from '../utils/audio';
 
 interface SandboxModeProps {
@@ -28,8 +28,8 @@ export const SandboxMode: React.FC<SandboxModeProps> = ({ onExit, onOpenTheory }
         </button>
       </div>
 
-      {/* The Full Interactive Linear Search Lab */}
-      <LinearSearchLab onExit={onExit} onOpenTheory={onOpenTheory} />
+      {/* The Full Interactive Circular Linked List Lab */}
+      <CircularLinkedListLab onExit={onExit} onOpenTheory={onOpenTheory} />
     </div>
   );
 };
