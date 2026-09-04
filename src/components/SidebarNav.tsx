@@ -4,6 +4,7 @@ import {
   BookOpen,
   Sparkles,
   Gamepad2,
+  FlaskConical,
   HelpCircle,
   TrendingUp,
   X,
@@ -71,6 +72,13 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
       badgeClass: 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-100 dark:border-emerald-500/20',
     },
     {
+      id: 'LAB' as MainViewTab,
+      label: 'Lab',
+      icon: FlaskConical,
+      badge: 'Interactive',
+      badgeClass: 'bg-[#EFF6FF] dark:bg-blue-950/50 text-[#2563EB] dark:text-[#3B82F6] border border-[#DBEAFE] dark:border-blue-500/20',
+    },
+    {
       id: 'QUIZ' as MainViewTab,
       label: 'Quiz',
       icon: HelpCircle,
@@ -109,8 +117,8 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
       className="w-64 h-full flex flex-col bg-white dark:bg-[#0F172A] border-r border-[#E5E7EB] dark:border-blue-500/20 select-none shadow-xs transition-colors duration-300"
     >
       {/* Top Sidebar Header with NAVIGATION MENU and Close Button */}
-      <div className="p-3 sm:p-4 border-b border-[#E5E7EB] dark:border-blue-500/15 flex items-center justify-between">
-        <span className="text-[11px] font-bold tracking-wider text-slate-400 dark:text-slate-500 uppercase font-mono">
+      <div className="p-3.5 sm:p-4 border-b border-[#E5E7EB] dark:border-blue-500/15 flex items-center justify-between">
+        <span className="text-xs font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase font-mono">
           NAVIGATION MENU
         </span>
         {/* Close Button in Top-Right Corner of Navigation */}
@@ -127,7 +135,7 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
 
       {/* Navigation Item List */}
       <div
-        className="px-3 py-3 space-y-1 overflow-y-auto"
+        className="px-3 py-3 space-y-1.5 overflow-y-auto"
         onMouseEnter={() => setIsProgressHovered(true)}
         onMouseLeave={() => setIsProgressHovered(false)}
       >
@@ -142,26 +150,26 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
               id={`sidebar-nav-${item.id.toLowerCase()}`}
               onClick={() => handleSelect(item.id)}
               aria-current={isActive ? 'page' : undefined}
-              className={`group w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-medium text-sm transition-all duration-150 cursor-pointer ${isActive
-                  ? 'bg-[#EFF6FF] dark:bg-blue-950/40 text-[#2563EB] dark:text-[#3B82F6] font-semibold shadow-xs border border-[#DBEAFE] dark:border-blue-500/30'
-                  : 'text-[#475569] dark:text-slate-400 hover:bg-[#EFF6FF] dark:hover:bg-blue-950/20 hover:text-[#2563EB] dark:hover:text-white border border-transparent'
+              className={`group w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-[15px] font-semibold transition-all duration-150 cursor-pointer ${isActive
+                  ? 'bg-[#EFF6FF] dark:bg-blue-950/50 text-[#2563EB] dark:text-[#3B82F6] font-bold shadow-xs border border-[#DBEAFE] dark:border-blue-500/30'
+                  : 'text-slate-700 dark:text-slate-300 hover:bg-[#EFF6FF] dark:hover:bg-blue-950/30 hover:text-[#2563EB] dark:hover:text-white border border-transparent'
                 }`}
             >
               <div className="flex items-center gap-3">
                 <div
                   className={`p-1.5 rounded-lg transition-all ${isActive
                       ? 'bg-[#2563EB] dark:bg-[#3B82F6] text-white shadow-xs'
-                      : 'bg-[#F8FAFC] dark:bg-blue-950/30 text-[#64748B] dark:text-slate-400 group-hover:text-[#2563EB] dark:group-hover:text-white'
+                      : 'bg-[#F8FAFC] dark:bg-blue-950/40 text-[#64748B] dark:text-slate-400 group-hover:text-[#2563EB] dark:group-hover:text-white'
                     }`}
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className="w-4.5 h-4.5" />
                 </div>
-                <span className="font-sans">{item.label}</span>
+                <span className="font-sans font-semibold tracking-normal">{item.label}</span>
               </div>
 
               {/* Detailed progress values are hidden by default and smoothly fade in on hover */}
               <span
-                className={`text-[11px] px-2 py-0.5 rounded-full font-medium transition-opacity duration-200 ease-in-out ${item.badgeClass} ${isProgressHovered ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                className={`text-xs px-2.5 py-0.5 rounded-full font-bold font-mono transition-opacity duration-200 ease-in-out ${item.badgeClass} ${isProgressHovered ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
                   }`}
               >
                 {item.badge}

@@ -94,17 +94,17 @@ export const CompletionCelebrationModal: React.FC<CompletionCelebrationModalProp
 
         {/* Certificate Header Badge */}
         <div className="text-center pb-6 border-b border-slate-100 dark:border-blue-500/15">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-amber-50 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 text-xs font-bold font-mono uppercase tracking-widest mb-3 rounded-lg border border-amber-200 dark:border-amber-500/30 shadow-xs">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-amber-50 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 text-xs sm:text-sm font-bold font-mono uppercase tracking-widest mb-3 rounded-lg border border-amber-200 dark:border-amber-500/30 shadow-xs">
             <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400" />
             <span>100% Curriculum Mastery Achieved</span>
             <Sparkles className="w-4 h-4 text-amber-600 dark:text-amber-400" />
           </div>
 
-          <h2 className="text-3xl sm:text-4xl font-extrabold font-display tracking-tight text-slate-900 dark:text-white">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-display tracking-tight text-slate-900 dark:text-white">
             Congratulations on Completion!
           </h2>
 
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-xl mx-auto mt-2 leading-relaxed font-normal">
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-xl mx-auto mt-2 leading-relaxed font-normal">
             You have successfully completed all curriculum modules, conquered all interactive Quest levels, mastered circular linked list operations and structures, and passed the official examination.
           </p>
         </div>
@@ -113,67 +113,67 @@ export const CompletionCelebrationModal: React.FC<CompletionCelebrationModalProp
         <div className="my-6 p-5 sm:p-6 bg-slate-50 dark:bg-[#0F172A] border border-slate-200 dark:border-blue-500/20 rounded-2xl">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pb-4 border-b border-slate-200 dark:border-blue-500/15">
             <div>
-              <div className="flex items-center gap-2 text-xs font-semibold text-[#2563EB] dark:text-[#3B82F6] uppercase font-mono">
+              <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-[#2563EB] dark:text-[#3B82F6] uppercase font-mono">
                 <ShieldCheck className="w-4 h-4" />
                 <span>Official DSA Certification</span>
               </div>
-              <div className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-1">
+              <div className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">
                 Circular Linked List Algorithm Specialist
               </div>
             </div>
 
             {/* Official Seal */}
             <div className="shrink-0 flex items-center gap-3 px-3.5 py-2 bg-white dark:bg-[#172033] rounded-xl border border-slate-200 dark:border-blue-500/30 shadow-2xs">
-              <div className="w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center text-white font-bold font-mono text-sm shadow-xs">
+              <div className="w-11 h-11 rounded-full bg-amber-500 flex items-center justify-center text-white font-bold font-mono text-base shadow-xs">
                 100%
               </div>
-              <div className="text-[11px] leading-tight font-semibold">
+              <div className="text-xs leading-tight font-semibold">
                 <div className="text-slate-900 dark:text-white font-bold">CERTIFIED</div>
-                <div className="text-slate-500 dark:text-slate-400 font-mono">{currentDate}</div>
+                <div className="text-slate-500 dark:text-slate-400 font-mono text-[11px]">{currentDate}</div>
               </div>
             </div>
           </div>
 
           {/* Quick Metrics Bar */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 my-4">
-            <div className="p-3 bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/20 rounded-xl shadow-2xs">
-              <div className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase font-mono">MODULES</div>
-              <div className="text-lg font-bold text-slate-900 dark:text-white font-mono">{stats.theory.completed} / {stats.theory.total}</div>
+            <div className="p-3.5 bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/20 rounded-xl shadow-2xs">
+              <div className="text-xs text-slate-400 dark:text-slate-500 font-bold uppercase font-mono">MODULES</div>
+              <div className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white font-mono">{stats.theory.completed} / {stats.theory.total}</div>
             </div>
-            <div className="p-3 bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/20 rounded-xl shadow-2xs">
-              <div className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase font-mono">QUEST LEVELS</div>
-              <div className="text-lg font-bold text-emerald-600 dark:text-emerald-400 font-mono">5 / 5 WON</div>
+            <div className="p-3.5 bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/20 rounded-xl shadow-2xs">
+              <div className="text-xs text-slate-400 dark:text-slate-500 font-bold uppercase font-mono">QUEST LEVELS</div>
+              <div className="text-xl sm:text-2xl font-bold text-emerald-600 dark:text-emerald-400 font-mono">5 / 5 WON</div>
             </div>
-            <div className="p-3 bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/20 rounded-xl shadow-2xs">
-              <div className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase font-mono">MASTERY</div>
-              <div className="text-lg font-bold text-[#2563EB] dark:text-[#3B82F6] font-mono">100% COMPLETE</div>
+            <div className="p-3.5 bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/20 rounded-xl shadow-2xs">
+              <div className="text-xs text-slate-400 dark:text-slate-500 font-bold uppercase font-mono">MASTERY</div>
+              <div className="text-xl sm:text-2xl font-bold text-[#2563EB] dark:text-[#3B82F6] font-mono">100% COMPLETE</div>
             </div>
-            <div className="p-3 bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/20 rounded-xl shadow-2xs">
-              <div className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase font-mono">STATUS</div>
-              <div className="text-lg font-bold text-emerald-600 dark:text-emerald-400 font-mono">MASTER</div>
+            <div className="p-3.5 bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/20 rounded-xl shadow-2xs">
+              <div className="text-xs text-slate-400 dark:text-slate-500 font-bold uppercase font-mono">STATUS</div>
+              <div className="text-xl sm:text-2xl font-bold text-emerald-600 dark:text-emerald-400 font-mono">MASTER</div>
             </div>
           </div>
 
           {/* Mastered Competencies Checklist */}
           <div className="mt-4">
-            <div className="text-xs font-bold text-slate-900 dark:text-slate-200 mb-2 uppercase font-mono flex items-center gap-1.5">
-              <Award className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#3B82F6]" />
+            <div className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-200 mb-2 uppercase font-mono flex items-center gap-1.5">
+              <Award className="w-4 h-4 text-[#2563EB] dark:text-[#3B82F6]" />
               <span>Verified Competencies:</span>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm">
               {competencies.map((comp) => (
                 <div
                   key={comp.code}
                   className="flex items-center justify-between p-2.5 bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/20 rounded-xl shadow-2xs"
                 >
                   <div className="flex items-center gap-2 min-w-0">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                     <span className="font-bold text-slate-900 dark:text-white font-mono">{comp.code}:</span>
-                    <span className="text-slate-600 dark:text-slate-300 text-[11px] truncate">
+                    <span className="text-slate-600 dark:text-slate-300 text-xs truncate">
                       {comp.title}
                     </span>
                   </div>
-                  <span className="text-[10px] font-bold font-mono uppercase text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-md shrink-0 ml-2 border border-emerald-200/50 dark:border-emerald-500/30">
+                  <span className="text-xs font-bold font-mono uppercase text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-md shrink-0 ml-2 border border-emerald-200/50 dark:border-emerald-500/30">
                     {comp.status}
                   </span>
                 </div>
@@ -187,7 +187,7 @@ export const CompletionCelebrationModal: React.FC<CompletionCelebrationModalProp
           <button
             id="btn-print-certificate"
             onClick={handlePrint}
-            className="w-full sm:w-auto btn-modern-secondary px-4 py-2.5 text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full sm:w-auto btn-modern-secondary px-5 py-2.5 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 cursor-pointer"
           >
             <Printer className="w-4 h-4 text-[#2563EB] dark:text-[#3B82F6]" />
             <span>Print / Save Certificate</span>
@@ -202,9 +202,9 @@ export const CompletionCelebrationModal: React.FC<CompletionCelebrationModalProp
                   onClose();
                   onNavigateToLab();
                 }}
-                className="flex-1 sm:flex-initial btn-modern-secondary px-3.5 py-2.5 text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
+                className="flex-1 sm:flex-initial btn-modern-secondary px-4 py-2.5 text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 cursor-pointer"
               >
-                <Sliders className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#3B82F6]" />
+                <Sliders className="w-4 h-4 text-[#2563EB] dark:text-[#3B82F6]" />
                 <span>Sandbox Lab</span>
               </button>
             )}
@@ -217,7 +217,7 @@ export const CompletionCelebrationModal: React.FC<CompletionCelebrationModalProp
                   onClose();
                   onNavigateToProgress();
                 }}
-                className="flex-1 sm:flex-initial btn-modern-primary px-4 py-2.5 text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer"
+                className="flex-1 sm:flex-initial btn-modern-primary px-5 py-2.5 text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 <Award className="w-4 h-4" />
                 <span>Progress Ledger</span>

@@ -51,19 +51,19 @@ export const HomePage: React.FC<HomePageProps> = ({
           <div className="lg:col-span-6 flex flex-col gap-3.5">
             {/* Small Curriculum Label */}
             <div className="flex items-center">
-              <span className="text-[11px] sm:text-xs font-mono font-bold tracking-wider text-[#4F46E5] dark:text-[#818CF8] uppercase">
+              <span className="text-xs sm:text-sm font-mono font-bold tracking-wider text-[#4F46E5] dark:text-[#818CF8] uppercase">
                 THEORY CURRICULUM &nbsp;•&nbsp; MODULE 02 &nbsp;•&nbsp; CHAPTER 01
               </span>
             </div>
 
             {/* Main Title */}
-            <h1 className="text-3xl sm:text-4xl lg:text-[44px] font-extrabold text-[#0F172A] dark:text-white tracking-tight leading-[1.12]">
+            <h1 className="text-4xl sm:text-5xl lg:text-[52px] font-extrabold text-[#0F172A] dark:text-white tracking-tight leading-[1.1]">
               Circular<br />
               <span>Linked List</span>
             </h1>
 
             {/* Educational Description */}
-            <p className="text-sm sm:text-[15px] text-slate-600 dark:text-slate-300 leading-relaxed max-w-lg">
+            <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-xl font-normal">
               Learn about circular linked lists, where the last node points back to the first node, forming a circle, and
               explore their operations, advantages, and real-world applications.
             </p>
@@ -358,39 +358,39 @@ export const HomePage: React.FC<HomePageProps> = ({
             ========================================================================= */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 pt-8 border-t border-slate-100 dark:border-indigo-500/15">
           {/* Card 1: Core Idea */}
-          <div className="bg-white dark:bg-[#0F172A] border border-slate-200/90 dark:border-indigo-500/20 rounded-2xl p-4.5 flex items-start gap-3.5 shadow-2xs hover:border-[#6366F1] dark:hover:border-indigo-500/40 transition-all">
-            <div className="w-11 h-11 rounded-2xl bg-[#EDE9FE] dark:bg-indigo-950/70 border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8] shrink-0">
-              <Target className="w-5 h-5" />
+          <div className="bg-white dark:bg-[#0F172A] border border-slate-200/90 dark:border-indigo-500/20 rounded-2xl p-5 flex items-start gap-3.5 shadow-2xs hover:border-[#6366F1] dark:hover:border-indigo-500/40 transition-all">
+            <div className="w-12 h-12 rounded-2xl bg-[#EDE9FE] dark:bg-indigo-950/70 border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8] shrink-0">
+              <Target className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-[#0F172A] dark:text-white">Core Idea</h2>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+              <h2 className="text-base sm:text-[17px] font-bold text-[#0F172A] dark:text-white">Core Idea</h2>
+              <p className="text-sm sm:text-[14.5px] text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed">
                 A linked list where the last node points back to the first node.
               </p>
             </div>
           </div>
 
           {/* Card 2: Key Operations */}
-          <div className="bg-white dark:bg-[#0F172A] border border-slate-200/90 dark:border-indigo-500/20 rounded-2xl p-4.5 flex items-start gap-3.5 shadow-2xs hover:border-[#6366F1] dark:hover:border-indigo-500/40 transition-all">
-            <div className="w-11 h-11 rounded-2xl bg-[#EDE9FE] dark:bg-indigo-950/70 border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8] shrink-0">
-              <Link2 className="w-5 h-5 -rotate-45" />
+          <div className="bg-white dark:bg-[#0F172A] border border-slate-200/90 dark:border-indigo-500/20 rounded-2xl p-5 flex items-start gap-3.5 shadow-2xs hover:border-[#6366F1] dark:hover:border-indigo-500/40 transition-all">
+            <div className="w-12 h-12 rounded-2xl bg-[#EDE9FE] dark:bg-indigo-950/70 border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8] shrink-0">
+              <Link2 className="w-6 h-6 -rotate-45" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-[#0F172A] dark:text-white">Key Operations</h2>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+              <h2 className="text-base sm:text-[17px] font-bold text-[#0F172A] dark:text-white">Key Operations</h2>
+              <p className="text-sm sm:text-[14.5px] text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed">
                 Insertion, deletion, traversal, and searching.
               </p>
             </div>
           </div>
 
           {/* Card 3: Main Advantage */}
-          <div className="bg-white dark:bg-[#0F172A] border border-slate-200/90 dark:border-indigo-500/20 rounded-2xl p-4.5 flex items-start gap-3.5 shadow-2xs hover:border-[#6366F1] dark:hover:border-indigo-500/40 transition-all">
-            <div className="w-11 h-11 rounded-2xl bg-[#EDE9FE] dark:bg-indigo-950/70 border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8] shrink-0">
-              <Shapes className="w-5 h-5" />
+          <div className="bg-white dark:bg-[#0F172A] border border-slate-200/90 dark:border-indigo-500/20 rounded-2xl p-5 flex items-start gap-3.5 shadow-2xs hover:border-[#6366F1] dark:hover:border-indigo-500/40 transition-all">
+            <div className="w-12 h-12 rounded-2xl bg-[#EDE9FE] dark:bg-indigo-950/70 border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8] shrink-0">
+              <Shapes className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-[#0F172A] dark:text-white">Main Advantage</h2>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
+              <h2 className="text-base sm:text-[17px] font-bold text-[#0F172A] dark:text-white">Main Advantage</h2>
+              <p className="text-sm sm:text-[14.5px] text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed">
                 Efficient circular traversal and useful in cyclic applications.
               </p>
             </div>
@@ -404,22 +404,22 @@ export const HomePage: React.FC<HomePageProps> = ({
       <section className="reveal-on-scroll bg-white dark:bg-[#111827] p-6 sm:p-9 rounded-2xl border border-slate-200/90 dark:border-indigo-500/20 shadow-xs dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)]">
         {/* Section Header */}
         <div className="flex items-center gap-2.5 mb-6">
-          <div className="w-8 h-8 rounded-full bg-[#EDE9FE] dark:bg-indigo-950/70 border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8]">
-            <Lightbulb className="w-4 h-4" />
+          <div className="w-9 h-9 rounded-full bg-[#EDE9FE] dark:bg-indigo-950/70 border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8]">
+            <Lightbulb className="w-5 h-5" />
           </div>
-          <h2 className="text-lg sm:text-xl font-bold text-[#0F172A] dark:text-white">
+          <h2 className="text-xl sm:text-2xl font-extrabold text-[#0F172A] dark:text-white tracking-tight">
             1. The Main Idea
           </h2>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
           {/* Left Column: Question & Explanation */}
-          <div className="lg:col-span-4 flex flex-col gap-2">
-            <h3 className="text-base sm:text-lg font-bold text-[#4F46E5] dark:text-[#818CF8] leading-snug">
+          <div className="lg:col-span-4 flex flex-col gap-2.5">
+            <h3 className="text-lg sm:text-xl font-bold text-[#4F46E5] dark:text-[#818CF8] leading-snug">
               What makes a linked list<br />
               “circular”?
             </h3>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-700 dark:text-slate-200 leading-relaxed font-normal">
               In a circular linked list, the last node does not point to NULL but instead points back to the first node,
               forming a circle. This allows continuous traversal from any node.
             </p>
@@ -429,48 +429,48 @@ export const HomePage: React.FC<HomePageProps> = ({
           <div className="lg:col-span-8 bg-[#FAF8FF] dark:bg-[#0F172A] border border-slate-200/80 dark:border-indigo-500/20 rounded-2xl p-5 sm:p-6">
             <div className="grid grid-cols-2 gap-x-4 gap-y-6 items-start sm:flex sm:flex-nowrap sm:items-center sm:justify-between sm:gap-2">
               {/* Step 1: Node */}
-              <div className="flex flex-col items-center text-center w-full sm:w-auto sm:flex-1 sm:min-w-[85px]">
+              <div className="flex flex-col items-center text-center w-full sm:w-auto sm:flex-1 sm:min-w-[90px]">
                 <div className="w-13 h-13 rounded-full bg-[#EDE9FE] dark:bg-indigo-950/80 border border-[#DDD6FE] dark:border-indigo-500/30 text-[#4F46E5] dark:text-[#818CF8] flex items-center justify-center shadow-xs mb-2.5 shrink-0">
                   <FileText className="w-6 h-6 text-[#4F46E5] dark:text-[#818CF8]" />
                 </div>
-                <span className="text-sm font-bold text-[#0F172A] dark:text-white">Node</span>
-                <span className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Stores data and address</span>
+                <span className="text-base font-bold text-[#0F172A] dark:text-white">Node</span>
+                <span className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 leading-snug">Stores data &amp; address</span>
               </div>
 
               {/* Arrow 1 */}
               <ArrowRight className="w-4 h-4 text-[#818CF8] dark:text-[#6366F1] shrink-0 hidden sm:block" />
 
               {/* Step 2: Next Pointer */}
-              <div className="flex flex-col items-center text-center w-full sm:w-auto sm:flex-1 sm:min-w-[85px]">
+              <div className="flex flex-col items-center text-center w-full sm:w-auto sm:flex-1 sm:min-w-[90px]">
                 <div className="w-13 h-13 rounded-full bg-[#EDE9FE] dark:bg-indigo-950/80 border border-[#DDD6FE] dark:border-indigo-500/30 text-[#4F46E5] dark:text-[#818CF8] flex items-center justify-center shadow-xs mb-2.5 shrink-0">
                   <ArrowRight className="w-6 h-6 text-[#4F46E5] dark:text-[#818CF8] stroke-[2.5]" />
                 </div>
-                <span className="text-sm font-bold text-[#0F172A] dark:text-white">Next Pointer</span>
-                <span className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Points to the next node</span>
+                <span className="text-base font-bold text-[#0F172A] dark:text-white">Next Pointer</span>
+                <span className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 leading-snug">Points to next node</span>
               </div>
 
               {/* Arrow 2 */}
               <ArrowRight className="w-4 h-4 text-[#818CF8] dark:text-[#6366F1] shrink-0 hidden sm:block" />
 
               {/* Step 3: Last Node */}
-              <div className="flex flex-col items-center text-center w-full sm:w-auto sm:flex-1 sm:min-w-[85px]">
+              <div className="flex flex-col items-center text-center w-full sm:w-auto sm:flex-1 sm:min-w-[90px]">
                 <div className="w-13 h-13 rounded-full bg-[#EDE9FE] dark:bg-indigo-950/80 border border-[#DDD6FE] dark:border-indigo-500/30 text-[#4F46E5] dark:text-[#818CF8] flex items-center justify-center shadow-xs mb-2.5 shrink-0">
                   <RotateCw className="w-6 h-6 text-[#4F46E5] dark:text-[#818CF8] stroke-[2.4]" />
                 </div>
-                <span className="text-sm font-bold text-[#0F172A] dark:text-white">Last Node</span>
-                <span className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Points back to the first node</span>
+                <span className="text-base font-bold text-[#0F172A] dark:text-white">Last Node</span>
+                <span className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 leading-snug">Points back to first node</span>
               </div>
 
               {/* Arrow 3 */}
               <ArrowRight className="w-4 h-4 text-[#818CF8] dark:text-[#6366F1] shrink-0 hidden sm:block" />
 
               {/* Step 4: Circular Traversal */}
-              <div className="flex flex-col items-center text-center w-full sm:w-auto sm:flex-1 sm:min-w-[85px]">
+              <div className="flex flex-col items-center text-center w-full sm:w-auto sm:flex-1 sm:min-w-[90px]">
                 <div className="w-13 h-13 rounded-full bg-[#EDE9FE] dark:bg-indigo-950/80 border border-[#DDD6FE] dark:border-indigo-500/30 text-[#4F46E5] dark:text-[#818CF8] flex items-center justify-center shadow-xs mb-2.5 shrink-0">
                   <InfinityIcon className="w-6 h-6 text-[#4F46E5] dark:text-[#818CF8] stroke-[2.4]" />
                 </div>
-                <span className="text-sm font-bold text-[#0F172A] dark:text-white">Circular Traversal</span>
-                <span className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Continue from any node</span>
+                <span className="text-base font-bold text-[#0F172A] dark:text-white">Circular Traversal</span>
+                <span className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 leading-snug">Loop from any node</span>
               </div>
             </div>
           </div>
@@ -483,10 +483,10 @@ export const HomePage: React.FC<HomePageProps> = ({
       <section className="reveal-on-scroll bg-white dark:bg-[#111827] p-6 sm:p-9 rounded-2xl border border-slate-200/90 dark:border-indigo-500/20 shadow-xs dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)]">
         {/* Section Header */}
         <div className="flex items-center gap-2.5 mb-8">
-          <div className="w-8 h-8 rounded-full bg-[#EDE9FE] dark:bg-indigo-950/70 border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8]">
-            <BookOpen className="w-4 h-4" />
+          <div className="w-9 h-9 rounded-full bg-[#EDE9FE] dark:bg-indigo-950/70 border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8]">
+            <BookOpen className="w-5 h-5" />
           </div>
-          <h2 className="text-lg sm:text-xl font-bold text-[#0F172A] dark:text-white">
+          <h2 className="text-xl sm:text-2xl font-extrabold text-[#0F172A] dark:text-white tracking-tight">
             2. Concept Roadmap
           </h2>
         </div>
@@ -505,13 +505,13 @@ export const HomePage: React.FC<HomePageProps> = ({
               }}
               className="flex flex-col items-center text-center group cursor-pointer w-full max-w-[220px] md:max-w-none"
             >
-              <div className="w-10 h-10 rounded-full bg-[#EDE9FE] dark:bg-indigo-950 text-[#4F46E5] dark:text-[#818CF8] border-2 border-white dark:border-[#111827] shadow-xs flex items-center justify-center font-mono font-extrabold text-xs mb-3 group-hover:bg-[#4F46E5] group-hover:text-white transition-colors">
+              <div className="w-10 h-10 rounded-full bg-[#EDE9FE] dark:bg-indigo-950 text-[#4F46E5] dark:text-[#818CF8] border-2 border-white dark:border-[#111827] shadow-xs flex items-center justify-center font-mono font-extrabold text-sm mb-3 group-hover:bg-[#4F46E5] group-hover:text-white transition-colors">
                 01
               </div>
-              <div className="w-12 h-12 rounded-full bg-[#EEF2FF] dark:bg-[#172033] border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8] mb-2.5 shadow-2xs group-hover:border-[#4F46E5] transition-all">
+              <div className="w-13 h-13 rounded-full bg-[#EEF2FF] dark:bg-[#172033] border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8] mb-2.5 shadow-2xs group-hover:border-[#4F46E5] transition-all">
                 <GitFork className="w-5 h-5 rotate-180" />
               </div>
-              <h3 className="text-xs sm:text-sm font-bold text-[#0F172A] dark:text-white leading-snug">
+              <h3 className="text-sm sm:text-base font-bold text-[#0F172A] dark:text-white leading-snug">
                 Introduction <br className="hidden md:inline" /> to Circular Linked List
               </h3>
             </div>
@@ -527,13 +527,13 @@ export const HomePage: React.FC<HomePageProps> = ({
               }}
               className="flex flex-col items-center text-center group cursor-pointer w-full max-w-[220px] md:max-w-none"
             >
-              <div className="w-10 h-10 rounded-full bg-[#EDE9FE] dark:bg-indigo-950 text-[#4F46E5] dark:text-[#818CF8] border-2 border-white dark:border-[#111827] shadow-xs flex items-center justify-center font-mono font-extrabold text-xs mb-3 group-hover:bg-[#4F46E5] group-hover:text-white transition-colors">
+              <div className="w-10 h-10 rounded-full bg-[#EDE9FE] dark:bg-indigo-950 text-[#4F46E5] dark:text-[#818CF8] border-2 border-white dark:border-[#111827] shadow-xs flex items-center justify-center font-mono font-extrabold text-sm mb-3 group-hover:bg-[#4F46E5] group-hover:text-white transition-colors">
                 02
               </div>
-              <div className="w-12 h-12 rounded-full bg-[#EEF2FF] dark:bg-[#172033] border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8] mb-2.5 shadow-2xs group-hover:border-[#4F46E5] transition-all">
+              <div className="w-13 h-13 rounded-full bg-[#EEF2FF] dark:bg-[#172033] border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8] mb-2.5 shadow-2xs group-hover:border-[#4F46E5] transition-all">
                 <FileText className="w-5 h-5" />
               </div>
-              <h3 className="text-xs sm:text-sm font-bold text-[#0F172A] dark:text-white leading-snug">
+              <h3 className="text-sm sm:text-base font-bold text-[#0F172A] dark:text-white leading-snug">
                 Node Structure <br className="hidden md:inline" /> and Representation
               </h3>
             </div>
@@ -549,13 +549,13 @@ export const HomePage: React.FC<HomePageProps> = ({
               }}
               className="flex flex-col items-center text-center group cursor-pointer w-full max-w-[220px] md:max-w-none"
             >
-              <div className="w-10 h-10 rounded-full bg-[#EDE9FE] dark:bg-indigo-950 text-[#4F46E5] dark:text-[#818CF8] border-2 border-white dark:border-[#111827] shadow-xs flex items-center justify-center font-mono font-extrabold text-xs mb-3 group-hover:bg-[#4F46E5] group-hover:text-white transition-colors">
+              <div className="w-10 h-10 rounded-full bg-[#EDE9FE] dark:bg-indigo-950 text-[#4F46E5] dark:text-[#818CF8] border-2 border-white dark:border-[#111827] shadow-xs flex items-center justify-center font-mono font-extrabold text-sm mb-3 group-hover:bg-[#4F46E5] group-hover:text-white transition-colors">
                 03
               </div>
-              <div className="w-12 h-12 rounded-full bg-[#EEF2FF] dark:bg-[#172033] border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8] mb-2.5 shadow-2xs group-hover:border-[#4F46E5] transition-all">
+              <div className="w-13 h-13 rounded-full bg-[#EEF2FF] dark:bg-[#172033] border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8] mb-2.5 shadow-2xs group-hover:border-[#4F46E5] transition-all">
                 <Settings className="w-5 h-5" />
               </div>
-              <h3 className="text-xs sm:text-sm font-bold text-[#0F172A] dark:text-white leading-snug">
+              <h3 className="text-sm sm:text-base font-bold text-[#0F172A] dark:text-white leading-snug">
                 Operations <br className="hidden md:inline" /> (Insertion &amp; Deletion)
               </h3>
             </div>
@@ -571,13 +571,13 @@ export const HomePage: React.FC<HomePageProps> = ({
               }}
               className="flex flex-col items-center text-center group cursor-pointer w-full max-w-[220px] md:max-w-none"
             >
-              <div className="w-10 h-10 rounded-full bg-[#EDE9FE] dark:bg-indigo-950 text-[#4F46E5] dark:text-[#818CF8] border-2 border-white dark:border-[#111827] shadow-xs flex items-center justify-center font-mono font-extrabold text-xs mb-3 group-hover:bg-[#4F46E5] group-hover:text-white transition-colors">
+              <div className="w-10 h-10 rounded-full bg-[#EDE9FE] dark:bg-indigo-950 text-[#4F46E5] dark:text-[#818CF8] border-2 border-white dark:border-[#111827] shadow-xs flex items-center justify-center font-mono font-extrabold text-sm mb-3 group-hover:bg-[#4F46E5] group-hover:text-white transition-colors">
                 04
               </div>
-              <div className="w-12 h-12 rounded-full bg-[#EEF2FF] dark:bg-[#172033] border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8] mb-2.5 shadow-2xs group-hover:border-[#4F46E5] transition-all">
+              <div className="w-13 h-13 rounded-full bg-[#EEF2FF] dark:bg-[#172033] border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8] mb-2.5 shadow-2xs group-hover:border-[#4F46E5] transition-all">
                 <RotateCw className="w-5 h-5 stroke-[2.4]" />
               </div>
-              <h3 className="text-xs sm:text-sm font-bold text-[#0F172A] dark:text-white leading-snug">
+              <h3 className="text-sm sm:text-base font-bold text-[#0F172A] dark:text-white leading-snug">
                 Traversal <br className="hidden md:inline" /> Techniques
               </h3>
             </div>
@@ -593,13 +593,13 @@ export const HomePage: React.FC<HomePageProps> = ({
               }}
               className="flex flex-col items-center text-center group cursor-pointer w-full max-w-[220px] md:max-w-none"
             >
-              <div className="w-10 h-10 rounded-full bg-[#EDE9FE] dark:bg-indigo-950 text-[#4F46E5] dark:text-[#818CF8] border-2 border-white dark:border-[#111827] shadow-xs flex items-center justify-center font-mono font-extrabold text-xs mb-3 group-hover:bg-[#4F46E5] group-hover:text-white transition-colors">
+              <div className="w-10 h-10 rounded-full bg-[#EDE9FE] dark:bg-indigo-950 text-[#4F46E5] dark:text-[#818CF8] border-2 border-white dark:border-[#111827] shadow-xs flex items-center justify-center font-mono font-extrabold text-sm mb-3 group-hover:bg-[#4F46E5] group-hover:text-white transition-colors">
                 05
               </div>
-              <div className="w-12 h-12 rounded-full bg-[#EEF2FF] dark:bg-[#172033] border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#2563EB] dark:text-[#3B82F6] mb-2.5 shadow-2xs group-hover:border-[#2563EB] transition-all">
+              <div className="w-13 h-13 rounded-full bg-[#EEF2FF] dark:bg-[#172033] border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#2563EB] dark:text-[#3B82F6] mb-2.5 shadow-2xs group-hover:border-[#2563EB] transition-all">
                 <CheckSquare className="w-5 h-5 fill-[#2563EB] text-white dark:fill-[#3B82F6] dark:text-[#172033]" />
               </div>
-              <h3 className="text-xs sm:text-sm font-bold text-[#0F172A] dark:text-white leading-snug">
+              <h3 className="text-sm sm:text-base font-bold text-[#0F172A] dark:text-white leading-snug">
                 Applications <br className="hidden md:inline" /> and Advantages
               </h3>
             </div>
@@ -613,10 +613,10 @@ export const HomePage: React.FC<HomePageProps> = ({
       <section className="reveal-on-scroll bg-white dark:bg-[#111827] p-6 sm:p-9 rounded-2xl border border-slate-200/90 dark:border-indigo-500/20 shadow-xs dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)]">
         {/* Section Header */}
         <div className="flex items-center gap-2.5 mb-6">
-          <div className="w-8 h-8 rounded-full bg-[#EDE9FE] dark:bg-indigo-950/70 border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8]">
-            <Star className="w-4 h-4" />
+          <div className="w-9 h-9 rounded-full bg-[#EDE9FE] dark:bg-indigo-950/70 border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8]">
+            <Star className="w-5 h-5" />
           </div>
-          <h2 className="text-lg sm:text-xl font-bold text-[#0F172A] dark:text-white">
+          <h2 className="text-xl sm:text-2xl font-extrabold text-[#0F172A] dark:text-white tracking-tight">
             3. Why This Topic Matters
           </h2>
         </div>
@@ -625,12 +625,12 @@ export const HomePage: React.FC<HomePageProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {/* Card 1: Continuous Access (Subtle Purple Tint) */}
           <div className="bg-[#F5F3FF] dark:bg-[#172033] border border-[#EDE9FE] dark:border-indigo-500/25 rounded-2xl p-5 sm:p-6 flex flex-col justify-between gap-4 shadow-2xs">
-            <div className="w-11 h-11 rounded-full bg-[#6366F1] text-white flex items-center justify-center shadow-xs">
+            <div className="w-12 h-12 rounded-full bg-[#6366F1] text-white flex items-center justify-center shadow-xs">
               <RotateCw className="w-5 h-5 stroke-[2.4]" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-[#0F172A] dark:text-white mb-1.5">Continuous Access</h3>
-              <p className="text-xs sm:text-[13px] text-slate-600 dark:text-slate-400 leading-relaxed">
+              <h3 className="text-lg font-bold text-[#0F172A] dark:text-white mb-2">Continuous Access</h3>
+              <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
                 Allows seamless traversal without reaching NULL.
               </p>
             </div>
@@ -638,12 +638,12 @@ export const HomePage: React.FC<HomePageProps> = ({
 
           {/* Card 2: Useful in Real Systems (Subtle Green Tint) */}
           <div className="bg-[#ECFDF5] dark:bg-[#172033] border border-[#D1FAE5] dark:border-emerald-500/25 rounded-2xl p-5 sm:p-6 flex flex-col justify-between gap-4 shadow-2xs">
-            <div className="w-11 h-11 rounded-full bg-[#10B981] text-white flex items-center justify-center shadow-xs">
+            <div className="w-12 h-12 rounded-full bg-[#10B981] text-white flex items-center justify-center shadow-xs">
               <Database className="w-5 h-5 fill-white/20" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-[#0F172A] dark:text-white mb-1.5">Useful in Real Systems</h3>
-              <p className="text-xs sm:text-[13px] text-slate-600 dark:text-slate-400 leading-relaxed">
+              <h3 className="text-lg font-bold text-[#0F172A] dark:text-white mb-2">Useful in Real Systems</h3>
+              <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
                 Used in round-robin scheduling, circular buffers, and playlists.
               </p>
             </div>
@@ -651,12 +651,12 @@ export const HomePage: React.FC<HomePageProps> = ({
 
           {/* Card 3: Improved Efficiency (Subtle Royal-Blue Tint) */}
           <div className="bg-[#EFF6FF] dark:bg-[#172033] border border-[#DBEAFE] dark:border-blue-500/25 rounded-2xl p-5 sm:p-6 flex flex-col justify-between gap-4 shadow-2xs">
-            <div className="w-11 h-11 rounded-full bg-[#2563EB] text-white flex items-center justify-center shadow-xs">
+            <div className="w-12 h-12 rounded-full bg-[#2563EB] text-white flex items-center justify-center shadow-xs">
               <Users className="w-5 h-5 fill-white/20" />
             </div>
             <div>
-              <h3 className="text-base font-bold text-[#0F172A] dark:text-white mb-1.5">Improved Efficiency</h3>
-              <p className="text-xs sm:text-[13px] text-slate-600 dark:text-slate-400 leading-relaxed">
+              <h3 className="text-lg font-bold text-[#0F172A] dark:text-white mb-2">Improved Efficiency</h3>
+              <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
                 Enables cyclic data processing and better resource utilization.
               </p>
             </div>
@@ -798,11 +798,11 @@ export const HomePage: React.FC<HomePageProps> = ({
             </div>
 
             {/* Title & Description */}
-            <div className="flex flex-col gap-1">
-              <h2 className="text-xl sm:text-2xl font-extrabold text-[#0F172A] dark:text-white">
+            <div className="flex flex-col gap-1.5">
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A] dark:text-white tracking-tight">
                 4. Ready to Start?
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-lg leading-relaxed">
+              <p className="text-sm sm:text-base text-slate-700 dark:text-slate-200 max-w-lg leading-relaxed font-normal">
                 Begin with the fundamental idea behind circular linked lists and explore their structure and operations.
               </p>
             </div>
@@ -812,7 +812,7 @@ export const HomePage: React.FC<HomePageProps> = ({
           <button
             id="btn-home-start-learning"
             onClick={handleStartLearning}
-            className="w-full md:w-auto px-8 py-4 bg-[#4F46E5] hover:bg-[#4338CA] dark:bg-[#6366F1] dark:hover:bg-[#4F46E5] text-white font-bold text-sm sm:text-base rounded-xl transition-all shadow-md flex items-center justify-center gap-2.5 cursor-pointer shrink-0 group hover:scale-[1.02] active:scale-[0.98]"
+            className="w-full md:w-auto px-8 py-4 bg-[#4F46E5] hover:bg-[#4338CA] dark:bg-[#6366F1] dark:hover:bg-[#4F46E5] text-white font-bold text-base sm:text-lg rounded-xl transition-all shadow-md flex items-center justify-center gap-2.5 cursor-pointer shrink-0 group hover:scale-[1.02] active:scale-[0.98]"
           >
             <span>Start Learning</span>
             <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />

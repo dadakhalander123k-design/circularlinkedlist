@@ -100,17 +100,17 @@ export const CLLMemoryBar: React.FC<CLLMemoryBarProps> = ({
     headAddress === tailNextAddress;
 
   return (
-    <div className="w-full bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200 dark:border-blue-500/25 rounded-xl p-3 flex flex-col gap-2 text-xs font-mono select-none">
+    <div className="w-full bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200 dark:border-blue-500/25 rounded-xl p-3 sm:p-3.5 flex flex-col gap-2 text-xs sm:text-sm font-mono select-none">
       <div className="flex flex-wrap items-center justify-between gap-3">
         {/* Left: Memory Pointer Registers */}
         <div className="flex flex-wrap items-center gap-3">
           {/* HEAD Register */}
-          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#111827] border border-blue-200 dark:border-blue-500/30 shadow-2xs">
-            <label htmlFor="input-head-address" className="font-bold text-blue-600 dark:text-blue-400">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-[#111827] border border-blue-200 dark:border-blue-500/30 shadow-2xs">
+            <label htmlFor="input-head-address" className="text-xs sm:text-sm font-bold text-blue-600 dark:text-blue-400">
               HEAD:
             </label>
             <div className="flex items-center gap-1">
-              <span className="text-slate-400 font-mono text-xs">[</span>
+              <span className="text-slate-400 font-mono text-xs sm:text-sm">[</span>
               <input
                 id="input-head-address"
                 type="text"
@@ -126,15 +126,15 @@ export const CLLMemoryBar: React.FC<CLLMemoryBarProps> = ({
                   }
                 }}
                 placeholder="1000"
-                className="w-14 px-1 py-0.5 text-xs font-bold text-center bg-blue-50/70 dark:bg-blue-950/60 border border-blue-300 dark:border-blue-500/40 rounded text-blue-900 dark:text-blue-100 focus:outline-hidden focus:ring-1 focus:ring-blue-500"
+                className="w-16 px-1.5 py-0.5 text-xs sm:text-sm font-bold text-center bg-blue-50/70 dark:bg-blue-950/60 border border-blue-300 dark:border-blue-500/40 rounded text-blue-900 dark:text-blue-100 focus:outline-hidden focus:ring-1 focus:ring-blue-500 font-mono"
                 title="Type node address and press Enter or click Set HEAD"
               />
-              <span className="text-slate-400 font-mono text-xs">]</span>
+              <span className="text-slate-400 font-mono text-xs sm:text-sm">]</span>
               <button
                 type="button"
                 id="btn-set-head-address"
                 onClick={handleApplyHead}
-                className="px-2 py-0.5 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white rounded text-[10px] font-bold cursor-pointer transition-transform"
+                className="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 active:scale-95 text-white rounded text-xs font-bold cursor-pointer transition-transform font-sans"
                 title="Apply HEAD Address"
               >
                 Set HEAD
@@ -143,12 +143,12 @@ export const CLLMemoryBar: React.FC<CLLMemoryBarProps> = ({
           </div>
 
           {/* TAIL Register */}
-          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white dark:bg-[#111827] border border-indigo-200 dark:border-indigo-500/30 shadow-2xs">
-            <label htmlFor="input-tail-address" className="font-bold text-indigo-600 dark:text-indigo-400">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-[#111827] border border-indigo-200 dark:border-indigo-500/30 shadow-2xs">
+            <label htmlFor="input-tail-address" className="text-xs sm:text-sm font-bold text-indigo-600 dark:text-indigo-400">
               TAIL:
             </label>
             <div className="flex items-center gap-1">
-              <span className="text-slate-400 font-mono text-xs">[</span>
+              <span className="text-slate-400 font-mono text-xs sm:text-sm">[</span>
               <input
                 id="input-tail-address"
                 type="text"
@@ -164,15 +164,15 @@ export const CLLMemoryBar: React.FC<CLLMemoryBarProps> = ({
                   }
                 }}
                 placeholder="1006"
-                className="w-14 px-1 py-0.5 text-xs font-bold text-center bg-indigo-50/70 dark:bg-indigo-950/60 border border-indigo-300 dark:border-indigo-500/40 rounded text-indigo-900 dark:text-indigo-100 focus:outline-hidden focus:ring-1 focus:ring-indigo-500"
+                className="w-16 px-1.5 py-0.5 text-xs sm:text-sm font-bold text-center bg-indigo-50/70 dark:bg-indigo-950/60 border border-indigo-300 dark:border-indigo-500/40 rounded text-indigo-900 dark:text-indigo-100 focus:outline-hidden focus:ring-1 focus:ring-indigo-500 font-mono"
                 title="Type node address and press Enter or click Set TAIL"
               />
-              <span className="text-slate-400 font-mono text-xs">]</span>
+              <span className="text-slate-400 font-mono text-xs sm:text-sm">]</span>
               <button
                 type="button"
                 id="btn-set-tail-address"
                 onClick={handleApplyTail}
-                className="px-2 py-0.5 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white rounded text-[10px] font-bold cursor-pointer transition-transform"
+                className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white rounded text-xs font-bold cursor-pointer transition-transform font-sans"
                 title="Apply TAIL Address"
               >
                 Set TAIL
@@ -182,7 +182,7 @@ export const CLLMemoryBar: React.FC<CLLMemoryBarProps> = ({
 
           {/* Circular Condition Invariant Indicator */}
           <div
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border font-bold ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border font-bold text-xs sm:text-sm ${
               isCircularClosed
                 ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-600/40 text-emerald-700 dark:text-emerald-300'
                 : 'bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-600/30 text-amber-700 dark:text-amber-300'
@@ -195,24 +195,24 @@ export const CLLMemoryBar: React.FC<CLLMemoryBarProps> = ({
                 : '[ NULL ]'}
             </span>
             {isCircularClosed ? (
-              <Check className="w-3.5 h-3.5 text-emerald-600" />
+              <Check className="w-4 h-4 text-emerald-600" />
             ) : (
-              <span className="text-[10px] font-normal">(Open Loop)</span>
+              <span className="text-xs font-semibold">(Open Loop)</span>
             )}
           </div>
         </div>
 
         {/* Right: Educational Note */}
-        <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-[11px]">
-          <Cpu className="w-3.5 h-3.5 text-blue-500" />
+        <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-xs sm:text-sm font-medium">
+          <Cpu className="w-4 h-4 text-blue-500" />
           <span>NEXT stores the memory address of the next node.</span>
         </div>
       </div>
 
       {/* Small inline validation error feedback */}
       {errorText && (
-        <div className="text-rose-600 dark:text-rose-400 text-xs font-medium flex items-center gap-1.5 animate-shake">
-          <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+        <div className="text-rose-600 dark:text-rose-400 text-xs sm:text-sm font-semibold flex items-center gap-1.5 animate-shake">
+          <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{errorText}</span>
         </div>
       )}

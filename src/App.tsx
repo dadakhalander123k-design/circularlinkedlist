@@ -465,13 +465,13 @@ export default function App() {
                       <div key={`game-level-${currentLevel.id}`} className="flex flex-col gap-6 animate-chapter-switch">
                         {/* Level Title & Subtitle Banner */}
                         <div className="text-center max-w-2xl mx-auto font-sans">
-                          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#EFF6FF] dark:bg-blue-950/60 border border-[#DBEAFE] dark:border-blue-500/30 text-[#2563EB] dark:text-[#3B82F6] text-xs font-bold mb-2 uppercase font-mono rounded-lg">
-                            <Sparkles className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#3B82F6]" />
+                          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#EFF6FF] dark:bg-blue-950/60 border border-[#DBEAFE] dark:border-blue-500/30 text-[#2563EB] dark:text-[#3B82F6] text-xs sm:text-sm font-bold mb-2 uppercase font-mono rounded-lg">
+                            <Sparkles className="w-4 h-4 text-[#2563EB] dark:text-[#3B82F6]" />
                             <span>
                               Level {currentLevel.id < 10 ? `0${currentLevel.id}` : currentLevel.id} • {currentLevel.title}
                             </span>
                           </div>
-                          <h1 className="text-2xl sm:text-4xl font-bold font-display text-slate-900 dark:text-white tracking-tight animate-heading-enter">
+                          <h1 className="text-2xl sm:text-4xl lg:text-[42px] font-extrabold font-display text-slate-900 dark:text-white tracking-tight animate-heading-enter">
                             {currentLevel.subtitle}
                           </h1>
                         </div>

@@ -729,52 +729,52 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
       {/* ========================================================= */}
       {/* 1. LAB HEADER & QUICK ACTIONS                             */}
       {/* ========================================================= */}
-      <div className="card-modern p-5 sm:p-6 bg-gradient-to-r from-blue-50/70 via-indigo-50/40 to-white dark:from-[#0f172a] dark:via-[#1e1b4b]/20 dark:to-[#0B1120] border border-blue-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="card-modern p-6 sm:p-8 bg-gradient-to-r from-blue-50/70 via-indigo-50/40 to-white dark:from-[#0f172a] dark:via-[#1e1b4b]/20 dark:to-[#0B1120] border border-blue-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 mb-1.5">
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-blue-600 text-white shadow-xs">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="px-3 py-1 rounded-full text-xs sm:text-sm font-mono font-bold uppercase tracking-wider bg-blue-600 text-white shadow-xs">
               Interactive Workbench
             </span>
-            <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            <span className="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400">
               Data Structures Lab
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight animate-heading-enter">
             Circular Linked List Lab
           </h1>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-2xl">
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 mt-2 max-w-2xl leading-relaxed">
             Build, modify, search, and traverse a circular linked list interactively. Inspect real memory
             addresses, verify pointer bypasses, and observe circular pointer closure in real time.
           </p>
         </div>
 
         {/* Quick Action Presets */}
-        <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+        <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
           <button
             onClick={handleResetLab}
             id="btn-lab-reset"
-            className="px-3 py-2 text-xs font-semibold rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700/70 transition-all flex items-center gap-1.5 shadow-xs cursor-pointer"
+            className="px-3.5 py-2 text-xs sm:text-sm font-bold rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700/70 transition-all flex items-center gap-1.5 shadow-xs cursor-pointer"
             title="Reset to 4-node default list"
           >
-            <RotateCcw className="w-3.5 h-3.5 text-blue-600" />
+            <RotateCcw className="w-4 h-4 text-blue-600" />
             <span>Reset Lab</span>
           </button>
           <button
             onClick={handleClearToEmpty}
             id="btn-lab-clear"
-            className="px-3 py-2 text-xs font-semibold rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 dark:hover:text-rose-400 transition-all flex items-center gap-1.5 shadow-xs cursor-pointer"
+            className="px-3.5 py-2 text-xs sm:text-sm font-bold rounded-lg bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 dark:hover:text-rose-400 transition-all flex items-center gap-1.5 shadow-xs cursor-pointer"
             title="Empty the list completely"
           >
-            <Trash2 className="w-3.5 h-3.5 text-rose-500" />
+            <Trash2 className="w-4 h-4 text-rose-500" />
             <span>Clear to Empty</span>
           </button>
           <button
             onClick={handleLoadSingleNode}
             id="btn-lab-1-node"
-            className="px-3 py-2 text-xs font-semibold rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/60 transition-all flex items-center gap-1.5 shadow-xs cursor-pointer"
+            className="px-3.5 py-2 text-xs sm:text-sm font-bold rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/60 transition-all flex items-center gap-1.5 shadow-xs cursor-pointer"
             title="Load 1-node self-looping list"
           >
-            <RotateCw className="w-3.5 h-3.5 text-blue-600" />
+            <RotateCw className="w-4 h-4 text-blue-600" />
             <span>1-Node Self Loop</span>
           </button>
         </div>
@@ -782,13 +782,13 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
 
       {/* Dynamic Feedback Toasts / Alerts */}
       {errorMessage && (
-        <div className="p-3 bg-rose-50 dark:bg-rose-950/50 border border-rose-300 dark:border-rose-800/80 rounded-xl text-xs font-semibold text-rose-700 dark:text-rose-300 flex items-center gap-2 shadow-xs animate-fadeIn">
+        <div className="p-3.5 bg-rose-50 dark:bg-rose-950/50 border border-rose-300 dark:border-rose-800/80 rounded-xl text-xs sm:text-sm font-semibold text-rose-700 dark:text-rose-300 flex items-center gap-2 shadow-xs animate-fadeIn">
           <AlertCircle className="w-4 h-4 text-rose-500 shrink-0" />
           <span>{errorMessage}</span>
         </div>
       )}
       {successMessage && (
-        <div className="p-3 bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-300 dark:border-emerald-800/80 rounded-xl text-xs font-semibold text-emerald-700 dark:text-emerald-300 flex items-center gap-2 shadow-xs animate-fadeIn">
+        <div className="p-3.5 bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-300 dark:border-emerald-800/80 rounded-xl text-xs sm:text-sm font-semibold text-emerald-700 dark:text-emerald-300 flex items-center gap-2 shadow-xs animate-fadeIn">
           <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
           <span>{successMessage}</span>
         </div>
@@ -797,71 +797,71 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
       {/* ========================================================= */}
       {/* 2. POINTER STATE & METRICS SUMMARY CARDS                  */}
       {/* ========================================================= */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
         {/* Metric 1: HEAD */}
-        <div className="card-modern p-3.5 bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
-          <span className="text-[10px] font-mono uppercase font-bold tracking-wider text-slate-500 dark:text-slate-400">
+        <div className="card-modern p-4 bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+          <span className="text-xs font-mono uppercase font-bold tracking-wider text-slate-500 dark:text-slate-400">
             HEAD Pointer
           </span>
-          <div className="mt-1 flex items-baseline gap-2">
-            <span className="text-xl sm:text-2xl font-mono font-extrabold text-blue-600 dark:text-blue-400">
+          <div className="mt-1.5 flex items-baseline gap-2">
+            <span className="text-2xl sm:text-3xl font-mono font-extrabold text-blue-600 dark:text-blue-400">
               {headAddress !== null ? headAddress : '—'}
             </span>
             {headAddress !== null && (
-              <span className="text-[10px] font-mono text-slate-400">
+              <span className="text-xs font-mono text-slate-400">
                 (DATA: {headNode?.value})
               </span>
             )}
           </div>
-          <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+          <span className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             Entry point of circular list
           </span>
         </div>
 
         {/* Metric 2: TAIL */}
-        <div className="card-modern p-3.5 bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
-          <span className="text-[10px] font-mono uppercase font-bold tracking-wider text-slate-500 dark:text-slate-400">
+        <div className="card-modern p-4 bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+          <span className="text-xs font-mono uppercase font-bold tracking-wider text-slate-500 dark:text-slate-400">
             TAIL Pointer
           </span>
-          <div className="mt-1 flex items-baseline gap-2">
-            <span className="text-xl sm:text-2xl font-mono font-extrabold text-indigo-600 dark:text-indigo-400">
+          <div className="mt-1.5 flex items-baseline gap-2">
+            <span className="text-2xl sm:text-3xl font-mono font-extrabold text-indigo-600 dark:text-indigo-400">
               {tailAddress !== null ? tailAddress : '—'}
             </span>
             {tailAddress !== null && (
-              <span className="text-[10px] font-mono text-slate-400">
+              <span className="text-xs font-mono text-slate-400">
                 (DATA: {tailNode?.value})
               </span>
             )}
           </div>
-          <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+          <span className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             Last node in sequence
           </span>
         </div>
 
         {/* Metric 3: Active Nodes */}
-        <div className="card-modern p-3.5 bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
-          <span className="text-[10px] font-mono uppercase font-bold tracking-wider text-slate-500 dark:text-slate-400">
+        <div className="card-modern p-4 bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+          <span className="text-xs font-mono uppercase font-bold tracking-wider text-slate-500 dark:text-slate-400">
             Active Nodes
           </span>
-          <div className="mt-1 flex items-baseline gap-2">
-            <span className="text-xl sm:text-2xl font-mono font-extrabold text-slate-800 dark:text-white">
+          <div className="mt-1.5 flex items-baseline gap-2">
+            <span className="text-2xl sm:text-3xl font-mono font-extrabold text-slate-800 dark:text-white">
               {nodes.length}
             </span>
-            <span className="text-[10px] font-mono text-slate-400">
+            <span className="text-xs font-mono text-slate-400">
               {nodes.length === 1 ? 'node' : 'nodes'}
             </span>
           </div>
-          <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+          <span className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             Allocated heap memory
           </span>
         </div>
 
         {/* Metric 4: Circular Invariant */}
-        <div className="card-modern p-3.5 bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
-          <span className="text-[10px] font-mono uppercase font-bold tracking-wider text-slate-500 dark:text-slate-400">
+        <div className="card-modern p-4 bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
+          <span className="text-xs font-mono uppercase font-bold tracking-wider text-slate-500 dark:text-slate-400">
             Circular Invariant
           </span>
-          <div className="mt-1 flex items-center gap-1.5 font-mono font-bold text-xs sm:text-sm text-emerald-600 dark:text-emerald-400">
+          <div className="mt-1.5 flex items-center gap-1.5 font-mono font-bold text-xs sm:text-sm text-emerald-600 dark:text-emerald-400">
             <CheckCircle2 className="w-4 h-4 shrink-0" />
             <span>
               {nodes.length > 0
@@ -869,7 +869,7 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                 : 'Empty (N/A)'}
             </span>
           </div>
-          <span className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+          <span className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             TAIL.NEXT ≡ HEAD
           </span>
         </div>
@@ -881,12 +881,12 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
       <div className="card-modern p-5 bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col gap-3">
         <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
           <div className="flex items-center gap-2">
-            <Layers className="w-4 h-4 text-blue-600" />
-            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-800 dark:text-white font-mono">
+            <Layers className="w-5 h-5 text-blue-600" />
+            <h2 className="text-base sm:text-lg font-bold uppercase tracking-wider text-slate-800 dark:text-white font-mono">
               Live Circular Linked List Visualization
             </h2>
           </div>
-          <span className="text-xs font-mono text-slate-500 dark:text-slate-400 hidden sm:inline">
+          <span className="text-xs sm:text-sm font-mono text-slate-500 dark:text-slate-400 hidden sm:inline">
             Click on any node to select its address for insertion or deletion
           </span>
         </div>
@@ -895,10 +895,10 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
         {nodes.length === 0 ? (
           <div className="w-full py-16 px-4 flex flex-col items-center justify-center text-center bg-slate-50 dark:bg-[#0B1120] rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-800">
             <Database className="w-10 h-10 text-slate-400 dark:text-slate-600 mb-3 stroke-[1.5]" />
-            <h3 className="text-base font-bold text-slate-700 dark:text-slate-300">
+            <h3 className="text-lg sm:text-xl font-bold text-slate-700 dark:text-slate-300">
               List is currently empty (HEAD = —, TAIL = —)
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm">
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1.5 max-w-md">
               Use the operation controls below to add your first node with data. The first node will automatically point back to itself.
             </p>
             <button
@@ -907,7 +907,7 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                 setInsertMode('ENDING');
                 handleInsert();
               }}
-              className="mt-4 px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold text-xs flex items-center gap-1.5 hover:bg-blue-700 cursor-pointer shadow-xs"
+              className="mt-4 px-5 py-2.5 rounded-lg bg-blue-600 text-white font-bold text-xs sm:text-sm flex items-center gap-2 hover:bg-blue-700 cursor-pointer shadow-xs"
             >
               <PlusCircle className="w-4 h-4" />
               <span>Create Initial Node (10)</span>
@@ -944,43 +944,43 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                     title={`Click to select node ${node.address}`}
                   >
                     {/* Role Badges */}
-                    <div className="h-7 mb-1 flex items-center gap-1 justify-center">
+                    <div className="h-7 mb-1 flex items-center gap-1.5 justify-center">
                       {isHead && !isTail && (
-                        <div className="px-2 py-0.5 rounded-md bg-blue-600 text-white font-mono font-bold text-[10px] tracking-wider uppercase shadow-xs flex items-center gap-1">
+                        <div className="px-2.5 py-0.5 rounded-md bg-blue-600 text-white font-mono font-bold text-xs tracking-wider uppercase shadow-xs flex items-center gap-1">
                           <span>HEAD</span>
                           <span className="text-blue-200">↓</span>
                         </div>
                       )}
                       {isTail && !isHead && (
-                        <div className="px-2 py-0.5 rounded-md bg-indigo-600 text-white font-mono font-bold text-[10px] tracking-wider uppercase shadow-xs flex items-center gap-1">
+                        <div className="px-2.5 py-0.5 rounded-md bg-indigo-600 text-white font-mono font-bold text-xs tracking-wider uppercase shadow-xs flex items-center gap-1">
                           <span>TAIL</span>
                           <span className="text-indigo-200">↓</span>
                         </div>
                       )}
                       {isHead && isTail && (
-                        <div className="px-2 py-0.5 rounded-md bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-mono font-bold text-[10px] tracking-wider uppercase shadow-xs flex items-center gap-1">
+                        <div className="px-2.5 py-0.5 rounded-md bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-mono font-bold text-xs tracking-wider uppercase shadow-xs flex items-center gap-1">
                           <span>HEAD • TAIL</span>
                           <span className="text-blue-200">↓</span>
                         </div>
                       )}
                       {isCurrentSearch && (
-                        <div className="px-2 py-0.5 rounded-md bg-amber-500 text-slate-900 font-mono font-bold text-[10px] tracking-wider uppercase shadow-xs animate-pulse">
+                        <div className="px-2.5 py-0.5 rounded-md bg-amber-500 text-slate-900 font-mono font-bold text-xs tracking-wider uppercase shadow-xs animate-pulse">
                           <span>SEARCHING</span>
                         </div>
                       )}
                       {isCurrentTraversal && (
-                        <div className="px-2 py-0.5 rounded-md bg-emerald-500 text-slate-900 font-mono font-bold text-[10px] tracking-wider uppercase shadow-xs animate-pulse">
+                        <div className="px-2.5 py-0.5 rounded-md bg-emerald-500 text-slate-900 font-mono font-bold text-xs tracking-wider uppercase shadow-xs animate-pulse">
                           <span>VISITED</span>
                         </div>
                       )}
                       {isFound && (
-                        <div className="px-2 py-0.5 rounded-md bg-emerald-600 text-white font-mono font-bold text-[10px] tracking-wider uppercase shadow-xs">
+                        <div className="px-2.5 py-0.5 rounded-md bg-emerald-600 text-white font-mono font-bold text-xs tracking-wider uppercase shadow-xs">
                           <span>MATCH</span>
                         </div>
                       )}
                       {isNew && (
-                        <div className="px-2 py-0.5 rounded-md bg-cyan-600 text-white font-mono font-bold text-[10px] tracking-wider uppercase shadow-xs flex items-center gap-1 animate-bounce">
-                          <Sparkles className="w-2.5 h-2.5" />
+                        <div className="px-2.5 py-0.5 rounded-md bg-cyan-600 text-white font-mono font-bold text-xs tracking-wider uppercase shadow-xs flex items-center gap-1 animate-bounce">
+                          <Sparkles className="w-3 h-3" />
                           <span>NEW</span>
                         </div>
                       )}
@@ -988,7 +988,7 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
 
                     {/* Node Card Box: ADDR | DATA | NEXT */}
                     <div
-                      className={`group flex flex-col rounded-xl border-2 shadow-xs transition-all duration-200 overflow-hidden min-w-[135px] sm:min-w-[150px] ${
+                      className={`group flex flex-col rounded-xl border-2 shadow-xs transition-all duration-200 overflow-hidden min-w-[140px] sm:min-w-[155px] ${
                         isFound
                           ? 'border-emerald-500 ring-4 ring-emerald-500/20 bg-emerald-50/70 dark:bg-emerald-950/60 scale-105'
                           : isCurrentSearch
@@ -1001,11 +1001,11 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                       }`}
                     >
                       {/* Tier 1: ADDRESS */}
-                      <div className="px-2.5 py-1 bg-slate-100/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700/80 flex items-center justify-between text-[10px] font-mono">
+                      <div className="px-3 py-1 bg-slate-100/90 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700/80 flex items-center justify-between text-xs font-mono">
                         <span className="font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
                           ADDR
                         </span>
-                        <span className="font-extrabold text-blue-700 dark:text-blue-300 bg-white dark:bg-[#0B1120] px-1.5 py-0.2 rounded border border-slate-200 dark:border-slate-700">
+                        <span className="font-extrabold text-xs sm:text-sm text-blue-700 dark:text-blue-300 bg-white dark:bg-[#0B1120] px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">
                           {node.address}
                         </span>
                       </div>
@@ -1014,10 +1014,10 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                       <div className="flex items-stretch flex-1">
                         {/* DATA */}
                         <div className="flex-1 px-3 py-2 flex flex-col items-center justify-center bg-slate-50/60 dark:bg-[#0F172A]/60 border-r border-slate-200 dark:border-slate-700/80">
-                          <span className="text-[9px] font-mono uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider">
+                          <span className="text-xs font-mono uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider">
                             DATA
                           </span>
-                          <span className="text-base sm:text-lg font-mono font-extrabold text-slate-800 dark:text-white">
+                          <span className="text-lg sm:text-xl font-mono font-extrabold text-slate-800 dark:text-white">
                             {node.value}
                           </span>
                         </div>
@@ -1025,12 +1025,12 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                         {/* NEXT */}
                         <div className="flex-1 px-2.5 py-2 flex flex-col items-center justify-center bg-white dark:bg-[#111827]">
                           <div className="w-full flex items-center justify-between gap-1 mb-0.5">
-                            <span className="text-[9px] font-mono uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider">
+                            <span className="text-xs font-mono uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider">
                               NEXT
                             </span>
-                            <span className="w-1.5 h-1.5 rounded-full bg-blue-600 dark:bg-blue-400"></span>
+                            <span className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400"></span>
                           </div>
-                          <span className="text-[11px] font-mono font-bold px-1.5 py-0.5 rounded bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800/80 text-blue-700 dark:text-blue-300">
+                          <span className="text-xs sm:text-sm font-mono font-bold px-2 py-0.5 rounded bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800/80 text-blue-700 dark:text-blue-300">
                             {node.nextAddress}
                           </span>
                         </div>
@@ -1221,39 +1221,39 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
           <button
             onClick={() => setActiveTab('DELETE')}
             id="tab-delete"
-            className={`px-4 py-2 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+            className={`px-4.5 py-2.5 text-xs sm:text-sm font-bold font-mono rounded-lg transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
               activeTab === 'DELETE'
                 ? 'bg-rose-600 text-white shadow-xs'
                 : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
-            <Trash2 className="w-3.5 h-3.5" />
+            <Trash2 className="w-4 h-4" />
             <span>DELETION</span>
           </button>
 
           <button
             onClick={() => setActiveTab('SEARCH')}
             id="tab-search"
-            className={`px-4 py-2 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+            className={`px-4.5 py-2.5 text-xs sm:text-sm font-bold font-mono rounded-lg transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
               activeTab === 'SEARCH'
                 ? 'bg-amber-600 text-white shadow-xs'
                 : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
-            <Search className="w-3.5 h-3.5" />
+            <Search className="w-4 h-4" />
             <span>SEARCHING</span>
           </button>
 
           <button
             onClick={() => setActiveTab('TRAVERSE')}
             id="tab-traverse"
-            className={`px-4 py-2 text-xs font-bold rounded-lg transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+            className={`px-4.5 py-2.5 text-xs sm:text-sm font-bold font-mono rounded-lg transition-all flex items-center gap-2 cursor-pointer whitespace-nowrap ${
               activeTab === 'TRAVERSE'
                 ? 'bg-emerald-600 text-white shadow-xs'
                 : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'
             }`}
           >
-            <RotateCw className="w-3.5 h-3.5" />
+            <RotateCw className="w-4 h-4" />
             <span>TRAVERSAL</span>
           </button>
         </div>
@@ -1261,15 +1261,15 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
         {/* TAB 1: INSERTION CONTROLS */}
         {activeTab === 'INSERT' && (
           <div className="flex flex-col gap-4 animate-fadeIn">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <span className="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300">
                 Choose Insertion Target:
               </span>
-              <div className="flex items-center gap-1.5">
+              <div className="flex flex-wrap items-center gap-2">
                 <button
                   type="button"
                   onClick={() => setInsertMode('BEGINNING')}
-                  className={`px-3 py-1 text-xs font-semibold rounded-md border transition-all cursor-pointer ${
+                  className={`px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-md border transition-all cursor-pointer ${
                     insertMode === 'BEGINNING'
                       ? 'bg-blue-50 dark:bg-blue-950/60 border-blue-500 text-blue-700 dark:text-blue-300'
                       : 'border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400'
@@ -1280,7 +1280,7 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                 <button
                   type="button"
                   onClick={() => setInsertMode('ENDING')}
-                  className={`px-3 py-1 text-xs font-semibold rounded-md border transition-all cursor-pointer ${
+                  className={`px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-md border transition-all cursor-pointer ${
                     insertMode === 'ENDING'
                       ? 'bg-blue-50 dark:bg-blue-950/60 border-blue-500 text-blue-700 dark:text-blue-300'
                       : 'border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400'
@@ -1291,7 +1291,7 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                 <button
                   type="button"
                   onClick={() => setInsertMode('POSITION')}
-                  className={`px-3 py-1 text-xs font-semibold rounded-md border transition-all cursor-pointer ${
+                  className={`px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-md border transition-all cursor-pointer ${
                     insertMode === 'POSITION'
                       ? 'bg-blue-50 dark:bg-blue-950/60 border-blue-500 text-blue-700 dark:text-blue-300'
                       : 'border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400'
@@ -1302,10 +1302,10 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 items-end">
               {/* Data Input */}
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-mono font-bold text-slate-600 dark:text-slate-300">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs sm:text-sm font-mono font-bold text-slate-600 dark:text-slate-300">
                   Node DATA (Integer):
                 </label>
                 <input
@@ -1314,21 +1314,21 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                   value={insertValue}
                   onChange={(e) => setInsertValue(e.target.value)}
                   placeholder="e.g. 50"
-                  className="px-3 py-2 text-sm font-mono rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#0B1120] text-slate-800 dark:text-white focus:outline-hidden focus:border-blue-500"
+                  className="px-3.5 py-2.5 text-sm sm:text-base font-mono font-bold rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#0B1120] text-slate-800 dark:text-white focus:outline-hidden focus:border-blue-500"
                 />
               </div>
 
               {/* Target Address Selector (if POSITION mode) */}
               {insertMode === 'POSITION' ? (
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-mono font-bold text-slate-600 dark:text-slate-300">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs sm:text-sm font-mono font-bold text-slate-600 dark:text-slate-300">
                     Insert After Address:
                   </label>
                   <select
                     id="select-insert-address"
                     value={insertTargetAddress}
                     onChange={(e) => setInsertTargetAddress(e.target.value)}
-                    className="px-3 py-2 text-sm font-mono rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#0B1120] text-slate-800 dark:text-white focus:outline-hidden focus:border-blue-500"
+                    className="px-3.5 py-2.5 text-sm sm:text-base font-mono font-bold rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#0B1120] text-slate-800 dark:text-white focus:outline-hidden focus:border-blue-500"
                   >
                     {nodes.map((n) => (
                       <option key={n.address} value={n.address}>
@@ -1338,11 +1338,11 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                   </select>
                 </div>
               ) : (
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-mono font-bold text-slate-400 dark:text-slate-500">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs sm:text-sm font-mono font-bold text-slate-400 dark:text-slate-500">
                     Target Placement:
                   </label>
-                  <div className="px-3 py-2 text-xs font-mono rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400">
+                  <div className="px-3.5 py-2.5 text-xs sm:text-sm font-mono rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400">
                     {insertMode === 'BEGINNING'
                       ? 'Prepend before HEAD (1000)'
                       : 'Append after current TAIL'}
@@ -1356,7 +1356,7 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                   type="button"
                   id="btn-execute-insert"
                   onClick={handleInsert}
-                  className="w-full px-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-xs transition-all"
+                  className="w-full px-5 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-xs transition-all"
                 >
                   <PlusCircle className="w-4 h-4" />
                   <span>
@@ -1370,7 +1370,7 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
               </div>
             </div>
 
-            <div className="text-[11px] text-slate-500 dark:text-slate-400 bg-blue-50/50 dark:bg-blue-950/20 p-2.5 rounded-lg border border-blue-100 dark:border-blue-900/40">
+            <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 bg-blue-50/50 dark:bg-blue-950/20 p-3 rounded-lg border border-blue-100 dark:border-blue-900/40 leading-relaxed">
               <span className="font-bold text-blue-700 dark:text-blue-300">Educational Hint: </span>
               {insertMode === 'BEGINNING' &&
                 'In a Circular Linked List, inserting at the beginning requires updating the new node to point to the old HEAD, and also updating TAIL.NEXT to point to the new HEAD!'}
@@ -1385,15 +1385,15 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
         {/* TAB 2: DELETION CONTROLS */}
         {activeTab === 'DELETE' && (
           <div className="flex flex-col gap-4 animate-fadeIn">
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-slate-700 dark:text-slate-300">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <span className="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300">
                 Choose Deletion Target:
               </span>
-              <div className="flex items-center gap-1.5">
+              <div className="flex flex-wrap items-center gap-2">
                 <button
                   type="button"
                   onClick={() => setDeleteMode('BEGINNING')}
-                  className={`px-3 py-1 text-xs font-semibold rounded-md border transition-all cursor-pointer ${
+                  className={`px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-md border transition-all cursor-pointer ${
                     deleteMode === 'BEGINNING'
                       ? 'bg-rose-50 dark:bg-rose-950/60 border-rose-500 text-rose-700 dark:text-rose-300'
                       : 'border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400'
@@ -1404,7 +1404,7 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                 <button
                   type="button"
                   onClick={() => setDeleteMode('ENDING')}
-                  className={`px-3 py-1 text-xs font-semibold rounded-md border transition-all cursor-pointer ${
+                  className={`px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-md border transition-all cursor-pointer ${
                     deleteMode === 'ENDING'
                       ? 'bg-rose-50 dark:bg-rose-950/60 border-rose-500 text-rose-700 dark:text-rose-300'
                       : 'border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400'
@@ -1415,7 +1415,7 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                 <button
                   type="button"
                   onClick={() => setDeleteMode('POSITION')}
-                  className={`px-3 py-1 text-xs font-semibold rounded-md border transition-all cursor-pointer ${
+                  className={`px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-md border transition-all cursor-pointer ${
                     deleteMode === 'POSITION'
                       ? 'bg-rose-50 dark:bg-rose-950/60 border-rose-500 text-rose-700 dark:text-rose-300'
                       : 'border-slate-300 dark:border-slate-700 text-slate-600 dark:text-slate-400'
@@ -1426,18 +1426,18 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-end">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 items-end">
               {/* Target Address Selector (if POSITION mode) */}
               {deleteMode === 'POSITION' ? (
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-mono font-bold text-slate-600 dark:text-slate-300">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs sm:text-sm font-mono font-bold text-slate-600 dark:text-slate-300">
                     Target Node Address to Delete:
                   </label>
                   <select
                     id="select-delete-address"
                     value={deleteTargetAddress}
                     onChange={(e) => setDeleteTargetAddress(e.target.value)}
-                    className="px-3 py-2 text-sm font-mono rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#0B1120] text-slate-800 dark:text-white focus:outline-hidden focus:border-rose-500"
+                    className="px-3.5 py-2.5 text-sm sm:text-base font-mono font-bold rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#0B1120] text-slate-800 dark:text-white focus:outline-hidden focus:border-rose-500"
                   >
                     {nodes.map((n) => (
                       <option key={n.address} value={n.address}>
@@ -1447,11 +1447,11 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                   </select>
                 </div>
               ) : (
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs font-mono font-bold text-slate-400 dark:text-slate-500">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs sm:text-sm font-mono font-bold text-slate-400 dark:text-slate-500">
                     Active Target:
                   </label>
-                  <div className="px-3 py-2 text-xs font-mono rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400">
+                  <div className="px-3.5 py-2.5 text-xs sm:text-sm font-mono rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400">
                     {deleteMode === 'BEGINNING'
                       ? `Target HEAD Node: ${headAddress !== null ? headAddress : 'None'}`
                       : `Target TAIL Node: ${tailAddress !== null ? tailAddress : 'None'}`}
@@ -1466,7 +1466,7 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                   id="btn-execute-delete"
                   onClick={handleDelete}
                   disabled={nodes.length === 0}
-                  className="w-full px-4 py-2.5 rounded-lg bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white font-semibold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-xs transition-all"
+                  className="w-full px-5 py-3 rounded-lg bg-rose-600 hover:bg-rose-700 disabled:opacity-50 text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-xs transition-all"
                 >
                   <Trash2 className="w-4 h-4" />
                   <span>
@@ -1480,7 +1480,7 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
               </div>
             </div>
 
-            <div className="text-[11px] text-slate-500 dark:text-slate-400 bg-rose-50/50 dark:bg-rose-950/20 p-2.5 rounded-lg border border-rose-100 dark:border-rose-900/40">
+            <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 bg-rose-50/50 dark:bg-rose-950/20 p-3 rounded-lg border border-rose-100 dark:border-rose-900/40 leading-relaxed">
               <span className="font-bold text-rose-700 dark:text-rose-300">Educational Hint: </span>
               {deleteMode === 'BEGINNING' &&
                 'Deleting HEAD requires advancing HEAD to HEAD.NEXT and updating TAIL.NEXT to point to the new HEAD so the circular structure remains unbroken!'}
@@ -1495,9 +1495,9 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
         {/* TAB 3: SEARCHING CONTROLS */}
         {activeTab === 'SEARCH' && (
           <div className="flex flex-col gap-4 animate-fadeIn">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-mono font-bold text-slate-600 dark:text-slate-300">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 items-end">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs sm:text-sm font-mono font-bold text-slate-600 dark:text-slate-300">
                   Search Target DATA:
                 </label>
                 <input
@@ -1506,7 +1506,7 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
                   placeholder="e.g. 30"
-                  className="px-3 py-2 text-sm font-mono rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#0B1120] text-slate-800 dark:text-white focus:outline-hidden focus:border-amber-500"
+                  className="px-3.5 py-2.5 text-sm sm:text-base font-mono font-bold rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#0B1120] text-slate-800 dark:text-white focus:outline-hidden focus:border-amber-500"
                 />
               </div>
 
@@ -1516,7 +1516,7 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                   id="btn-execute-search"
                   onClick={handleStartSearch}
                   disabled={searchStatus === 'searching' || nodes.length === 0}
-                  className="w-full px-4 py-2.5 rounded-lg bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white font-semibold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-xs transition-all"
+                  className="w-full px-5 py-3 rounded-lg bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-xs transition-all"
                 >
                   <Search className="w-4 h-4" />
                   <span>
@@ -1530,15 +1530,15 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                   type="button"
                   id="btn-reset-search"
                   onClick={handleResetSearch}
-                  className="w-full px-4 py-2.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-xs flex items-center justify-center gap-1.5 cursor-pointer transition-all border border-slate-200 dark:border-slate-700"
+                  className="w-full px-5 py-3 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all border border-slate-200 dark:border-slate-700"
                 >
-                  <RotateCcw className="w-3.5 h-3.5" />
+                  <RotateCcw className="w-4 h-4" />
                   <span>Reset Search</span>
                 </button>
               </div>
             </div>
 
-            <div className="text-[11px] text-slate-500 dark:text-slate-400 bg-amber-50/50 dark:bg-amber-950/20 p-2.5 rounded-lg border border-amber-100 dark:border-amber-900/40">
+            <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 bg-amber-50/50 dark:bg-amber-950/20 p-3 rounded-lg border border-amber-100 dark:border-amber-900/40 leading-relaxed">
               <span className="font-bold text-amber-700 dark:text-amber-300">Educational Hint: </span>
               In a Circular Linked List, searching starts at HEAD and follows NEXT pointers. Unlike a singly linked list that terminates at NULL, a circular list must explicitly check if the current pointer loops back to HEAD to prevent an infinite loop!
             </div>
@@ -1548,14 +1548,14 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
         {/* TAB 4: TRAVERSAL CONTROLS */}
         {activeTab === 'TRAVERSE' && (
           <div className="flex flex-col gap-4 animate-fadeIn">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 items-end">
               <div className="sm:col-span-2">
                 <button
                   type="button"
                   id="btn-execute-traverse"
                   onClick={handleStartTraversal}
                   disabled={traversalStatus === 'traversing' || nodes.length === 0}
-                  className="w-full px-4 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-semibold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-xs transition-all"
+                  className="w-full px-5 py-3 rounded-lg bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-xs transition-all"
                 >
                   <Play className="w-4 h-4" />
                   <span>
@@ -1569,20 +1569,20 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                   type="button"
                   id="btn-reset-traverse"
                   onClick={handleResetTraversal}
-                  className="w-full px-4 py-2.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-xs flex items-center justify-center gap-1.5 cursor-pointer transition-all border border-slate-200 dark:border-slate-700"
+                  className="w-full px-5 py-3 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all border border-slate-200 dark:border-slate-700"
                 >
-                  <RotateCcw className="w-3.5 h-3.5" />
+                  <RotateCcw className="w-4 h-4" />
                   <span>Reset Traversal</span>
                 </button>
               </div>
             </div>
 
             {traversalPath.length > 0 && (
-              <div className="p-3 bg-emerald-50/60 dark:bg-emerald-950/30 rounded-lg border border-emerald-200 dark:border-emerald-800/80 font-mono text-xs text-emerald-800 dark:text-emerald-300 flex items-center gap-2 flex-wrap">
+              <div className="p-3.5 bg-emerald-50/60 dark:bg-emerald-950/30 rounded-lg border border-emerald-200 dark:border-emerald-800/80 font-mono text-xs sm:text-sm text-emerald-800 dark:text-emerald-300 flex items-center gap-2 flex-wrap">
                 <span className="font-bold">Visited Sequence:</span>
                 {traversalPath.map((v, i) => (
-                  <span key={i} className="flex items-center gap-1">
-                    <span className="px-1.5 py-0.5 rounded bg-white dark:bg-emerald-900 border border-emerald-300 dark:border-emerald-700 font-extrabold">
+                  <span key={i} className="flex items-center gap-1.5">
+                    <span className="px-2 py-0.5 rounded bg-white dark:bg-emerald-900 border border-emerald-300 dark:border-emerald-700 font-extrabold text-xs sm:text-sm">
                       {v}
                     </span>
                     <span>→</span>
@@ -1596,7 +1596,7 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
               </div>
             )}
 
-            <div className="text-[11px] text-slate-500 dark:text-slate-400 bg-emerald-50/50 dark:bg-emerald-950/20 p-2.5 rounded-lg border border-emerald-100 dark:border-emerald-900/40">
+            <div className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 bg-emerald-50/50 dark:bg-emerald-950/20 p-3 rounded-lg border border-emerald-100 dark:border-emerald-900/40 leading-relaxed">
               <span className="font-bold text-emerald-700 dark:text-emerald-300">Educational Hint: </span>
               A standard circular traversal begins with <code>do &#123; visit(curr); curr = curr-&gt;next; &#125; while (curr != head);</code>. Notice how it visits all active nodes and stops cleanly when returning to HEAD.
             </div>
@@ -1609,33 +1609,33 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
       {/* ========================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Left Column: Live Pointer Table (5 cols) */}
-        <div className="lg:col-span-5 card-modern p-4 bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+        <div className="lg:col-span-5 card-modern p-5 bg-white dark:bg-[#111827] border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2 mb-3">
-              <div className="flex items-center gap-1.5">
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5 mb-3">
+              <div className="flex items-center gap-2">
                 <Database className="w-4 h-4 text-blue-600" />
-                <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-slate-800 dark:text-white">
+                <h3 className="text-xs sm:text-sm font-bold uppercase tracking-wider font-mono text-slate-800 dark:text-white">
                   Memory Pointer Table
                 </h3>
               </div>
-              <span className="text-[10px] font-mono text-slate-400">
+              <span className="text-xs font-mono text-slate-400">
                 {nodes.length} active records
               </span>
             </div>
 
             {nodes.length === 0 ? (
-              <div className="py-8 text-center text-xs font-mono text-slate-400">
+              <div className="py-8 text-center text-xs sm:text-sm font-mono text-slate-400">
                 Table empty. No nodes currently allocated in memory.
               </div>
             ) : (
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs font-mono">
+                <table className="w-full text-left text-xs sm:text-sm font-mono">
                   <thead>
-                    <tr className="border-b border-slate-200 dark:border-slate-700/80 text-[10px] text-slate-400 uppercase tracking-wider">
-                      <th className="py-1.5 px-2">Address</th>
-                      <th className="py-1.5 px-2">Data</th>
-                      <th className="py-1.5 px-2">Next</th>
-                      <th className="py-1.5 px-2">Role</th>
+                    <tr className="border-b border-slate-200 dark:border-slate-700/80 text-xs text-slate-400 font-bold uppercase tracking-wider">
+                      <th className="py-2 px-2.5">Address</th>
+                      <th className="py-2 px-2.5">Data</th>
+                      <th className="py-2 px-2.5">Next</th>
+                      <th className="py-2 px-2.5">Role</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
@@ -1647,33 +1647,33 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                           key={n.id}
                           className="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
                         >
-                          <td className="py-1.5 px-2 font-bold text-blue-600 dark:text-blue-400">
+                          <td className="py-2 px-2.5 font-bold text-blue-600 dark:text-blue-400">
                             {n.address}
                           </td>
-                          <td className="py-1.5 px-2 font-extrabold text-slate-800 dark:text-slate-100">
+                          <td className="py-2 px-2.5 font-extrabold text-slate-800 dark:text-slate-100">
                             {n.value}
                           </td>
-                          <td className="py-1.5 px-2 font-semibold text-slate-600 dark:text-slate-300">
+                          <td className="py-2 px-2.5 font-semibold text-slate-600 dark:text-slate-300">
                             {n.nextAddress}
                           </td>
-                          <td className="py-1.5 px-2">
+                          <td className="py-2 px-2.5">
                             {isHead && !isTail && (
-                              <span className="px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-[9px] font-bold">
+                              <span className="px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-xs font-bold">
                                 HEAD
                               </span>
                             )}
                             {isTail && !isHead && (
-                              <span className="px-1.5 py-0.5 rounded bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 text-[9px] font-bold">
+                              <span className="px-2 py-0.5 rounded bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 text-xs font-bold">
                                 TAIL
                               </span>
                             )}
                             {isHead && isTail && (
-                              <span className="px-1.5 py-0.5 rounded bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300 text-[9px] font-bold">
+                              <span className="px-2 py-0.5 rounded bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300 text-xs font-bold">
                                 HEAD/TAIL
                               </span>
                             )}
                             {!isHead && !isTail && (
-                              <span className="text-slate-400 text-[10px]">NODE</span>
+                              <span className="text-slate-400 text-xs font-medium">NODE</span>
                             )}
                           </td>
                         </tr>
@@ -1685,7 +1685,7 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
             )}
           </div>
 
-          <div className="mt-4 pt-2 border-t border-slate-100 dark:border-slate-800 text-[10px] font-mono text-slate-500 dark:text-slate-400">
+          <div className="mt-4 pt-2.5 border-t border-slate-100 dark:border-slate-800 text-xs font-mono text-slate-500 dark:text-slate-400">
             {nodes.length > 0 ? (
               <span>
                 Verified invariant: Node {nodes[nodes.length - 1].address}.NEXT == {nodes[0].address}
@@ -1697,37 +1697,37 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
         </div>
 
         {/* Right Column: Educational Output Console (7 cols) */}
-        <div className="lg:col-span-7 card-modern p-4 bg-[#0B1120] text-slate-200 border border-slate-800 shadow-sm flex flex-col justify-between">
+        <div className="lg:col-span-7 card-modern p-5 bg-[#0B1120] text-slate-200 border border-slate-800 shadow-sm flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-2.5 mb-3">
               <div className="flex items-center gap-2">
                 <Terminal className="w-4 h-4 text-emerald-400" />
-                <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-white">
+                <h3 className="text-xs sm:text-sm font-bold uppercase tracking-wider font-mono text-white">
                   Live Operations Console & Step Output
                 </h3>
               </div>
               <button
                 onClick={clearLogs}
-                className="text-[10px] font-mono text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+                className="text-xs font-mono text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
               >
                 Clear Output
               </button>
             </div>
 
             {/* Terminal Window with auto-scroll */}
-            <div className="font-mono text-xs flex flex-col gap-1 max-h-56 overflow-y-auto pr-1">
+            <div className="font-mono text-xs sm:text-sm flex flex-col gap-1.5 max-h-60 overflow-y-auto pr-1">
               {consoleLogs.map((log, index) => (
                 <div
                   key={index}
                   className={`leading-relaxed ${
                     log.startsWith('> Error')
-                      ? 'text-rose-400'
+                      ? 'text-rose-400 font-semibold'
                       : log.startsWith('> MATCH') || log.startsWith('> Traversal Result')
                       ? 'text-emerald-400 font-bold'
                       : log.startsWith('> Circular connection') || log.startsWith('> Single-node')
-                      ? 'text-blue-400'
+                      ? 'text-blue-400 font-semibold'
                       : log.startsWith('>')
-                      ? 'text-slate-300'
+                      ? 'text-slate-200'
                       : 'text-slate-400'
                   }`}
                 >
@@ -1737,7 +1737,7 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
             </div>
           </div>
 
-          <div className="mt-3 pt-2 border-t border-slate-800 flex items-center justify-between text-[10px] font-mono text-slate-500">
+          <div className="mt-3.5 pt-2.5 border-t border-slate-800 flex items-center justify-between text-xs font-mono text-slate-500">
             <span>Terminal status: LIVE</span>
             <span>Educational Pointer Verifier v2.0</span>
           </div>

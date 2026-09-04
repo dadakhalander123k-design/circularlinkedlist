@@ -579,36 +579,36 @@ export const QuizView: React.FC<QuizViewProps> = ({
       {/* Header Banner */}
       <div className="border border-slate-200 dark:border-blue-500/20 rounded-2xl pb-6 mb-6 bg-white dark:bg-[#111827] p-6 sm:p-8 shadow-xs dark:shadow-[0_8px_30px_rgba(0,0,0,0.35)] reveal-on-scroll">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#EFF6FF] dark:bg-blue-950/60 border border-[#DBEAFE] dark:border-blue-500/30 text-[#2563EB] dark:text-[#3B82F6] rounded-lg text-xs font-semibold uppercase tracking-wider font-mono">
-            <ShieldCheck className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#3B82F6]" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#EFF6FF] dark:bg-blue-950/60 border border-[#DBEAFE] dark:border-blue-500/30 text-[#2563EB] dark:text-[#3B82F6] rounded-lg text-xs sm:text-sm font-bold uppercase tracking-wider font-mono">
+            <ShieldCheck className="w-4 h-4 text-[#2563EB] dark:text-[#3B82F6]" />
             <span>Knowledge Assessment</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            <span className="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400">
               Simple Circular Linked List Quiz (10 Questions)
             </span>
             {isSubmitted && (
-              <span className="px-2.5 py-0.5 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-300 rounded-md text-xs font-semibold">
+              <span className="px-3 py-1 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-300 rounded-md text-xs sm:text-sm font-bold">
                 Completed
               </span>
             )}
           </div>
         </div>
 
-        <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight animate-heading-enter">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight animate-heading-enter">
           Circular Linked List Knowledge Check
         </h1>
-        <p className="text-sm text-slate-600 dark:text-slate-300 max-w-2xl mt-1 leading-relaxed">
+        <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mt-2 leading-relaxed">
           Test your understanding of circular linked list concepts, node connections, head pointers, traversals, and operations.
         </p>
 
         {/* Question Index Tabs / Progress Tracker */}
-        <div className="mt-5 pt-4 border-t border-slate-100 dark:border-blue-500/15">
-          <div className="flex items-center justify-between gap-2 mb-3 text-xs font-semibold text-slate-700 dark:text-slate-300">
+        <div className="mt-6 pt-5 border-t border-slate-100 dark:border-blue-500/15">
+          <div className="flex items-center justify-between gap-2 mb-3 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300">
             <div className="flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#3B82F6]" />
+              <Sparkles className="w-4 h-4 text-[#2563EB] dark:text-[#3B82F6]" />
               <span>
-                Progress: <strong className="text-[#2563EB] dark:text-[#3B82F6] font-mono">{answeredCount}</strong> / {totalQuestions} Answered
+                Progress: <strong className="text-[#2563EB] dark:text-[#3B82F6] font-mono text-sm sm:text-base">{answeredCount}</strong> / {totalQuestions} Answered
               </span>
             </div>
             {isSubmitted && (
@@ -618,9 +618,9 @@ export const QuizView: React.FC<QuizViewProps> = ({
                     soundManager.playNav();
                     setViewMode(viewMode === 'STEP_BY_STEP' ? 'FULL_REVIEW' : 'STEP_BY_STEP');
                   }}
-                  className="text-xs font-semibold text-[#2563EB] dark:text-[#3B82F6] hover:text-[#1D4ED8] dark:hover:text-[#3B82F6] flex items-center gap-1 cursor-pointer"
+                  className="text-xs sm:text-sm font-bold text-[#2563EB] dark:text-[#3B82F6] hover:text-[#1D4ED8] dark:hover:text-[#3B82F6] flex items-center gap-1.5 cursor-pointer"
                 >
-                  <ListOrdered className="w-3.5 h-3.5" />
+                  <ListOrdered className="w-4 h-4" />
                   <span>{viewMode === 'STEP_BY_STEP' ? 'Switch to Full Review' : 'Switch to Step Mode'}</span>
                 </button>
               </div>
@@ -628,7 +628,7 @@ export const QuizView: React.FC<QuizViewProps> = ({
           </div>
 
           {/* Question Index Pills */}
-          <div className="grid grid-cols-5 sm:grid-cols-10 gap-1.5">
+          <div className="grid grid-cols-5 sm:grid-cols-10 gap-2">
             {QUIZ_QUESTIONS.map((q, idx) => {
               const rec = studentAnswers[q.id];
               const isAnswered = rec !== undefined;
@@ -639,9 +639,9 @@ export const QuizView: React.FC<QuizViewProps> = ({
                 pillStyle = 'bg-[#2563EB] dark:bg-[#3B82F6] text-white border-[#2563EB] dark:border-[#3B82F6] font-bold shadow-xs';
               } else if (isAnswered) {
                 if (rec.isCorrect) {
-                  pillStyle = 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-500/30 font-semibold';
+                  pillStyle = 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-500/30 font-bold';
                 } else {
-                  pillStyle = 'bg-rose-50 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border-rose-200 dark:border-rose-500/30 font-semibold';
+                  pillStyle = 'bg-rose-50 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border-rose-200 dark:border-rose-500/30 font-bold';
                 }
               }
 
@@ -658,12 +658,12 @@ export const QuizView: React.FC<QuizViewProps> = ({
                       setViewMode('STEP_BY_STEP');
                     }
                   }}
-                  className={`py-2 text-center text-xs font-mono rounded-lg border transition-all cursor-pointer ${pillStyle}`}
+                  className={`py-2 text-center text-xs sm:text-sm font-mono rounded-lg border transition-all cursor-pointer ${pillStyle}`}
                   title={`Question ${idx + 1}`}
                 >
-                  <span>Q{idx + 1}</span>
+                  <span className="font-bold">Q{idx + 1}</span>
                   {isAnswered && (
-                    <span className="block text-[10px] leading-tight mt-0.5">
+                    <span className="block text-xs font-bold leading-tight mt-0.5">
                       {rec.isCorrect ? '✓' : '✕'}
                     </span>
                   )}
@@ -686,29 +686,29 @@ export const QuizView: React.FC<QuizViewProps> = ({
           </div>
 
           {/* 2. Achievement Badge */}
-          <div className={`inline-flex items-center justify-center px-4 py-1.5 rounded-full border ${certificateTheme.badge} font-mono text-[11px] sm:text-xs font-bold tracking-wider uppercase mb-3 sm:mb-4`}>
+          <div className={`inline-flex items-center justify-center px-4 py-1.5 rounded-full border ${certificateTheme.badge} font-mono text-xs sm:text-sm font-extrabold tracking-wider uppercase mb-3 sm:mb-4`}>
             {certificateTheme.badgeText}
           </div>
 
           {/* 3. Main Completion Heading */}
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#0B192C] dark:text-white tracking-tight uppercase mb-3">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0B192C] dark:text-white tracking-tight uppercase mb-3">
             QUIZ ASSESSMENT COMPLETED
           </h2>
 
           {/* 4. Supporting Description */}
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 max-w-xl mx-auto leading-relaxed font-normal mb-6 sm:mb-8">
+          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-xl mx-auto leading-relaxed font-normal mb-6 sm:mb-8">
             {certificateTheme.description}
           </p>
 
           {/* 5. Large Highlighted Score Card */}
           <div className={`w-full max-w-md mx-auto p-6 sm:p-8 bg-white dark:bg-[#0F172A] border-2 ${certificateTheme.scoreCardBorder} rounded-3xl shadow-sm dark:shadow-md flex flex-col items-center justify-center text-center mb-6 sm:mb-8`}>
-            <span className={`text-[11px] sm:text-xs font-mono font-bold tracking-[0.2em] ${certificateTheme.scoreLabel} uppercase mb-2`}>
+            <span className={`text-xs sm:text-sm font-mono font-bold tracking-[0.2em] ${certificateTheme.scoreLabel} uppercase mb-2`}>
               FINAL HIGHLIGHTED SCORE
             </span>
-            <div className={`text-5xl sm:text-6xl font-black ${certificateTheme.scoreAccent} font-sans tracking-tight leading-none my-2`}>
+            <div className={`text-6xl sm:text-7xl font-black ${certificateTheme.scoreAccent} font-sans tracking-tight leading-none my-2`}>
               {percentage}%
             </div>
-            <div className={`mt-3 px-4 py-1.5 rounded-xl bg-slate-50 dark:bg-blue-950/40 border ${certificateTheme.scoreSubBorder} text-slate-700 dark:text-slate-300 font-mono text-xs sm:text-sm font-semibold`}>
+            <div className={`mt-3 px-5 py-2 rounded-xl bg-slate-50 dark:bg-blue-950/40 border ${certificateTheme.scoreSubBorder} text-slate-700 dark:text-slate-300 font-mono text-sm sm:text-base font-bold`}>
               {score} / {totalQuestions} Questions Correct
             </div>
           </div>
@@ -717,31 +717,31 @@ export const QuizView: React.FC<QuizViewProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 w-full max-w-2xl mx-auto">
             {/* CORRECT CARD */}
             <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#0F172A] border border-slate-200/90 dark:border-blue-500/30 shadow-xs flex flex-col items-center justify-center text-center">
-              <span className="text-[10px] sm:text-[11px] font-mono font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase mb-1.5">
+              <span className="text-xs font-mono font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase mb-1.5">
                 CORRECT
               </span>
-              <span className={`text-xl sm:text-2xl font-extrabold ${certificateTheme.scoreAccent} font-mono flex items-center justify-center gap-1.5`}>
-                <Check className="w-5 h-5 stroke-[2.5]" />
+              <span className={`text-2xl sm:text-3xl font-extrabold ${certificateTheme.scoreAccent} font-mono flex items-center justify-center gap-1.5`}>
+                <Check className="w-6 h-6 stroke-[2.5]" />
                 {score}
               </span>
             </div>
 
             {/* INCORRECT CARD */}
             <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#0F172A] border border-slate-200/90 dark:border-blue-500/30 shadow-xs flex flex-col items-center justify-center text-center">
-              <span className="text-[10px] sm:text-[11px] font-mono font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase mb-1.5">
+              <span className="text-xs font-mono font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase mb-1.5">
                 INCORRECT
               </span>
-              <span className="text-xl sm:text-2xl font-extrabold text-rose-500 dark:text-rose-400 font-mono">
+              <span className="text-2xl sm:text-3xl font-extrabold text-rose-500 dark:text-rose-400 font-mono">
                 {totalQuestions - score}
               </span>
             </div>
 
             {/* ACCURACY CARD */}
             <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#0F172A] border border-slate-200/90 dark:border-blue-500/30 shadow-xs flex flex-col items-center justify-center text-center">
-              <span className="text-[10px] sm:text-[11px] font-mono font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase mb-1.5">
+              <span className="text-xs font-mono font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase mb-1.5">
                 ACCURACY
               </span>
-              <span className="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white font-mono">
+              <span className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white font-mono">
                 {percentage}%
               </span>
             </div>
@@ -754,7 +754,7 @@ export const QuizView: React.FC<QuizViewProps> = ({
               id="btn-quiz-retake"
               type="button"
               onClick={handleResetQuiz}
-              className="w-full sm:w-auto px-6 sm:px-7 py-3 rounded-2xl bg-[#2563EB] hover:bg-[#1D4ED8] dark:bg-[#2563EB] dark:hover:bg-[#1D4ED8] text-white font-sans text-sm font-semibold shadow-xs transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-98 flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full sm:w-auto px-7 sm:px-8 py-3.5 rounded-2xl bg-[#2563EB] hover:bg-[#1D4ED8] dark:bg-[#2563EB] dark:hover:bg-[#1D4ED8] text-white font-sans text-sm sm:text-base font-bold shadow-xs transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-98 flex items-center justify-center gap-2 cursor-pointer"
             >
               <RotateCcw className="w-4 h-4 stroke-[2.2]" />
               <span>Retake Quiz</span>
@@ -770,7 +770,7 @@ export const QuizView: React.FC<QuizViewProps> = ({
                   onNavigateToHome();
                 }
               }}
-              className="w-full sm:w-auto px-6 sm:px-7 py-3 rounded-2xl bg-white hover:bg-slate-50 dark:bg-[#0F172A] dark:hover:bg-[#172033] text-slate-800 dark:text-slate-200 border border-slate-200/90 dark:border-blue-500/30 font-sans text-sm font-semibold shadow-xs transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-98 flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full sm:w-auto px-7 sm:px-8 py-3.5 rounded-2xl bg-white hover:bg-slate-50 dark:bg-[#0F172A] dark:hover:bg-[#172033] text-slate-800 dark:text-slate-200 border border-slate-200/90 dark:border-blue-500/30 font-sans text-sm sm:text-base font-bold shadow-xs transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-98 flex items-center justify-center gap-2 cursor-pointer"
             >
               <Home className="w-4 h-4 stroke-[2.2] text-[#2563EB] dark:text-[#3B82F6]" />
               <span>Back to Home</span>
@@ -795,22 +795,22 @@ export const QuizView: React.FC<QuizViewProps> = ({
             {/* Question Header */}
             <div className="flex items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100 dark:border-blue-500/15">
               <div className="flex items-center gap-2">
-                <span className="px-2.5 py-1 bg-[#2563EB] dark:bg-[#3B82F6] text-white rounded-md text-xs font-bold font-mono shadow-xs">
+                <span className="px-3 py-1 bg-[#2563EB] dark:bg-[#3B82F6] text-white rounded-md text-xs sm:text-sm font-bold font-mono shadow-xs">
                   Question {currentQuestionIndex + 1 < 10 ? `0${currentQuestionIndex + 1}` : currentQuestionIndex + 1} of {totalQuestions}
                 </span>
-                <span className="text-xs font-semibold text-[#2563EB] dark:text-[#3B82F6] font-mono">{currentQuestion.techniqueCode}</span>
+                <span className="text-xs sm:text-sm font-bold text-[#2563EB] dark:text-[#3B82F6] font-mono">{currentQuestion.techniqueCode}</span>
               </div>
 
               {isCurrentQuestionAnswered && (
                 <div>
                   {currentAnswerRecord?.isCorrect ? (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-950/60 text-xs font-bold text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 rounded-lg">
-                      <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-950/60 text-xs sm:text-sm font-bold text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 rounded-lg">
+                      <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                       <span>Correct</span>
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-50 dark:bg-rose-950/60 text-xs font-bold text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-500/30 rounded-lg">
-                      <XCircle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" />
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-50 dark:bg-rose-950/60 text-xs sm:text-sm font-bold text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-500/30 rounded-lg">
+                      <XCircle className="w-4 h-4 text-rose-600 dark:text-rose-400" />
                       <span>Incorrect</span>
                     </span>
                   )}
@@ -819,7 +819,7 @@ export const QuizView: React.FC<QuizViewProps> = ({
             </div>
 
             {/* Question Statement */}
-            <p className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white mb-6 leading-snug break-words">
+            <p className="text-xl sm:text-2xl lg:text-[26px] font-extrabold text-slate-900 dark:text-white mb-6 leading-snug break-words">
               {currentQuestion.question}
             </p>
 
@@ -851,10 +851,10 @@ export const QuizView: React.FC<QuizViewProps> = ({
                     onClick={() => handleSelectOption(optIdx)}
                     disabled={isCurrentQuestionAnswered && isSubmitted}
                     style={{ animationDelay: `${(optIdx + 1) * 60}ms` }}
-                    className={`w-full p-4 text-left text-sm font-sans rounded-xl border transition-all flex items-start gap-3.5 cursor-pointer animate-chapter-switch ${optStyle}`}
+                    className={`w-full p-4 sm:p-4.5 text-left font-sans rounded-xl border transition-all flex items-start gap-3.5 cursor-pointer animate-chapter-switch ${optStyle}`}
                   >
                     <span
-                      className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 border text-xs font-bold font-mono ${isSelected
+                      className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 border text-sm font-bold font-mono ${isSelected
                         ? isCurrentQuestionAnswered
                           ? optIdx === currentQuestion.correctIndex
                             ? 'bg-emerald-600 text-white border-emerald-600'
@@ -865,7 +865,7 @@ export const QuizView: React.FC<QuizViewProps> = ({
                     >
                       {String.fromCharCode(65 + optIdx)}
                     </span>
-                    <span className="flex-1 pt-0.5 leading-relaxed break-words">{opt}</span>
+                    <span className="flex-1 pt-0.5 text-base sm:text-lg font-medium leading-relaxed break-words">{opt}</span>
                   </button>
                 );
               })}
@@ -879,10 +879,10 @@ export const QuizView: React.FC<QuizViewProps> = ({
                   soundManager.playNav();
                   setCurrentQuestionIndex((prev) => Math.max(0, prev - 1));
                 }}
-                className={`btn-modern-secondary px-4 py-2 text-xs font-semibold flex items-center gap-1.5 transition-all ${currentQuestionIndex === 0 ? 'opacity-40 cursor-not-allowed pointer-events-none' : 'cursor-pointer'
+                className={`btn-modern-secondary px-5 py-2.5 text-xs sm:text-sm font-bold flex items-center gap-1.5 transition-all ${currentQuestionIndex === 0 ? 'opacity-40 cursor-not-allowed pointer-events-none' : 'cursor-pointer'
                   }`}
               >
-                <ArrowLeft className="w-3.5 h-3.5" />
+                <ArrowLeft className="w-4 h-4" />
                 <span>Previous</span>
               </button>
 
@@ -891,7 +891,7 @@ export const QuizView: React.FC<QuizViewProps> = ({
                   id="btn-confirm-answer"
                   disabled={pendingSelection === null}
                   onClick={handleConfirmAnswer}
-                  className={`btn-modern-primary px-6 py-2.5 text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all ${pendingSelection !== null ? 'cursor-pointer' : 'opacity-40 cursor-not-allowed pointer-events-none'
+                  className={`btn-modern-primary px-7 py-3 text-xs sm:text-sm font-extrabold uppercase tracking-wider flex items-center gap-2 transition-all ${pendingSelection !== null ? 'cursor-pointer' : 'opacity-40 cursor-not-allowed pointer-events-none'
                     }`}
                 >
                   <Check className="w-4 h-4" />
@@ -904,7 +904,7 @@ export const QuizView: React.FC<QuizViewProps> = ({
                     soundManager.playClick();
                     setCurrentQuestionIndex((prev) => prev + 1);
                   }}
-                  className="btn-modern-primary px-6 py-2.5 text-xs font-bold uppercase tracking-wider flex items-center gap-2 cursor-pointer"
+                  className="btn-modern-primary px-7 py-3 text-xs sm:text-sm font-extrabold uppercase tracking-wider flex items-center gap-2 cursor-pointer"
                 >
                   <span>Next Question</span>
                   <ArrowRight className="w-4 h-4" />
@@ -913,7 +913,7 @@ export const QuizView: React.FC<QuizViewProps> = ({
                 <button
                   id="btn-finish-quiz"
                   onClick={handleSubmitExamination}
-                  className="btn-modern-primary px-6 py-2.5 text-xs font-bold uppercase tracking-wider flex items-center gap-2 cursor-pointer"
+                  className="btn-modern-primary px-7 py-3 text-xs sm:text-sm font-extrabold uppercase tracking-wider flex items-center gap-2 cursor-pointer"
                 >
                   <Award className="w-4 h-4" />
                   <span>Complete & Review</span>
@@ -923,31 +923,31 @@ export const QuizView: React.FC<QuizViewProps> = ({
 
             {/* Technical Explanation Panel (visible once answered) */}
             {isCurrentQuestionAnswered && (
-              <div className="mt-6 pt-4 border-t border-slate-100 dark:border-blue-500/15 bg-slate-50 dark:bg-[#0F172A] rounded-xl p-4 sm:p-5 text-xs">
-                <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-white mb-2">
+              <div className="mt-6 pt-4 border-t border-slate-100 dark:border-blue-500/15 bg-slate-50 dark:bg-[#0F172A] rounded-xl p-4 sm:p-5">
+                <div className="flex items-center gap-1.5 font-bold text-sm sm:text-base text-slate-900 dark:text-white mb-2">
                   <HelpCircle className="w-4 h-4 text-[#2563EB] dark:text-[#3B82F6]" />
                   <span>Technical Explanation:</span>
                 </div>
-                <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-3 font-normal text-sm">
+                <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-3 font-normal text-sm sm:text-base">
                   {currentQuestion.explanation}
                 </p>
 
                 {currentQuestion.exampleSnippet && (
-                  <div className="mb-3 p-3 bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/30 rounded-lg font-mono text-xs text-[#2563EB] dark:text-[#3B82F6] font-semibold">
+                  <div className="mb-3 p-3 bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/30 rounded-lg font-mono text-xs sm:text-sm text-[#2563EB] dark:text-[#3B82F6] font-semibold">
                     Example: {currentQuestion.exampleSnippet}
                   </div>
                 )}
 
-                <div className="flex flex-wrap items-center gap-3 text-xs pt-1">
+                <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm pt-1">
                   {currentQuestion.targetChapterId && (
                     <button
                       onClick={() => {
                         soundManager.playNav();
                         onNavigateToTheory(currentQuestion.targetChapterId);
                       }}
-                      className="text-[#2563EB] dark:text-[#3B82F6] font-semibold hover:underline flex items-center gap-1 cursor-pointer"
+                      className="text-[#2563EB] dark:text-[#3B82F6] font-bold hover:underline flex items-center gap-1 cursor-pointer"
                     >
-                      <BookOpen className="w-3.5 h-3.5" />
+                      <BookOpen className="w-4 h-4" />
                       <span>Review in Theory Guide →</span>
                     </button>
                   )}
@@ -957,9 +957,9 @@ export const QuizView: React.FC<QuizViewProps> = ({
                         soundManager.playNav();
                         onNavigateToQuest(currentQuestion.targetLevelId);
                       }}
-                      className="text-slate-700 dark:text-slate-300 font-semibold hover:underline flex items-center gap-1 cursor-pointer"
+                      className="text-slate-700 dark:text-slate-300 font-bold hover:underline flex items-center gap-1 cursor-pointer"
                     >
-                      <Gamepad2 className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#3B82F6]" />
+                      <Gamepad2 className="w-4 h-4 text-[#2563EB] dark:text-[#3B82F6]" />
                       <span>Practice in Quest Level {currentQuestion.targetLevelId} →</span>
                     </button>
                   )}
@@ -974,11 +974,11 @@ export const QuizView: React.FC<QuizViewProps> = ({
       {viewMode === 'FULL_REVIEW' && (
         <div className="space-y-6">
           <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-blue-500/20">
-            <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <ListOrdered className="w-4 h-4 text-[#2563EB] dark:text-[#3B82F6]" />
+            <h3 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <ListOrdered className="w-5 h-5 text-[#2563EB] dark:text-[#3B82F6]" />
               <span>Full Question-by-Question Review</span>
             </h3>
-            <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold font-mono">
+            <span className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-bold font-mono">
               {score} of {totalQuestions} Correct
             </span>
           </div>
@@ -1003,25 +1003,25 @@ export const QuizView: React.FC<QuizViewProps> = ({
                   {/* Header */}
                   <div className="flex items-center justify-between gap-3 mb-3 pb-2 border-b border-slate-100 dark:border-blue-500/15">
                     <div className="flex items-center gap-2">
-                      <span className="px-2.5 py-0.5 bg-[#2563EB] dark:bg-[#3B82F6] text-white rounded-md text-xs font-bold font-mono">
+                      <span className="px-2.5 py-1 bg-[#2563EB] dark:bg-[#3B82F6] text-white rounded-md text-xs sm:text-sm font-bold font-mono">
                         Question {idx + 1 < 10 ? `0${idx + 1}` : idx + 1}
                       </span>
-                      <span className="text-xs font-semibold text-[#2563EB] dark:text-[#3B82F6] font-mono">{q.techniqueCode}</span>
+                      <span className="text-xs sm:text-sm font-bold text-[#2563EB] dark:text-[#3B82F6] font-mono">{q.techniqueCode}</span>
                     </div>
 
                     <div>
                       {isAnswered ? (
                         isCorrect ? (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-emerald-50 dark:bg-emerald-950/60 text-xs font-bold text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 rounded-md">
-                            <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> Correct
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-950/60 text-xs sm:text-sm font-bold text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 rounded-md">
+                            <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> Correct
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-rose-50 dark:bg-rose-950/60 text-xs font-bold text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-500/30 rounded-md">
-                            <XCircle className="w-3.5 h-3.5 text-rose-600 dark:text-rose-400" /> Incorrect
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-50 dark:bg-rose-950/60 text-xs sm:text-sm font-bold text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-500/30 rounded-md">
+                            <XCircle className="w-4 h-4 text-rose-600 dark:text-rose-400" /> Incorrect
                           </span>
                         )
                       ) : (
-                        <span className="px-2 py-0.5 bg-slate-100 dark:bg-[#0F172A] rounded-md text-xs font-semibold text-slate-500 dark:text-slate-400">
+                        <span className="px-2.5 py-1 bg-slate-100 dark:bg-[#0F172A] rounded-md text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400">
                           Unanswered
                         </span>
                       )}
@@ -1029,57 +1029,57 @@ export const QuizView: React.FC<QuizViewProps> = ({
                   </div>
 
                   {/* Question Prompt */}
-                  <p className="text-base font-bold text-slate-900 dark:text-white mb-4 leading-snug">
+                  <p className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white mb-4 leading-snug">
                     {q.question}
                   </p>
 
                   {/* Stored Comparison */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4 text-xs font-mono">
-                    <div className={`p-3 rounded-xl border ${isCorrect ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-500/30 text-emerald-950 dark:text-emerald-200' : 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-500/30 text-rose-950 dark:text-rose-200'}`}>
-                      <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1 font-sans">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4 text-xs sm:text-sm font-mono">
+                    <div className={`p-3.5 rounded-xl border ${isCorrect ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-500/30 text-emerald-950 dark:text-emerald-200' : 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-500/30 text-rose-950 dark:text-rose-200'}`}>
+                      <div className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1 font-sans">
                         Your Submission:
                       </div>
-                      <div className="font-bold text-sm">
+                      <div className="font-bold text-sm sm:text-base">
                         {rec ? `${String.fromCharCode(65 + rec.selectedOptionIndex)}: ${rec.selectedAnswerText}` : 'No Answer Submitted'}
                       </div>
                     </div>
 
-                    <div className="p-3 rounded-xl border bg-slate-50 dark:bg-[#0F172A] border-slate-200 dark:border-blue-500/20 text-slate-900 dark:text-white">
-                      <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1 font-sans">
+                    <div className="p-3.5 rounded-xl border bg-slate-50 dark:bg-[#0F172A] border-slate-200 dark:border-blue-500/20 text-slate-900 dark:text-white">
+                      <div className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1 font-sans">
                         Correct Answer:
                       </div>
-                      <div className="font-bold text-sm text-emerald-800 dark:text-emerald-300">
+                      <div className="font-bold text-sm sm:text-base text-emerald-800 dark:text-emerald-300">
                         {String.fromCharCode(65 + q.correctIndex)}: {q.correctAnswerText}
                       </div>
                     </div>
                   </div>
 
                   {/* Explanation */}
-                  <div className="bg-slate-50 dark:bg-[#0F172A] p-4 rounded-xl border border-slate-200 dark:border-blue-500/20 text-xs">
-                    <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-white mb-1.5">
+                  <div className="bg-slate-50 dark:bg-[#0F172A] p-4 sm:p-5 rounded-xl border border-slate-200 dark:border-blue-500/20 text-xs sm:text-sm">
+                    <div className="flex items-center gap-1.5 font-bold text-sm sm:text-base text-slate-900 dark:text-white mb-1.5">
                       <HelpCircle className="w-4 h-4 text-[#2563EB] dark:text-[#3B82F6]" />
                       <span>Technical Explanation:</span>
                     </div>
-                    <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-2 font-normal text-sm">
+                    <p className="text-slate-700 dark:text-slate-300 leading-relaxed mb-2 font-normal text-sm sm:text-base">
                       {q.explanation}
                     </p>
 
                     {q.exampleSnippet && (
-                      <div className="mb-2 p-2.5 bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/30 rounded-lg font-mono text-xs text-[#2563EB] dark:text-[#3B82F6] font-semibold">
+                      <div className="mb-2 p-3 bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/30 rounded-lg font-mono text-xs sm:text-sm text-[#2563EB] dark:text-[#3B82F6] font-semibold">
                         Example: {q.exampleSnippet}
                       </div>
                     )}
 
-                    <div className="flex flex-wrap items-center gap-3 text-xs pt-1">
+                    <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm pt-1">
                       {q.targetChapterId && (
                         <button
                           onClick={() => {
                             soundManager.playNav();
                             onNavigateToTheory(q.targetChapterId);
                           }}
-                          className="text-[#2563EB] dark:text-[#3B82F6] font-semibold hover:underline flex items-center gap-1 cursor-pointer"
+                          className="text-[#2563EB] dark:text-[#3B82F6] font-bold hover:underline flex items-center gap-1 cursor-pointer"
                         >
-                          <BookOpen className="w-3.5 h-3.5" />
+                          <BookOpen className="w-4 h-4" />
                           <span>Review in Theory Guide →</span>
                         </button>
                       )}
@@ -1089,9 +1089,9 @@ export const QuizView: React.FC<QuizViewProps> = ({
                             soundManager.playNav();
                             onNavigateToQuest(q.targetLevelId);
                           }}
-                          className="text-slate-700 dark:text-slate-300 font-semibold hover:underline flex items-center gap-1 cursor-pointer"
+                          className="text-slate-700 dark:text-slate-300 font-bold hover:underline flex items-center gap-1 cursor-pointer"
                         >
-                          <Gamepad2 className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#3B82F6]" />
+                          <Gamepad2 className="w-4 h-4 text-[#2563EB] dark:text-[#3B82F6]" />
                           <span>Practice in Quest Level {q.targetLevelId} →</span>
                         </button>
                       )}

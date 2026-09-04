@@ -400,23 +400,23 @@ export const VideoTutorialsView: React.FC = () => {
       {/* Top Header Banner for Section */}
       <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/20 rounded-3xl p-6 sm:p-8 shadow-xs">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-4 border-b border-slate-100 dark:border-blue-500/15 pb-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#EFF6FF] dark:bg-blue-950/60 text-[#2563EB] dark:text-[#3B82F6] text-xs font-bold font-mono uppercase tracking-wider rounded-lg border border-[#DBEAFE] dark:border-blue-500/30">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#EFF6FF] dark:bg-blue-950/60 text-[#2563EB] dark:text-[#3B82F6] text-xs sm:text-sm font-bold font-mono uppercase tracking-wider rounded-lg border border-[#DBEAFE] dark:border-blue-500/30">
             <VideoIcon className="w-4 h-4 text-[#2563EB] dark:text-[#3B82F6]" />
             <span>Video Masterclass</span>
           </div>
-          <span className="text-xs text-slate-500 dark:text-slate-400 font-mono">
+          <span className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-mono font-semibold">
             Circular Linked List In Action
           </span>
         </div>
 
         <div className="space-y-2">
-          <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight animate-heading-enter">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight animate-heading-enter">
             Circular Linked List Video Tutorials
           </h1>
-          <p className="text-sm sm:text-base font-semibold text-[#2563EB] dark:text-[#3B82F6]">
+          <p className="text-base sm:text-lg font-bold text-[#2563EB] dark:text-[#3B82F6]">
             Watch step-by-step visual explanations of circular linked lists and their operations.
           </p>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl">
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl">
             Select a video lesson below to visually understand circular linked list concepts and operations step by step.
           </p>
         </div>
@@ -446,7 +446,7 @@ export const VideoTutorialsView: React.FC = () => {
                   <div className="flex items-center justify-between mb-3.5">
                     <div className="flex items-center gap-2.5">
                       <span
-                        className={`px-3 py-1 rounded-md text-xs font-bold font-mono border tracking-wide transition-colors ${isSelected
+                        className={`px-3 py-1 rounded-md text-xs sm:text-sm font-bold font-mono border tracking-wide transition-colors ${isSelected
                             ? 'bg-[#EFF6FF] dark:bg-blue-950/80 text-[#2563EB] dark:text-[#3B82F6] border-[#DBEAFE] dark:border-blue-500/40'
                             : 'bg-[#F8FAFC] dark:bg-blue-950/40 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-blue-500/20'
                           }`}
@@ -456,7 +456,7 @@ export const VideoTutorialsView: React.FC = () => {
 
                       {/* Small Minimal Completion Indicator */}
                       {isCompleted && (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold font-mono bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-bold font-mono bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30">
                           <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                           <span>COMPLETED</span>
                         </span>
@@ -474,10 +474,10 @@ export const VideoTutorialsView: React.FC = () => {
                   </div>
 
                   {/* Title & Description */}
-                  <h2 className="text-xl sm:text-2xl font-extrabold font-sans text-slate-900 dark:text-white tracking-tight leading-snug mb-2.5 break-words">
+                  <h2 className="text-2xl sm:text-3xl font-extrabold font-sans text-slate-900 dark:text-white tracking-tight leading-snug mb-2.5 break-words">
                     {lesson.title}
                   </h2>
-                  <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-5 font-normal break-words">
+                  <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed mb-5 font-normal break-words">
                     {lesson.description}
                   </p>
 
@@ -486,7 +486,7 @@ export const VideoTutorialsView: React.FC = () => {
                     {lesson.topics.map((topic, idx) => (
                       <span
                         key={idx}
-                        className="px-3 py-1 rounded-lg text-xs font-semibold bg-[#F1F5F9] dark:bg-[#0F172A] text-[#334155] dark:text-slate-200 border border-slate-200/90 dark:border-blue-500/25 tracking-normal"
+                        className="px-3 py-1 rounded-lg text-xs sm:text-sm font-semibold bg-[#F1F5F9] dark:bg-[#0F172A] text-[#334155] dark:text-slate-200 border border-slate-200/90 dark:border-blue-500/25 tracking-normal"
                       >
                         {topic}
                       </span>
@@ -501,7 +501,7 @@ export const VideoTutorialsView: React.FC = () => {
                     e.stopPropagation();
                     handleSelectLesson(lesson, true);
                   }}
-                  className={`w-full py-3 px-4 rounded-xl font-bold text-xs tracking-wider uppercase transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-[0.98] ${isSelected
+                  className={`w-full py-3.5 px-4 rounded-xl font-extrabold text-xs sm:text-sm tracking-wider uppercase transition-all duration-150 flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-[0.98] ${isSelected
                       ? 'bg-[#2563EB] dark:bg-[#2563EB] hover:bg-[#1D4ED8] dark:hover:bg-[#1D4ED8] text-white shadow-md'
                       : 'bg-[#EFF6FF] dark:bg-blue-950/50 hover:bg-[#DBEAFE] dark:hover:bg-blue-900/60 text-[#2563EB] dark:text-[#3B82F6] border border-[#DBEAFE] dark:border-blue-500/30'
                     }`}
@@ -530,10 +530,10 @@ export const VideoTutorialsView: React.FC = () => {
               <Tv className="w-5 h-5" />
             </div>
             <div className="min-w-0 flex-1">
-              <span className="text-xs font-bold font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
+              <span className="text-xs sm:text-sm font-bold font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
                 Current Lesson
               </span>
-              <h3 className="text-base sm:text-xl font-bold font-sans text-slate-900 dark:text-white break-words leading-snug">
+              <h3 className="text-lg sm:text-2xl font-bold font-sans text-slate-900 dark:text-white break-words leading-snug">
                 {selectedLesson
                   ? `NOW PLAYING: ${selectedLesson.nowPlayingTitle}`
                   : 'Select a lesson to begin'}
@@ -544,12 +544,12 @@ export const VideoTutorialsView: React.FC = () => {
           {selectedLesson && (
             <div className="flex items-center gap-2.5 self-start sm:self-auto">
               {completedVideos.includes(selectedLesson.id) && (
-                <span className="px-3 py-1 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs font-semibold rounded-lg font-mono flex items-center gap-1.5">
+                <span className="px-3 py-1 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-500/30 text-emerald-700 dark:text-emerald-300 text-xs sm:text-sm font-bold rounded-lg font-mono flex items-center gap-1.5">
                   <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                   <span>Completed</span>
                 </span>
               )}
-              <span className="px-3 py-1 bg-slate-100 dark:bg-[#0F172A] border border-slate-200 dark:border-blue-500/25 text-slate-700 dark:text-slate-300 text-xs font-medium rounded-lg font-mono">
+              <span className="px-3 py-1 bg-slate-100 dark:bg-[#0F172A] border border-slate-200 dark:border-blue-500/25 text-slate-700 dark:text-slate-300 text-xs sm:text-sm font-semibold rounded-lg font-mono">
                 {selectedLesson.filename}
               </span>
             </div>
@@ -575,10 +575,10 @@ export const VideoTutorialsView: React.FC = () => {
               <div className="w-16 h-16 rounded-2xl bg-blue-950/50 dark:bg-blue-950/60 border border-blue-500/30 dark:border-blue-500/30 flex items-center justify-center text-[#2563EB] dark:text-[#3B82F6] shadow-md">
                 <VideoIcon className="w-8 h-8" />
               </div>
-              <h4 className="text-lg font-bold text-white font-sans">
+              <h4 className="text-xl sm:text-2xl font-bold text-white font-sans">
                 Select a lesson and click CLICK TO WATCH.
               </h4>
-              <p className="text-xs sm:text-sm text-slate-400 max-w-md font-sans leading-relaxed">
+              <p className="text-sm sm:text-base text-slate-400 max-w-md font-sans leading-relaxed">
                 Choose between What is Circular Linked List or Operations of Circular Linked List to load and play the provided video lesson.
               </p>
             </div>
