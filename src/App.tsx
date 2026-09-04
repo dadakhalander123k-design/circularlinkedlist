@@ -240,10 +240,36 @@ export default function App() {
       const nextIndex = currentLevelIndex + 1;
       setCurrentLevelIndex(nextIndex);
     } else {
-      // All 5 levels completed! Move to Level 6: Completion Milestone
-      setCurrentLevelIndex(5);
+      // Level 5 finished: Move to Completion only if all 5 levels completed
+      const pCompleted = progressManager.getState().levelsCompleted;
+      const allDone = [1, 2, 3, 4, 5].every(
+        (lvl) => completedLevels.includes(lvl) || pCompleted.includes(lvl)
+      );
+      if (allDone) {
+        setCurrentLevelIndex(5);
+      } else {
+        const firstIncomplete = [1, 2, 3, 4, 5].find(
+          (lvl) => !completedLevels.includes(lvl) && !pCompleted.includes(lvl)
+        );
+        const safeLvl = firstIncomplete !== undefined ? firstIncomplete - 1 : 0;
+        setCurrentLevelIndex(safeLvl);
+        initLevel(safeLvl);
+      }
     }
   };
+
+  // Strict lock guard: if currentLevelIndex is on Completion (index 5) but not all 5 levels are completed, revert immediately
+  useEffect(() => {
+    if (currentLevelIndex >= 5 && !isAllLevelsCompleted) {
+      const pCompleted = progressManager.getState().levelsCompleted;
+      const firstIncomplete = [1, 2, 3, 4, 5].find(
+        (lvl) => !completedLevels.includes(lvl) && !pCompleted.includes(lvl)
+      );
+      const safeIndex = firstIncomplete !== undefined ? firstIncomplete - 1 : 0;
+      setCurrentLevelIndex(safeIndex);
+      initLevel(safeIndex);
+    }
+  }, [currentLevelIndex, isAllLevelsCompleted, completedLevels]);
 
   // Smart Resume / Continue Learning Action
   const handleContinueLearning = () => {
@@ -428,9 +454,13 @@ export default function App() {
                   <div className="flex flex-col gap-6 animate-page-enter">
                     {/* Level Stepper Bar */}
                     <LevelProgressBar
-                      currentLevelId={currentLevelIndex >= 5 ? 6 : currentLevel.id}
+                      currentLevelId={currentLevelIndex >= 5 && isAllLevelsCompleted ? 6 : currentLevel.id}
                       completedLevels={completedLevels}
                       onSelectLevel={(lvlId) => {
+                        if (lvlId === 6 && !isAllLevelsCompleted) {
+                          soundManager.playError();
+                          return;
+                        }
                         soundManager.playClick();
                         setCurrentLevelIndex(lvlId - 1);
                         if (lvlId <= 5) {
@@ -438,11 +468,11 @@ export default function App() {
                         }
                       }}
                       onOpenLab={() => navigateToTab('LAB')}
-                      isCompletionActive={currentLevelIndex >= 5}
+                      isCompletionActive={currentLevelIndex >= 5 && isAllLevelsCompleted}
                     />
 
                     {/* Level 6: Quest Completion & Mastery Certificate */}
-                    {currentLevelIndex >= 5 ? (
+                    {currentLevelIndex >= 5 && isAllLevelsCompleted ? (
                       <QuestCompletionView
                         onReplayLevel={(lvlId) => {
                           setCurrentLevelIndex(lvlId - 1);
@@ -523,7 +553,16 @@ export default function App() {
                       if (tab === 'THEORY' || tab === 'LEARN') {
                         navigateToTab('THEORY', chapterId);
                       } else if (tab === 'QUEST' || tab === 'GAME') {
-                        if (levelId) setCurrentLevelIndex(levelId - 1);
+                        if (levelId) {
+                          if (levelId === 6 && !isAllLevelsCompleted) {
+                            const safeLvl = Math.min(completedLevels.length, 4);
+                            setCurrentLevelIndex(safeLvl);
+                            initLevel(safeLvl);
+                          } else {
+                            setCurrentLevelIndex(levelId - 1);
+                            if (levelId <= 5) initLevel(levelId - 1);
+                          }
+                        }
                         navigateToTab('GAME');
                       } else if (tab === 'LAB' || tab === 'SANDBOX') {
                         navigateToTab('LAB');

@@ -29,9 +29,9 @@ export const LevelProgressBar: React.FC<LevelProgressBarProps> = ({
   ];
 
   const isAllQuestCompleted = [1, 2, 3, 4, 5].every(
-    (id) => completedLevels.includes(id) || pState.levelsCompleted.includes(id) || pState.levelsMastered.includes(id)
+    (id) => completedLevels.includes(id) || pState.levelsCompleted.includes(id)
   );
-  const isLevel6Active = currentLevelId === 6 || isCompletionActive;
+  const isLevel6Active = (currentLevelId === 6 || isCompletionActive) && isAllQuestCompleted;
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-4 flex flex-col items-center">
@@ -96,35 +96,55 @@ export const LevelProgressBar: React.FC<LevelProgressBarProps> = ({
         <button
           id="step-progress-node-completion"
           onClick={() => {
+            if (!isAllQuestCompleted) {
+              soundManager.playError();
+              return;
+            }
             soundManager.playSelect();
             onSelectLevel(6);
           }}
-          className="group flex flex-col items-center gap-2 relative z-10 focus:outline-hidden cursor-pointer"
-          title="Completion Milestone"
+          disabled={!isAllQuestCompleted}
+          className={`group flex flex-col items-center gap-2 relative z-10 focus:outline-hidden ${
+            isAllQuestCompleted ? 'cursor-pointer' : 'cursor-not-allowed opacity-85'
+          }`}
+          title={isAllQuestCompleted ? 'Completion Milestone' : 'Locked: Complete Levels 01–05 to unlock'}
+          aria-disabled={!isAllQuestCompleted}
         >
           <div
-            className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs transition-all duration-200 border-2 ${isLevel6Active
+            className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs transition-all duration-200 border-2 ${
+              isLevel6Active
                 ? 'bg-amber-500 text-white border-amber-500 shadow-md ring-4 ring-amber-100 dark:ring-amber-500/20 scale-110'
                 : isAllQuestCompleted
                   ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 border-amber-500 dark:border-amber-400 shadow-xs hover:bg-amber-100 dark:hover:bg-amber-900/40'
                   : 'bg-slate-100 dark:bg-[#0F172A] text-slate-400 dark:text-slate-500 border-slate-300 dark:border-blue-500/30'
-              }`}
+            }`}
           >
-            {isAllQuestCompleted || isLevel6Active ? (
+            {isAllQuestCompleted ? (
               <Trophy className={`w-4 h-4 ${isLevel6Active ? 'text-white' : 'text-amber-500 dark:text-amber-400'}`} />
             ) : (
               <Lock className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500" />
             )}
           </div>
           <div className="text-center">
-            <span className={`text-[10px] font-mono font-bold block ${isLevel6Active ? 'text-amber-600 dark:text-amber-400' : 'text-slate-500 dark:text-slate-400'}`}>
+            <span
+              className={`text-[10px] font-mono font-bold block ${
+                isLevel6Active
+                  ? 'text-amber-600 dark:text-amber-400'
+                  : isAllQuestCompleted
+                    ? 'text-slate-600 dark:text-slate-300'
+                    : 'text-slate-400 dark:text-slate-500'
+              }`}
+            >
               06
             </span>
             <span
-              className={`text-[11px] font-semibold hidden sm:block max-w-[85px] leading-tight transition-colors ${isLevel6Active
+              className={`text-[11px] font-semibold hidden sm:block max-w-[85px] leading-tight transition-colors ${
+                isLevel6Active
                   ? 'text-amber-700 dark:text-amber-300 font-bold'
-                  : 'text-slate-700 dark:text-slate-300'
-                }`}
+                  : isAllQuestCompleted
+                    ? 'text-slate-700 dark:text-slate-300'
+                    : 'text-slate-400 dark:text-slate-500'
+              }`}
             >
               Completion
             </span>
