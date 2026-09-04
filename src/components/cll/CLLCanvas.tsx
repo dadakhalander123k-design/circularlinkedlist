@@ -3,9 +3,12 @@ import { CLLNodeView } from './CLLNodeView';
 
 export interface VisualNodeData {
   id: string;
+  address: number;
   value: number;
   nextId: string | null;
+  nextAddress?: number | null | string;
   isHead?: boolean;
+  isTail?: boolean;
   isCurrent?: boolean;
   isPrev?: boolean;
   isTarget?: boolean;
@@ -21,9 +24,11 @@ export interface VisualNodeData {
 interface CLLCanvasProps {
   nodes: VisualNodeData[];
   headId: string | null;
+  tailId?: string | null;
   currentId?: string | null;
   onNodeClick?: (nodeId: string) => void;
   onNextClick?: (nodeId: string) => void;
+  onApplyNextAddress?: (fromAddress: number, targetAddress: number) => void;
   isAnimatingLoop?: boolean;
   showNullForTail?: boolean;
   customTailLabel?: string;
@@ -32,9 +37,11 @@ interface CLLCanvasProps {
 export const CLLCanvas: React.FC<CLLCanvasProps> = ({
   nodes,
   headId,
+  tailId,
   currentId,
   onNodeClick,
   onNextClick,
+  onApplyNextAddress,
   isAnimatingLoop = false,
   showNullForTail = false,
   customTailLabel,
@@ -68,21 +75,21 @@ export const CLLCanvas: React.FC<CLLCanvasProps> = ({
 
   useEffect(() => {
     updatePositions();
-    const timer = setTimeout(updatePositions, 100);
+    const timer = setTimeout(updatePositions, 80);
     window.addEventListener('resize', updatePositions);
     return () => {
       clearTimeout(timer);
       window.removeEventListener('resize', updatePositions);
     };
-  }, [nodes, headId, currentId]);
+  }, [nodes, headId, tailId, currentId]);
 
   const headNode = nodes.find((n) => n.id === headId);
-  const headPos = headId ? nodePositions.get(headId) : null;
+  const tailNode = tailId ? nodes.find((n) => n.id === tailId) : nodes[nodes.length - 1];
 
   return (
     <div
       ref={containerRef}
-      className="relative w-full overflow-x-auto overflow-y-visible py-6 px-4 min-h-[170px] flex items-center justify-center select-none"
+      className="relative w-full overflow-x-auto overflow-y-visible py-6 px-4 min-h-[190px] flex items-center justify-center select-none"
     >
       {/* Node elements in responsive flex row */}
       <div className="flex items-center gap-6 sm:gap-10 z-10 py-4 flex-nowrap">
@@ -91,8 +98,11 @@ export const CLLCanvas: React.FC<CLLCanvasProps> = ({
             <div key={node.id} className="relative">
               <CLLNodeView
                 id={node.id}
+                address={node.address}
                 value={node.value}
+                nextAddress={node.nextAddress}
                 isHead={node.id === headId}
+                isTail={node.id === tailId || (!tailId && node === nodes[nodes.length - 1])}
                 isCurrent={node.id === currentId}
                 isPrev={node.isPrev}
                 isTarget={node.isTarget}
@@ -105,17 +115,18 @@ export const CLLCanvas: React.FC<CLLCanvasProps> = ({
                 customBadge={node.customBadge}
                 onClick={() => onNodeClick && onNodeClick(node.id)}
                 onNextClick={onNextClick ? () => onNextClick(node.id) : undefined}
+                onApplyNextAddress={onApplyNextAddress}
               />
             </div>
           );
         })}
 
-        {/* Visual NULL box if tail points to NULL (demonstrates SLL or broken CLL) */}
+        {/* Visual NULL box if tail points to NULL */}
         {showNullForTail && (
           <div className="flex items-center gap-2 pl-2">
             <span className="text-slate-400 font-mono text-sm">→</span>
             <div className="px-3 py-2 rounded-lg bg-rose-50 dark:bg-rose-950/40 border-2 border-dashed border-rose-400 dark:border-rose-600/60 text-rose-600 dark:text-rose-400 font-mono font-bold text-xs">
-              NULL
+              NULL (0x0)
             </div>
           </div>
         )}
@@ -172,12 +183,11 @@ export const CLLCanvas: React.FC<CLLCanvasProps> = ({
           // If pointing to immediately next node in linear view
           if (idx < nodes.length - 1 && nodes[idx + 1].id === node.nextId) {
             const startX = fromPos.x + fromPos.w;
-            const startY = fromPos.y + fromPos.h * 0.65;
+            const startY = fromPos.y + fromPos.h * 0.7;
             const endX = toPos.x;
-            const endY = toPos.y + toPos.h * 0.65;
+            const endY = toPos.y + toPos.h * 0.7;
 
-            const isHighlighted =
-              isAnimatingLoop || node.id === currentId || node.isVisited;
+            const isHighlighted = isAnimatingLoop || node.id === currentId || node.isVisited;
 
             return (
               <g key={`arrow-${node.id}-${node.nextId}`}>
@@ -196,7 +206,7 @@ export const CLLCanvas: React.FC<CLLCanvasProps> = ({
             );
           }
 
-          // If single node points to itself: Draw loop-around
+          // If single node points to itself
           if (node.id === node.nextId && nodes.length === 1) {
             const x = fromPos.x + fromPos.w * 0.75;
             const y = fromPos.y + fromPos.h;
@@ -219,21 +229,20 @@ export const CLLCanvas: React.FC<CLLCanvasProps> = ({
         {/* 2. Curved Return Loop-back Arrow from Tail back to HEAD */}
         {(() => {
           if (nodes.length <= 1 || showNullForTail) return null;
-          const tailNode = nodes[nodes.length - 1];
-          if (!tailNode || !tailNode.nextId) return null;
+          const tail = tailNode;
+          if (!tail || !tail.nextId) return null;
 
-          const fromPos = nodePositions.get(tailNode.id);
-          const toPos = nodePositions.get(tailNode.nextId);
+          const fromPos = nodePositions.get(tail.id);
+          const toPos = nodePositions.get(tail.nextId);
           if (!fromPos || !toPos) return null;
 
-          // Only draw loop-back if pointing backwards (e.g. to head or earlier node)
+          // Loop-back below all nodes returning to target (HEAD)
           const startX = fromPos.x + fromPos.w * 0.85;
           const startY = fromPos.y + fromPos.h;
           const targetX = toPos.x + toPos.w * 0.35;
           const targetY = toPos.y + toPos.h;
-          const loopDepth = 38;
+          const loopDepth = 40;
 
-          // Draw an elegant curved loop below all nodes returning to head
           const path = `
             M ${startX} ${startY}
             v ${loopDepth}
@@ -241,10 +250,10 @@ export const CLLCanvas: React.FC<CLLCanvasProps> = ({
             V ${targetY + 4}
           `;
 
-          const isLoopActive = isAnimatingLoop || tailNode.id === currentId;
+          const isLoopActive = isAnimatingLoop || tail.id === currentId;
 
           return (
-            <g key={`loopback-tail-to-${tailNode.nextId}`}>
+            <g key={`loopback-tail-to-${tail.nextId}`}>
               <path
                 d={path}
                 fill="none"
@@ -254,14 +263,14 @@ export const CLLCanvas: React.FC<CLLCanvasProps> = ({
                 markerEnd={isLoopActive ? 'url(#cll-arrow-emerald)' : 'url(#cll-arrow)'}
                 className={isLoopActive ? 'animate-pulse' : 'transition-all duration-300'}
               />
-              {/* Loopback Label */}
+              {/* Loopback Label with Memory Addresses */}
               <text
                 x={(startX + targetX) / 2}
                 y={startY + loopDepth + 14}
                 textAnchor="middle"
                 className="text-[10px] font-mono font-bold fill-blue-600 dark:fill-blue-400 select-none"
               >
-                {customTailLabel || 'CIRCULAR LOOP: LAST NODE → HEAD'}
+                {customTailLabel || `TAIL (addr ${tail.address}) NEXT → HEAD (addr ${headNode?.address || 1000})`}
               </text>
             </g>
           );

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { ArrowRight, CheckCircle2, AlertCircle, Lightbulb, Sparkles, PlusCircle } from 'lucide-react';
+import { ArrowRight, CheckCircle2, AlertCircle, Lightbulb, Sparkles } from 'lucide-react';
 import { soundManager } from '../utils/audio';
 import { GuidedSolvePanel } from './GuidedSolvePanel';
 import { CLLCanvas, VisualNodeData } from './cll/CLLCanvas';
+import { CLLMemoryBar } from './cll/CLLMemoryBar';
 
 interface Level3GameplayProps {
   onLevelComplete: (levelId: number, score: number) => void;
@@ -18,45 +19,51 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
   // 3 progressive parts: 'partA_beginning' -> 'partB_end' -> 'partC_position' -> 'completed'
   const [stage, setStage] = useState<'partA_beginning' | 'partB_end' | 'partC_position' | 'completed'>('partA_beginning');
 
-  // Sub-step within each stage (e.g. 1: point new node, 2: point tail/prev, 3: update head)
+  // Sub-step within each stage
   const [subStep, setSubStep] = useState<number>(1);
-  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
-  const [feedback, setFeedback] = useState<string>('Step 1: Point new Node [5] toward current HEAD (Node [10]).');
+  const [feedback, setFeedback] = useState<string>(
+    'Part A: Set NEXT for new Node at address 1006 to point to current HEAD address (1000).'
+  );
   const [mistakeText, setMistakeText] = useState<string | null>(null);
 
   // Guided Solve state
   const [isGuidedSolveActive, setIsGuidedSolveActive] = useState<boolean>(false);
 
   // -------------------------------------------------------------
-  // PART A: Insert 5 at Beginning of [10, 20, 30]
+  // PART A: Insert 5 (addr 1006) at Beginning of [1000, 1002, 1004]
   // -------------------------------------------------------------
+  const [partAHead, setPartAHead] = useState<number>(1000);
+  const [partATail, setPartATail] = useState<number>(1004);
   const [partANodes, setPartANodes] = useState<VisualNodeData[]>([
-    { id: 'a-new-5', value: 5, nextId: null, isNew: true, customBadge: 'NEW TO INSERT' },
-    { id: 'a-10', value: 10, nextId: 'a-20', isHead: true },
-    { id: 'a-20', value: 20, nextId: 'a-30' },
-    { id: 'a-30', value: 30, nextId: 'a-10', customBadge: 'TAIL' },
+    { id: 'a-1006', address: 1006, value: 5, nextId: null, nextAddress: null, isNew: true, customBadge: 'NEW NODE' },
+    { id: 'a-1000', address: 1000, value: 10, nextId: 'a-1002', nextAddress: 1002, isHead: true },
+    { id: 'a-1002', address: 1002, value: 20, nextId: 'a-1004', nextAddress: 1004 },
+    { id: 'a-1004', address: 1004, value: 30, nextId: 'a-1000', nextAddress: 1000, isTail: true },
   ]);
-  const [partAHeadId, setPartAHeadId] = useState<string>('a-10');
 
   // -------------------------------------------------------------
-  // PART B: Insert 40 at End of [10, 20, 30]
+  // PART B: Insert 40 (addr 1006) at End of [1000, 1002, 1004]
   // -------------------------------------------------------------
+  const [partBHead, setPartBHead] = useState<number>(1000);
+  const [partBTail, setPartBTail] = useState<number>(1004);
   const [partBNodes, setPartBNodes] = useState<VisualNodeData[]>([
-    { id: 'b-10', value: 10, nextId: 'b-20', isHead: true },
-    { id: 'b-20', value: 20, nextId: 'b-30' },
-    { id: 'b-30', value: 30, nextId: 'b-10', customBadge: 'OLD TAIL' },
-    { id: 'b-new-40', value: 40, nextId: null, isNew: true, customBadge: 'NEW TAIL' },
+    { id: 'b-1000', address: 1000, value: 10, nextId: 'b-1002', nextAddress: 1002, isHead: true },
+    { id: 'b-1002', address: 1002, value: 20, nextId: 'b-1004', nextAddress: 1004 },
+    { id: 'b-1004', address: 1004, value: 30, nextId: 'b-1000', nextAddress: 1000, isTail: true, customBadge: 'OLD TAIL' },
+    { id: 'b-1006', address: 1006, value: 40, nextId: null, nextAddress: null, isNew: true, customBadge: 'NEW TAIL' },
   ]);
 
   // -------------------------------------------------------------
-  // PART C: Insert 25 between 20 and 30 in [10, 20, 30, 40]
+  // PART C: Insert 25 (addr 1008) between 1002 and 1004
   // -------------------------------------------------------------
+  const [partCHead, setPartCHead] = useState<number>(1000);
+  const [partCTail, setPartCTail] = useState<number>(1006);
   const [partCNodes, setPartCNodes] = useState<VisualNodeData[]>([
-    { id: 'c-10', value: 10, nextId: 'c-20', isHead: true },
-    { id: 'c-20', value: 20, nextId: 'c-30', customBadge: 'PREV' },
-    { id: 'c-new-25', value: 25, nextId: null, isNew: true, customBadge: 'INSERT HERE' },
-    { id: 'c-30', value: 30, nextId: 'c-40', customBadge: 'NEXT' },
-    { id: 'c-40', value: 40, nextId: 'c-10', customBadge: 'TAIL' },
+    { id: 'c-1000', address: 1000, value: 10, nextId: 'c-1002', nextAddress: 1002, isHead: true },
+    { id: 'c-1002', address: 1002, value: 20, nextId: 'c-1004', nextAddress: 1004, isPrev: true, customBadge: 'PREV' },
+    { id: 'c-1008', address: 1008, value: 25, nextId: null, nextAddress: null, isNew: true, customBadge: 'INSERT' },
+    { id: 'c-1004', address: 1004, value: 30, nextId: 'c-1006', nextAddress: 1006 },
+    { id: 'c-1006', address: 1006, value: 40, nextId: 'c-1000', nextAddress: 1000, isTail: true },
   ]);
 
   // Handle Part A pointer updates
@@ -65,37 +72,43 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
     if (subStep === 1 && action === 'point_new_to_head') {
       soundManager.playCalcSuccess();
       setPartANodes((prev) =>
-        prev.map((n) => (n.id === 'a-new-5' ? { ...n, nextId: 'a-10', isNew: false } : n))
+        prev.map((n) =>
+          n.address === 1006 ? { ...n, nextId: 'a-1000', nextAddress: 1000, isNew: false } : n
+        )
       );
       setSubStep(2);
-      setFeedback('Great! [5].next points to [10]. Now update the tail: Node [30] must point to new Node [5].');
+      setFeedback('Great! 1006.NEXT = 1000. Now update tail address 1004: set 1004.NEXT = 1006.');
       onScoreUpdate(15);
       onStreakUpdate(1);
     } else if (subStep === 2 && action === 'point_tail_to_new') {
       soundManager.playCalcSuccess();
       setPartANodes((prev) =>
-        prev.map((n) => (n.id === 'a-30' ? { ...n, nextId: 'a-new-5' } : n))
+        prev.map((n) => (n.address === 1004 ? { ...n, nextId: 'a-1006', nextAddress: 1006 } : n))
       );
       setSubStep(3);
-      setFeedback('Now make Node [5] the new HEAD!');
+      setFeedback('Now update the HEAD register: HEAD = 1006.');
       onScoreUpdate(15);
       onStreakUpdate(2);
     } else if (subStep === 3 && action === 'update_head') {
       soundManager.playCalcSuccess();
-      setPartAHeadId('a-new-5');
+      setPartAHead(1006);
       setPartANodes((prev) =>
         prev.map((n) =>
-          n.id === 'a-new-5' ? { ...n, isHead: true } : n.id === 'a-10' ? { ...n, isHead: false } : n
+          n.address === 1006
+            ? { ...n, isHead: true }
+            : n.address === 1000
+            ? { ...n, isHead: false }
+            : n
         )
       );
       setSubStep(4);
-      setFeedback('✓ Part A Complete! HEAD → 5 → 10 → 20 → 30 → HEAD. The circular invariant holds!');
+      setFeedback('✓ Part A Complete! HEAD = 1006. Circuit: 1006 → 1000 → 1002 → 1004 → 1006.');
       onScoreUpdate(20);
       onStreakUpdate(3);
     } else {
       soundManager.playError();
       onScoreUpdate(-2);
-      setMistakeText('Follow the exact pointer order: connect new node first so data is never disconnected!');
+      setMistakeText('Follow the pointer order: connect new node address first so memory links stay valid!');
     }
   };
 
@@ -105,82 +118,107 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
     if (subStep === 1 && action === 'point_tail_to_new') {
       soundManager.playCalcSuccess();
       setPartBNodes((prev) =>
-        prev.map((n) => (n.id === 'b-30' ? { ...n, nextId: 'b-new-40', customBadge: undefined } : n))
+        prev.map((n) =>
+          n.address === 1004 ? { ...n, nextId: 'b-1006', nextAddress: 1006, customBadge: undefined } : n
+        )
       );
       setSubStep(2);
-      setFeedback('Old tail [30] now points to [40]. Now complete the circle: Point [40] to HEAD [10]!');
+      setFeedback('Old tail 1004 now points to 1006. Now close the circle: set 1006.NEXT = HEAD address (1000)!');
       onScoreUpdate(15);
       onStreakUpdate(4);
     } else if (subStep === 2 && action === 'point_new_to_head') {
       soundManager.playCalcSuccess();
+      setPartBTail(1006);
       setPartBNodes((prev) =>
         prev.map((n) =>
-          n.id === 'b-new-40' ? { ...n, nextId: 'b-10', isNew: false, customBadge: 'NEW TAIL' } : n
+          n.address === 1006
+            ? { ...n, nextId: 'b-1000', nextAddress: 1000, isNew: false, isTail: true, customBadge: 'TAIL' }
+            : n.address === 1004
+            ? { ...n, isTail: false }
+            : n
         )
       );
       setSubStep(3);
-      setFeedback('✓ Part B Complete! HEAD → 10 → 20 → 30 → 40 → HEAD. Node [40] is now the tail pointing to HEAD.');
+      setFeedback('✓ Part B Complete! TAIL = 1006. 1004 → 1006 → 1000 (HEAD).');
       onScoreUpdate(20);
       onStreakUpdate(5);
     } else {
       soundManager.playError();
       onScoreUpdate(-2);
-      setMistakeText('The new last node must receive the connection from old tail, and its NEXT must point to HEAD.');
+      setMistakeText('The new last node must receive the address link from old tail, and its NEXT must store HEAD address (1000).');
     }
   };
 
-  // Handle Part C pointer updates (Insert at Position between 20 and 30)
+  // Handle Part C pointer updates (Insert at Position between 1002 and 1004)
   const handlePartCStep = (action: 'point_new_to_next' | 'point_prev_to_new') => {
     setMistakeText(null);
     if (subStep === 1 && action === 'point_new_to_next') {
       soundManager.playCalcSuccess();
       setPartCNodes((prev) =>
-        prev.map((n) => (n.id === 'c-new-25' ? { ...n, nextId: 'c-30', isNew: false } : n))
+        prev.map((n) =>
+          n.address === 1008 ? { ...n, nextId: 'c-1004', nextAddress: 1004, isNew: false } : n
+        )
       );
       setSubStep(2);
-      setFeedback('Perfect! [25].next points to [30]. Now update previous node [20] to point to [25].');
+      setFeedback('Address linked! 1008.NEXT = 1004. Now update previous node 1002: set 1002.NEXT = 1008.');
       onScoreUpdate(15);
       onStreakUpdate(6);
     } else if (subStep === 2 && action === 'point_prev_to_new') {
       soundManager.playCalcSuccess();
       setPartCNodes((prev) =>
-        prev.map((n) => (n.id === 'c-20' ? { ...n, nextId: 'c-new-25' } : n))
+        prev.map((n) =>
+          n.address === 1002 ? { ...n, nextId: 'c-1008', nextAddress: 1008 } : n
+        )
       );
       setSubStep(3);
-      setFeedback('✓ Part C Complete! 20 → 25 → 30. The list seamlessly accommodates the new node!');
+      setFeedback('✓ Part C Complete! Reconnected: 1002 → 1008 → 1004. Memory addresses correctly spliced!');
       onScoreUpdate(25);
       onStreakUpdate(7);
       setTimeout(() => {
         setStage('completed');
         soundManager.playLevelVictory();
-        onLevelComplete(3, 100);
       }, 1500);
     } else {
       soundManager.playError();
       onScoreUpdate(-2);
-      setMistakeText(
-        'Check the direction of the NEXT pointer! The new node must point to the node that originally came after 20 (Node [30]).'
-      );
+      setMistakeText('Check the address direction! The new node (1008) must point to address 1004 first.');
+    }
+  };
+
+  // Handler for typed NEXT address inputs
+  const handleApplyNextAddress = (fromAddr: number, targetAddr: number) => {
+    if (stage === 'partA_beginning') {
+      if (fromAddr === 1006 && targetAddr === 1000) handlePartAStep('point_new_to_head');
+      else if (fromAddr === 1004 && targetAddr === 1006) handlePartAStep('point_tail_to_new');
+      else setMistakeText(`Invalid target address for step ${subStep}.`);
+    } else if (stage === 'partB_end') {
+      if (fromAddr === 1004 && targetAddr === 1006) handlePartBStep('point_tail_to_new');
+      else if (fromAddr === 1006 && targetAddr === 1000) handlePartBStep('point_new_to_head');
+      else setMistakeText(`Invalid target address for step ${subStep}.`);
+    } else if (stage === 'partC_position') {
+      if (fromAddr === 1008 && targetAddr === 1004) handlePartCStep('point_new_to_next');
+      else if (fromAddr === 1002 && targetAddr === 1008) handlePartCStep('point_prev_to_new');
+      else setMistakeText(`Invalid target address for step ${subStep}.`);
     }
   };
 
   // Guided solve explanation
   const getGuidedSolveExplanation = () => {
     if (stage === 'partA_beginning') {
-      if (subStep === 1) return 'Step 1: Point new node [5] → current HEAD [10]. Connect the new node first to prevent dangling references.';
-      if (subStep === 2) return 'Step 2: Update tail node [30] → [5]. In a Circular Linked List, the tail must always point to the new beginning.';
-      if (subStep === 3) return 'Step 3: Move HEAD to [5]. HEAD now references our new starting node.';
-      return 'Part A Complete! Click "Next Challenge" to insert at the end.';
+      if (subStep === 1) return 'Insert Beginning: Set new node 1006.NEXT = 1000 (old HEAD address).';
+      if (subStep === 2) return 'Update Tail: Set tail node 1004.NEXT = 1006 (new node address).';
+      if (subStep === 3) return 'Update HEAD Register: Set HEAD = 1006.';
+      return 'Part A Complete! Click "Next Challenge" to insert at end.';
     }
     if (stage === 'partB_end') {
-      if (subStep === 1) return 'Step 1: Traverse to tail node [30] and update its pointer: [30] → [40].';
-      if (subStep === 2) return 'Step 2: Point new tail [40] → HEAD [10] to close the circular loop.';
+      if (subStep === 1) return 'Insert End: Set old tail 1004.NEXT = 1006 (new node address).';
+      if (subStep === 2) return 'Close Circle: Set new tail 1006.NEXT = 1000 (HEAD address). TAIL = 1006.';
       return 'Part B Complete! Click "Next Challenge" to insert at a specific position.';
     }
     if (stage === 'partC_position') {
-      if (subStep === 1) return 'Step 1: Point new node [25] → next node [30]. Wire the new node forward first.';
-      if (subStep === 2) return 'Step 2: Point previous node [20] → new node [25]. The chain is repaired!';
-      return 'Insertion mastery achieved across beginning, end, and position!';
+      if (subStep === 1) return 'Insert Position: Point new node 1008.NEXT = 1004 (address of node after 1002).';
+      if (subStep === 2) return 'Splice Chain: Point previous node 1002.NEXT = 1008.';
+      return 'Address-based insertion mastered across beginning, end, and position!';
     }
     return 'Level 3 complete!';
   };
@@ -193,7 +231,7 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
       else {
         setStage('partB_end');
         setSubStep(1);
-        setFeedback('Part B: Insert Node [40] at the END of the Circular Linked List.');
+        setFeedback('Part B: Insert Node at address 1006 at the END. Update 1004.NEXT = 1006.');
       }
     } else if (stage === 'partB_end') {
       if (subStep === 1) handlePartBStep('point_tail_to_new');
@@ -201,7 +239,7 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
       else {
         setStage('partC_position');
         setSubStep(1);
-        setFeedback('Part C: Insert Node [25] between Node [20] and Node [30].');
+        setFeedback('Part C: Insert Node 1008 between address 1002 and address 1004.');
       }
     } else if (stage === 'partC_position') {
       if (subStep === 1) handlePartCStep('point_new_to_next');
@@ -221,14 +259,18 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
         <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-blue-500/15">
           <div className="flex items-center gap-3">
             <span className="px-3 py-1 bg-[#EFF6FF] dark:bg-blue-950/60 border border-[#DBEAFE] dark:border-blue-500/30 text-[#2563EB] dark:text-[#3B82F6] rounded-lg text-xs font-bold font-mono">
-              {stage === 'partA_beginning' ? 'PART A: BEGINNING' : stage === 'partB_end' ? 'PART B: END' : 'PART C: POSITION'}
+              {stage === 'partA_beginning'
+                ? 'PART A: INSERT AT HEAD'
+                : stage === 'partB_end'
+                ? 'PART B: INSERT AT TAIL'
+                : 'PART C: SPLICING ADDRESSES'}
             </span>
             <span className="text-sm sm:text-base font-bold text-slate-800 dark:text-slate-100">
               {stage === 'partA_beginning'
-                ? 'Insert Node [5] at Beginning'
+                ? 'Insert Node at Address 1006 at Beginning'
                 : stage === 'partB_end'
-                ? 'Insert Node [40] at End'
-                : 'Insert Node [25] Between [20] and [30]'}
+                ? 'Insert Node at Address 1006 at End'
+                : 'Insert Node 1008 Between 1002 and 1004'}
             </span>
           </div>
 
@@ -272,7 +314,7 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
                   ? 'Proceed to Part B'
                   : subStep === 3 && stage === 'partB_end'
                   ? 'Proceed to Part C'
-                  : 'Execute Pointer Repair'
+                  : 'Execute Pointer Update'
               }
               onNextStep={handleGuidedNextStep}
               onStop={() => setIsGuidedSolveActive(false)}
@@ -280,31 +322,68 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
           </div>
         )}
 
+        {/* Memory Pointer Registers Bar */}
+        <div className="pt-4 pb-2">
+          <CLLMemoryBar
+            headAddress={stage === 'partA_beginning' ? partAHead : stage === 'partB_end' ? partBHead : partCHead}
+            tailAddress={stage === 'partA_beginning' ? partATail : stage === 'partB_end' ? partBTail : partCTail}
+            tailNextAddress={
+              stage === 'partA_beginning'
+                ? partANodes.find((n) => n.address === partATail)?.nextAddress as number
+                : stage === 'partB_end'
+                ? partBNodes.find((n) => n.address === partBTail)?.nextAddress as number
+                : partCNodes.find((n) => n.address === partCTail)?.nextAddress as number
+            }
+            validAddresses={
+              stage === 'partA_beginning'
+                ? partANodes.map((n) => n.address)
+                : stage === 'partB_end'
+                ? partBNodes.map((n) => n.address)
+                : partCNodes.map((n) => n.address)
+            }
+          />
+        </div>
+
         {/* Canvas Display */}
-        <div className="pt-6 pb-2">
+        <div className="pt-2 pb-2">
           <div className="text-xs font-bold uppercase font-mono tracking-wider text-slate-500 dark:text-slate-400 mb-2 flex items-center justify-between">
-            <span>Pointer Alignment</span>
+            <span>Pointer Wiring (Type target address into NEXT or click action buttons)</span>
             <span className="text-blue-600 dark:text-blue-400 font-mono font-bold">
-              Operation: Pointer Repair Mechanic
+              Memory Invariant: TAIL.NEXT === HEAD
             </span>
           </div>
 
-          <div className="bg-slate-50/60 dark:bg-[#0B1120]/60 rounded-2xl border border-slate-200/80 dark:border-blue-500/20 p-2 sm:p-4 my-3">
+          <div className="bg-slate-50/60 dark:bg-[#0B1120]/60 rounded-2xl border border-slate-200/80 dark:border-blue-500/20 p-2 sm:p-4 my-2">
             {stage === 'partA_beginning' && (
-              <CLLCanvas nodes={partANodes} headId={partAHeadId} />
+              <CLLCanvas
+                nodes={partANodes}
+                headId={`a-${partAHead}`}
+                tailId={`a-${partATail}`}
+                onApplyNextAddress={handleApplyNextAddress}
+              />
             )}
             {stage === 'partB_end' && (
-              <CLLCanvas nodes={partBNodes} headId="b-10" />
+              <CLLCanvas
+                nodes={partBNodes}
+                headId={`b-${partBHead}`}
+                tailId={`b-${partBTail}`}
+                onApplyNextAddress={handleApplyNextAddress}
+              />
             )}
             {stage === 'partC_position' && (
-              <CLLCanvas nodes={partCNodes} headId="c-10" />
+              <CLLCanvas
+                nodes={partCNodes}
+                headId={`c-${partCHead}`}
+                tailId={`c-${partCTail}`}
+                onApplyNextAddress={handleApplyNextAddress}
+              />
             )}
           </div>
         </div>
 
         {/* Action Controls for Part A */}
         {stage === 'partA_beginning' && (
-          <div className="p-5 rounded-2xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-500/30 space-y-4 animate-scale-enter">
+          <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-500/30 space-y-3 animate-scale-enter">
             <p className="text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300">
               {feedback}
             </p>
@@ -315,7 +394,7 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
                   onClick={() => handlePartAStep('point_new_to_head')}
                   className="btn-modern-primary px-4 py-2 text-xs font-bold flex items-center gap-2 cursor-pointer shadow-sm"
                 >
-                  <span>Connect [5].next → [10] (HEAD)</span>
+                  <span>Set 1006.NEXT = 1000 (HEAD)</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               )}
@@ -324,7 +403,7 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
                   onClick={() => handlePartAStep('point_tail_to_new')}
                   className="btn-modern-primary px-4 py-2 text-xs font-bold flex items-center gap-2 cursor-pointer shadow-sm"
                 >
-                  <span>Update Tail: Connect [30].next → [5]</span>
+                  <span>Set Tail 1004.NEXT = 1006</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               )}
@@ -333,7 +412,7 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
                   onClick={() => handlePartAStep('update_head')}
                   className="btn-modern-primary px-4 py-2 text-xs font-bold flex items-center gap-2 cursor-pointer shadow-sm"
                 >
-                  <span>Set HEAD → Node [5]</span>
+                  <span>Set HEAD Register = 1006</span>
                   <CheckCircle2 className="w-3.5 h-3.5" />
                 </button>
               )}
@@ -343,7 +422,7 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
                     soundManager.playSelect();
                     setStage('partB_end');
                     setSubStep(1);
-                    setFeedback('Part B: Insert Node [40] at the END of the Circular Linked List.');
+                    setFeedback('Part B: Insert Node 1006 at the END. Set 1004.NEXT = 1006.');
                   }}
                   className="btn-modern-primary px-5 py-2.5 text-xs font-bold flex items-center gap-2 cursor-pointer shadow-sm"
                 >
@@ -357,7 +436,7 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
 
         {/* Action Controls for Part B */}
         {stage === 'partB_end' && (
-          <div className="p-5 rounded-2xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-500/30 space-y-4 animate-scale-enter">
+          <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-500/30 space-y-3 animate-scale-enter">
             <p className="text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300">
               {feedback}
             </p>
@@ -368,7 +447,7 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
                   onClick={() => handlePartBStep('point_tail_to_new')}
                   className="btn-modern-primary px-4 py-2 text-xs font-bold flex items-center gap-2 cursor-pointer shadow-sm"
                 >
-                  <span>Connect Old Tail [30].next → [40]</span>
+                  <span>Set Old Tail 1004.NEXT = 1006</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               )}
@@ -377,7 +456,7 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
                   onClick={() => handlePartBStep('point_new_to_head')}
                   className="btn-modern-primary px-4 py-2 text-xs font-bold flex items-center gap-2 cursor-pointer shadow-sm"
                 >
-                  <span>Connect New Tail [40].next → HEAD [10]</span>
+                  <span>Set New Tail 1006.NEXT = 1000 (HEAD)</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               )}
@@ -387,7 +466,7 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
                     soundManager.playSelect();
                     setStage('partC_position');
                     setSubStep(1);
-                    setFeedback('Part C: Insert Node [25] between Node [20] and Node [30].');
+                    setFeedback('Part C: Insert Node 1008 between address 1002 and address 1004.');
                   }}
                   className="btn-modern-primary px-5 py-2.5 text-xs font-bold flex items-center gap-2 cursor-pointer shadow-sm"
                 >
@@ -401,7 +480,7 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
 
         {/* Action Controls for Part C */}
         {stage === 'partC_position' && (
-          <div className="p-5 rounded-2xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-500/30 space-y-4 animate-scale-enter">
+          <div className="p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-500/30 space-y-3 animate-scale-enter">
             <p className="text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300">
               {feedback}
             </p>
@@ -412,7 +491,7 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
                   onClick={() => handlePartCStep('point_new_to_next')}
                   className="btn-modern-primary px-4 py-2 text-xs font-bold flex items-center gap-2 cursor-pointer shadow-sm"
                 >
-                  <span>Connect [25].next → [30]</span>
+                  <span>Set 1008.NEXT = 1004</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               )}
@@ -421,7 +500,7 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
                   onClick={() => handlePartCStep('point_prev_to_new')}
                   className="btn-modern-primary px-4 py-2 text-xs font-bold flex items-center gap-2 cursor-pointer shadow-sm"
                 >
-                  <span>Connect Previous [20].next → [25]</span>
+                  <span>Set Previous 1002.NEXT = 1008</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               )}
@@ -445,7 +524,7 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
               Level Complete!
             </h3>
             <p className="text-xs sm:text-sm text-emerald-800 dark:text-emerald-300 max-w-md mx-auto">
-              Excellent work. You successfully inserted nodes at the beginning, end, and middle while preserving the circular link.
+              Excellent work. You successfully inserted nodes at the beginning, end, and middle by updating memory addresses and pointer registers!
             </p>
             <button
               onClick={() => onLevelComplete(3, 100)}

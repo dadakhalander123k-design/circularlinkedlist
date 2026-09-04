@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { CheckCircle2, ArrowRight, Lightbulb, Sparkles } from 'lucide-react';
+import { CheckCircle2, ArrowRight, Lightbulb, Sparkles, AlertCircle } from 'lucide-react';
 import { soundManager } from '../utils/audio';
 import { GuidedSolvePanel } from './GuidedSolvePanel';
 import { CLLCanvas, VisualNodeData } from './cll/CLLCanvas';
+import { CLLMemoryBar } from './cll/CLLMemoryBar';
 
 interface Level1GameplayProps {
   onLevelComplete: (levelId: number, score: number) => void;
@@ -18,129 +19,185 @@ export const Level1Gameplay: React.FC<Level1GameplayProps> = ({
   // Phase progression: 'connecting' -> 'animating_circle' -> 'completed'
   const [phase, setPhase] = useState<'connecting' | 'animating_circle' | 'completed'>('connecting');
 
-  // Node connection state: 4 values [10, 20, 30, 40]
-  const [connections, setConnections] = useState<Record<number, number | null>>({
-    0: null, // 10.next
-    1: null, // 20.next
-    2: null, // 30.next
-    3: null, // 40.next
+  // Node addresses: 1000, 1002, 1004, 1006
+  const nodeSpecs = [
+    { addr: 1000, val: 10 },
+    { addr: 1002, val: 20 },
+    { addr: 1004, val: 30 },
+    { addr: 1006, val: 40 },
+  ];
+
+  const [headAddress, setHeadAddress] = useState<number | null>(1000);
+  const [tailAddress, setTailAddress] = useState<number | null>(1006);
+
+  // Address-to-target NEXT address mapping
+  const [nextAddresses, setNextAddresses] = useState<Record<number, number | null>>({
+    1000: null,
+    1002: null,
+    1004: null,
+    1006: null,
   });
 
-  const [activeFromIndex, setActiveFromIndex] = useState<number | null>(0);
+  const [activeFromAddr, setActiveFromAddr] = useState<number | null>(1000);
   const [feedback, setFeedback] = useState<string>(
-    'Connect Node [10] to Node [20] by clicking Node [20] or "Connect Next".'
+    'Set NEXT for Node at address 1000 to 1002 (type address or click Node [20]).'
   );
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isAnimatingLoop, setIsAnimatingLoop] = useState<boolean>(false);
   const [isGuidedSolveActive, setIsGuidedSolveActive] = useState<boolean>(false);
   const [guidedStep, setGuidedStep] = useState<number>(1);
 
-  const nodeValues = [10, 20, 30, 40];
+  // Visual nodes mapper with addresses
+  const visualNodes: VisualNodeData[] = nodeSpecs.map((spec) => {
+    const targetAddr = nextAddresses[spec.addr];
+    const targetNode = nodeSpecs.find((n) => n.addr === targetAddr);
 
-  // Visual nodes mapper
-  const visualNodes: VisualNodeData[] = nodeValues.map((val, idx) => {
-    const nextIdx = connections[idx];
     return {
-      id: `l1-node-${idx}`,
-      value: val,
-      nextId: nextIdx !== null ? `l1-node-${nextIdx}` : null,
-      isHead: idx === 0,
-      isCurrent: activeFromIndex === idx,
-      isSelected: activeFromIndex === idx,
-      isVisited: nextIdx !== null,
-      customBadge: idx === 0 ? 'START / HEAD' : idx === 3 ? 'TAIL' : undefined,
+      id: `l1-node-${spec.addr}`,
+      address: spec.addr,
+      value: spec.val,
+      nextId: targetNode ? `l1-node-${targetNode.addr}` : null,
+      nextAddress: targetAddr,
+      isHead: spec.addr === headAddress,
+      isTail: spec.addr === tailAddress,
+      isCurrent: activeFromAddr === spec.addr,
+      isSelected: activeFromAddr === spec.addr,
+      isVisited: targetAddr !== null,
+      customBadge: spec.addr === 1000 ? 'START' : spec.addr === 1006 ? 'TAIL' : undefined,
     };
   });
 
-  // Handle clicking a node to connect NEXT pointer
-  const handleNodeClick = (clickedIdx: number) => {
-    if (phase !== 'connecting') return;
+  // Handle address connection (used both for typed address and node clicks)
+  const applyConnection = (fromAddr: number, targetAddr: number) => {
+    setErrorMessage(null);
 
-    if (activeFromIndex === null) {
-      setActiveFromIndex(clickedIdx);
-      setFeedback(`Selected Node [${nodeValues[clickedIdx]}]. Now click the destination node.`);
+    // 1. Check if target address exists
+    const validTarget = nodeSpecs.find((n) => n.addr === targetAddr);
+    if (!validTarget) {
+      soundManager.playError();
+      onScoreUpdate(-2);
+      setErrorMessage(`Address ${targetAddr} does not belong to any node.`);
       return;
     }
 
-    const from = activeFromIndex;
-    const to = clickedIdx;
-
-    if (from === 0 && to === 1) {
-      soundManager.playClick();
-      setConnections((prev) => ({ ...prev, 0: 1 }));
-      setActiveFromIndex(1);
-      setFeedback('Great! [10] → [20]. Now connect Node [20] to Node [30].');
-      onScoreUpdate(10);
-      onStreakUpdate(1);
-      setGuidedStep(3);
-    } else if (from === 1 && to === 2) {
-      soundManager.playClick();
-      setConnections((prev) => ({ ...prev, 1: 2 }));
-      setActiveFromIndex(2);
-      setFeedback('Excellent! [20] → [30]. Now connect Node [30] to Node [40].');
-      onScoreUpdate(10);
-      onStreakUpdate(2);
-      setGuidedStep(4);
-    } else if (from === 2 && to === 3) {
-      soundManager.playClick();
-      setConnections((prev) => ({ ...prev, 2: 3 }));
-      setActiveFromIndex(3);
-      setFeedback('Complete the circle: Connect the last node [40] back to HEAD [10].');
-      onScoreUpdate(10);
-      onStreakUpdate(3);
-      setGuidedStep(5);
-    } else if (from === 3 && to === 0) {
-      soundManager.playCalcSuccess();
-      setConnections((prev) => ({ ...prev, 3: 0 }));
-      setActiveFromIndex(null);
-      setPhase('animating_circle');
-      setIsAnimatingLoop(true);
-      setFeedback("✓ Correct Circular Connection! You're going around the circle: 10 → 20 → 30 → 40 → 10!");
-      onScoreUpdate(20);
-      onStreakUpdate(4);
-
-      setTimeout(() => {
-        setIsAnimatingLoop(false);
-        setPhase('completed');
-        soundManager.playLevelVictory();
-      }, 2200);
-    } else {
-      soundManager.playError();
-      onScoreUpdate(-2);
-      if (from === 3) {
-        setFeedback('A Circular Linked List does not end at NULL. Connect the last node [40] back to HEAD [10]!');
+    // 2. Validate current objective sequence
+    if (fromAddr === 1000) {
+      if (targetAddr === 1002) {
+        soundManager.playClick();
+        setNextAddresses((prev) => ({ ...prev, 1000: 1002 }));
+        setActiveFromAddr(1002);
+        setFeedback('Great! 1000 → 1002. Now set NEXT for Node 1002 to address 1004.');
+        onScoreUpdate(10);
+        onStreakUpdate(1);
+        setGuidedStep(3);
       } else {
-        setFeedback(`In sequential order, Node [${nodeValues[from]}] should point to Node [${nodeValues[from + 1]}].`);
+        soundManager.playError();
+        onScoreUpdate(-2);
+        setErrorMessage(
+          `${targetAddr} is a valid node address, but node 1000 must connect sequentially to address 1002.`
+        );
+      }
+    } else if (fromAddr === 1002) {
+      if (targetAddr === 1004) {
+        soundManager.playClick();
+        setNextAddresses((prev) => ({ ...prev, 1002: 1004 }));
+        setActiveFromAddr(1004);
+        setFeedback('Excellent! 1002 → 1004. Now set NEXT for Node 1004 to address 1006.');
+        onScoreUpdate(10);
+        onStreakUpdate(2);
+        setGuidedStep(4);
+      } else {
+        soundManager.playError();
+        onScoreUpdate(-2);
+        setErrorMessage(
+          `${targetAddr} is a valid node address, but node 1002 must connect to address 1004.`
+        );
+      }
+    } else if (fromAddr === 1004) {
+      if (targetAddr === 1006) {
+        soundManager.playClick();
+        setNextAddresses((prev) => ({ ...prev, 1004: 1006 }));
+        setActiveFromAddr(1006);
+        setFeedback('Crucial Step: Complete the circle by setting NEXT for last node 1006 to HEAD address (1000).');
+        onScoreUpdate(10);
+        onStreakUpdate(3);
+        setGuidedStep(5);
+      } else {
+        soundManager.playError();
+        onScoreUpdate(-2);
+        setErrorMessage(
+          `${targetAddr} is a valid node address, but node 1004 must connect to address 1006.`
+        );
+      }
+    } else if (fromAddr === 1006) {
+      if (targetAddr === 1000) {
+        soundManager.playCalcSuccess();
+        setNextAddresses((prev) => ({ ...prev, 1006: 1000 }));
+        setActiveFromAddr(null);
+        setPhase('animating_circle');
+        setIsAnimatingLoop(true);
+        setFeedback(
+          "✓ Circular connection established! Node 1006 NEXT stores HEAD address 1000: 1000 → 1002 → 1004 → 1006 → 1000."
+        );
+        onScoreUpdate(25);
+        onStreakUpdate(4);
+
+        setTimeout(() => {
+          setIsAnimatingLoop(false);
+          setPhase('completed');
+          soundManager.playLevelVictory();
+        }, 2200);
+      } else {
+        soundManager.playError();
+        onScoreUpdate(-2);
+        setErrorMessage(
+          `A Circular Linked List does not end with NULL or middle nodes. Connect the tail node (1006) to HEAD address (1000)!`
+        );
       }
     }
+  };
+
+  // Node click handler
+  const handleNodeClick = (nodeId: string) => {
+    if (phase !== 'connecting') return;
+    const clickedAddr = parseInt(nodeId.replace('l1-node-', ''), 10);
+
+    if (activeFromAddr === null) {
+      setActiveFromAddr(clickedAddr);
+      setFeedback(`Selected Node at address ${clickedAddr}. Enter or click destination address.`);
+      return;
+    }
+
+    applyConnection(activeFromAddr, clickedAddr);
   };
 
   // Guided Solve logic
   const getGuidedSolveExplanation = () => {
     switch (guidedStep) {
       case 1:
-        return 'Identify HEAD: In a Circular Linked List, HEAD points to the starting node (Node [10]).';
+        return 'Identify HEAD: Node [10] is located at memory address 1000. HEAD stores address 1000.';
       case 2:
-        return 'Connect First Node: Link Node [10]\'s NEXT pointer forward to Node [20]: 10 → 20.';
+        return 'Connect Node 1000: Node 1000 stores the address of the next node (1002) in its NEXT field: 1000 → 1002.';
       case 3:
-        return 'Continue Chaining: Click Node [30] to create the pointer link from Node [20] to Node [30].';
+        return 'Connect Node 1002: Set Node 1002\'s NEXT field to address 1004: 1002 → 1004.';
       case 4:
-        return 'Reach the Tail: Click Node [40] to link Node [30] → [40]. Now Node [40] is the last node.';
+        return 'Reach the Tail: Set Node 1004\'s NEXT field to address 1006: 1004 → 1006.';
       case 5:
-        return 'Complete the Circle: Connect Node [40] back to HEAD [10]. Unlike a singly linked list ending in NULL, a circular list loops back to the start!';
+        return 'Complete the Circle: The last node at address 1006 must store the address of HEAD (1000) in its NEXT field. TAIL.NEXT = 1000.';
       default:
-        return 'Level 1 complete! You successfully built the circular linked list.';
+        return 'Level 1 complete! You successfully built the circular linked list using memory addresses.';
     }
   };
 
   const handleGuidedNextStep = () => {
     if (guidedStep === 1 || guidedStep === 2) {
-      handleNodeClick(1);
+      applyConnection(1000, 1002);
     } else if (guidedStep === 3) {
-      handleNodeClick(2);
+      applyConnection(1002, 1004);
     } else if (guidedStep === 4) {
-      handleNodeClick(3);
+      applyConnection(1004, 1006);
     } else if (guidedStep === 5) {
-      handleNodeClick(0);
+      applyConnection(1006, 1000);
     } else if (phase === 'completed') {
       onLevelComplete(1, 100);
     }
@@ -153,13 +210,10 @@ export const Level1Gameplay: React.FC<Level1GameplayProps> = ({
         <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-blue-500/15">
           <div className="flex items-center gap-3">
             <span className="px-3 py-1 bg-[#EFF6FF] dark:bg-blue-950/60 border border-[#DBEAFE] dark:border-blue-500/30 text-[#2563EB] dark:text-[#3B82F6] rounded-lg text-xs font-bold font-mono">
-              GAMEPLAY
+              LEVEL 1: MEMORY POINTERS
             </span>
             <span className="text-sm sm:text-base font-bold text-slate-800 dark:text-slate-100">
-              Build the Circular Linked List:{' '}
-              <span className="font-mono text-[#2563EB] dark:text-[#3B82F6] font-extrabold">
-                HEAD → 10 → 20 → 30 → 40 → HEAD
-              </span>
+              Build Circular Connections Using Addresses: 1000 → 1002 → 1004 → 1006 → 1000
             </span>
           </div>
 
@@ -194,8 +248,8 @@ export const Level1Gameplay: React.FC<Level1GameplayProps> = ({
                 phase === 'completed'
                   ? 'Complete Level 1'
                   : guidedStep === 5
-                  ? 'Connect 40 → HEAD'
-                  : `Connect to Node [${nodeValues[guidedStep]}]`
+                  ? 'Connect 1006 → 1000'
+                  : `Connect ${nodeSpecs[guidedStep - 1].addr} → ${nodeSpecs[guidedStep].addr}`
               }
               onNextStep={handleGuidedNextStep}
               onStop={() => setIsGuidedSolveActive(false)}
@@ -203,32 +257,63 @@ export const Level1Gameplay: React.FC<Level1GameplayProps> = ({
           </div>
         )}
 
-        {/* Interactive CLL Canvas */}
-        <div className="pt-6 pb-2">
+        {/* Memory Pointer Registers Bar */}
+        <div className="pt-4 pb-2">
+          <CLLMemoryBar
+            headAddress={headAddress}
+            tailAddress={tailAddress}
+            tailNextAddress={nextAddresses[1006]}
+            validAddresses={nodeSpecs.map((n) => n.addr)}
+            onSetHeadAddress={(addr) => {
+              if (nodeSpecs.some((n) => n.addr === addr)) {
+                setHeadAddress(addr);
+              } else {
+                setErrorMessage(`Cannot set HEAD: Address ${addr} does not exist.`);
+              }
+            }}
+            onSetTailAddress={(addr) => {
+              if (nodeSpecs.some((n) => n.addr === addr)) {
+                setTailAddress(addr);
+              } else {
+                setErrorMessage(`Cannot set TAIL: Address ${addr} does not exist.`);
+              }
+            }}
+          />
+        </div>
+
+        {/* Interactive CLL Canvas with Addresses */}
+        <div className="pt-2 pb-2">
           <div className="text-xs font-bold uppercase font-mono tracking-wider text-slate-500 dark:text-slate-400 mb-2 flex items-center justify-between">
-            <span>Linked Nodes (Click destination node to establish NEXT pointer)</span>
+            <span>Memory Nodes (Click node or edit NEXT field to enter target address)</span>
             <span className="text-blue-600 dark:text-blue-400 font-mono font-bold">
-              HEAD: Node [10]
+              HEAD: [ {headAddress} ]
             </span>
           </div>
 
-          <div className="bg-slate-50/60 dark:bg-[#0B1120]/60 rounded-2xl border border-slate-200/80 dark:border-blue-500/20 p-2 sm:p-4 my-3">
+          <div className="bg-slate-50/60 dark:bg-[#0B1120]/60 rounded-2xl border border-slate-200/80 dark:border-blue-500/20 p-2 sm:p-4 my-2">
             <CLLCanvas
               nodes={visualNodes}
-              headId="l1-node-0"
-              currentId={activeFromIndex !== null ? `l1-node-${activeFromIndex}` : null}
-              onNodeClick={(id) => {
-                const idx = parseInt(id.replace('l1-node-', ''), 10);
-                handleNodeClick(idx);
-              }}
+              headId={headAddress ? `l1-node-${headAddress}` : null}
+              tailId={tailAddress ? `l1-node-${tailAddress}` : null}
+              currentId={activeFromAddr !== null ? `l1-node-${activeFromAddr}` : null}
+              onNodeClick={handleNodeClick}
+              onApplyNextAddress={(from, target) => applyConnection(from, target)}
               isAnimatingLoop={isAnimatingLoop}
             />
           </div>
         </div>
 
-        {/* Interactive Action Control */}
+        {/* Error Feedback Banner if invalid address entered */}
+        {errorMessage && (
+          <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-500/30 text-xs text-rose-700 dark:text-rose-300 font-medium flex items-center gap-2 animate-shake">
+            <AlertCircle className="w-4 h-4 shrink-0" />
+            <span>{errorMessage}</span>
+          </div>
+        )}
+
+        {/* Action Controls */}
         {phase === 'connecting' && (
-          <div className="p-4 rounded-xl bg-blue-50/60 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-500/30 flex items-center justify-between gap-3">
+          <div className="p-4 rounded-xl bg-blue-50/60 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-500/30 flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <Lightbulb className="w-5 h-5 text-blue-600 dark:text-blue-400 shrink-0" />
               <p className="text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-300">
@@ -237,17 +322,16 @@ export const Level1Gameplay: React.FC<Level1GameplayProps> = ({
             </div>
             <button
               onClick={() => {
-                if (activeFromIndex !== null) {
-                  if (activeFromIndex < 3) {
-                    handleNodeClick(activeFromIndex + 1);
-                  } else {
-                    handleNodeClick(0);
-                  }
-                }
+                if (activeFromAddr === 1000) applyConnection(1000, 1002);
+                else if (activeFromAddr === 1002) applyConnection(1002, 1004);
+                else if (activeFromAddr === 1004) applyConnection(1004, 1006);
+                else if (activeFromAddr === 1006) applyConnection(1006, 1000);
               }}
               className="btn-modern-primary px-4 py-2 text-xs font-bold shrink-0 cursor-pointer shadow-sm flex items-center gap-1.5"
             >
-              <span>{activeFromIndex === 3 ? 'Connect 40 → HEAD [10]' : 'Connect Next Node'}</span>
+              <span>
+                {activeFromAddr === 1006 ? 'Connect 1006.NEXT → 1000 (HEAD)' : 'Connect Next Pointer'}
+              </span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -270,7 +354,7 @@ export const Level1Gameplay: React.FC<Level1GameplayProps> = ({
               Level Complete!
             </h3>
             <p className="text-xs sm:text-sm text-emerald-800 dark:text-emerald-300 max-w-md mx-auto">
-              Excellent work. You successfully built the circular linked list: HEAD → 10 → 20 → 30 → 40 → HEAD.
+              Excellent work. You verified that every node is stored at an ADDRESS, and each NEXT pointer stores the ADDRESS of the following node, closing the circle with TAIL.NEXT = HEAD (1006 → 1000).
             </p>
             <button
               onClick={() => onLevelComplete(1, 100)}
