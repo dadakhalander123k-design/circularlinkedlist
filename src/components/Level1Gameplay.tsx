@@ -63,7 +63,6 @@ export const Level1Gameplay: React.FC<Level1GameplayProps> = ({
       isCurrent: activeFromAddr === spec.addr,
       isSelected: activeFromAddr === spec.addr,
       isVisited: targetAddr !== null,
-      customBadge: spec.addr === 1000 ? 'START' : spec.addr === 1006 ? 'TAIL' : undefined,
     };
   });
 

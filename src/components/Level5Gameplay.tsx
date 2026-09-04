@@ -36,12 +36,14 @@ export const Level5Gameplay: React.FC<Level5GameplayProps> = ({
   // -------------------------------------------------------------
   // TASK 1: Search Existing Target (Target: 30 at Address 1004)
   // -------------------------------------------------------------
-  const t1Nodes: VisualNodeData[] = [
+  const [t1Head, setT1Head] = useState<number>(1000);
+  const [t1Tail, setT1Tail] = useState<number>(1006);
+  const [t1Nodes, setT1Nodes] = useState<VisualNodeData[]>([
     { id: 't1-1000', address: 1000, value: 10, nextId: 't1-1002', nextAddress: 1002, isHead: true },
     { id: 't1-1002', address: 1002, value: 20, nextId: 't1-1004', nextAddress: 1004 },
     { id: 't1-1004', address: 1004, value: 30, nextId: 't1-1006', nextAddress: 1006 },
     { id: 't1-1006', address: 1006, value: 40, nextId: 't1-1000', nextAddress: 1000, isTail: true },
-  ];
+  ]);
   const [t1CurrentIdx, setT1CurrentIdx] = useState<number>(0);
   const [t1Found, setT1Found] = useState<boolean>(false);
 
@@ -61,12 +63,14 @@ export const Level5Gameplay: React.FC<Level5GameplayProps> = ({
   // -------------------------------------------------------------
   // TASK 2: Search Missing Target (Target: 50)
   // -------------------------------------------------------------
-  const t2Nodes: VisualNodeData[] = [
+  const [t2Head, setT2Head] = useState<number>(1000);
+  const [t2Tail, setT2Tail] = useState<number>(1006);
+  const [t2Nodes, setT2Nodes] = useState<VisualNodeData[]>([
     { id: 't2-1000', address: 1000, value: 10, nextId: 't2-1002', nextAddress: 1002, isHead: true },
     { id: 't2-1002', address: 1002, value: 20, nextId: 't2-1004', nextAddress: 1004 },
     { id: 't2-1004', address: 1004, value: 30, nextId: 't2-1006', nextAddress: 1006 },
     { id: 't2-1006', address: 1006, value: 40, nextId: 't2-1000', nextAddress: 1000, isTail: true },
-  ];
+  ]);
   const [t2CurrentIdx, setT2CurrentIdx] = useState<number>(0);
   const [t2CycleCompleted, setT2CycleCompleted] = useState<boolean>(false);
   const [t2Done, setT2Done] = useState<boolean>(false);
@@ -106,8 +110,8 @@ export const Level5Gameplay: React.FC<Level5GameplayProps> = ({
     },
   ]);
   const [bossRepaired, setBossRepaired] = useState<boolean>(false);
-  const [bossHead] = useState<number>(1000);
-  const [bossTail] = useState<number>(1004);
+  const [bossHead, setBossHead] = useState<number>(1000);
+  const [bossTail, setBossTail] = useState<number>(1004);
 
   const handleRepairAction = () => {
     setMistakeText(null);
@@ -330,17 +334,25 @@ export const Level5Gameplay: React.FC<Level5GameplayProps> = ({
           <div className="py-4 space-y-4 animate-scale-enter">
             {/* Memory Pointer Registers Bar */}
             <CLLMemoryBar
-              headAddress={1000}
-              tailAddress={1006}
-              tailNextAddress={1000}
+              headAddress={t1Head}
+              tailAddress={t1Tail}
+              tailNextAddress={t1Nodes.find((n) => n.address === t1Tail)?.nextAddress ?? 1000}
               validAddresses={[1000, 1002, 1004, 1006]}
+              onSetHeadAddress={(addr) => {
+                setT1Head(addr);
+                setT1Nodes((prev) => prev.map((n) => ({ ...n, isHead: n.address === addr })));
+              }}
+              onSetTailAddress={(addr) => {
+                setT1Tail(addr);
+                setT1Nodes((prev) => prev.map((n) => ({ ...n, isTail: n.address === addr })));
+              }}
             />
 
             <div className="bg-slate-50/60 dark:bg-[#0B1120]/60 rounded-2xl border border-slate-200/80 dark:border-blue-500/20 p-2 sm:p-4">
               <CLLCanvas
                 nodes={t1Nodes}
-                headId="t1-1000"
-                tailId="t1-1006"
+                headId={`t1-${t1Head}`}
+                tailId={`t1-${t1Tail}`}
                 currentId={t1Nodes[t1CurrentIdx].id}
               />
             </div>
@@ -386,17 +398,25 @@ export const Level5Gameplay: React.FC<Level5GameplayProps> = ({
           <div className="py-4 space-y-4 animate-scale-enter">
             {/* Memory Pointer Registers Bar */}
             <CLLMemoryBar
-              headAddress={1000}
-              tailAddress={1006}
-              tailNextAddress={1000}
+              headAddress={t2Head}
+              tailAddress={t2Tail}
+              tailNextAddress={t2Nodes.find((n) => n.address === t2Tail)?.nextAddress ?? 1000}
               validAddresses={[1000, 1002, 1004, 1006]}
+              onSetHeadAddress={(addr) => {
+                setT2Head(addr);
+                setT2Nodes((prev) => prev.map((n) => ({ ...n, isHead: n.address === addr })));
+              }}
+              onSetTailAddress={(addr) => {
+                setT2Tail(addr);
+                setT2Nodes((prev) => prev.map((n) => ({ ...n, isTail: n.address === addr })));
+              }}
             />
 
             <div className="bg-slate-50/60 dark:bg-[#0B1120]/60 rounded-2xl border border-slate-200/80 dark:border-blue-500/20 p-2 sm:p-4">
               <CLLCanvas
                 nodes={t2Nodes}
-                headId="t2-1000"
-                tailId="t2-1006"
+                headId={`t2-${t2Head}`}
+                tailId={`t2-${t2Tail}`}
                 currentId={t2Nodes[t2CurrentIdx].id}
               />
             </div>
@@ -463,6 +483,14 @@ export const Level5Gameplay: React.FC<Level5GameplayProps> = ({
               tailAddress={bossTail}
               tailNextAddress={bossRepaired ? 1000 : null}
               validAddresses={[1000, 1002, 1004]}
+              onSetHeadAddress={(addr) => {
+                setBossHead(addr);
+                setBossNodes((prev) => prev.map((n) => ({ ...n, isHead: n.address === addr })));
+              }}
+              onSetTailAddress={(addr) => {
+                setBossTail(addr);
+                setBossNodes((prev) => prev.map((n) => ({ ...n, isTail: n.address === addr })));
+              }}
             />
 
             <div className="bg-slate-50/60 dark:bg-[#0B1120]/60 rounded-2xl border border-slate-200/80 dark:border-blue-500/20 p-2 sm:p-4">
@@ -521,6 +549,14 @@ export const Level5Gameplay: React.FC<Level5GameplayProps> = ({
               tailAddress={masterTail}
               tailNextAddress={masterNodes.find((n) => n.address === masterTail)?.nextAddress as number}
               validAddresses={masterNodes.map((n) => n.address)}
+              onSetHeadAddress={(addr) => {
+                setMasterHead(addr);
+                setMasterNodes((prev) => prev.map((n) => ({ ...n, isHead: n.address === addr })));
+              }}
+              onSetTailAddress={(addr) => {
+                setMasterTail(addr);
+                setMasterNodes((prev) => prev.map((n) => ({ ...n, isTail: n.address === addr })));
+              }}
             />
 
             <div className="bg-slate-50/60 dark:bg-[#0B1120]/60 rounded-2xl border border-slate-200/80 dark:border-blue-500/20 p-2 sm:p-4">

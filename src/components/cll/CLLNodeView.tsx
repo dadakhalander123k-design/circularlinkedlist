@@ -71,7 +71,7 @@ export const CLLNodeView: React.FC<CLLNodeViewProps> = ({
     >
       {/* Dynamic Top Indicator Badges */}
       <div className="h-7 mb-1 flex items-center gap-1.5 justify-center">
-        {isHead && (
+        {isHead && !isTail && (
           <div className="px-2 py-0.5 rounded-md bg-blue-600 dark:bg-blue-500 text-white font-mono font-bold text-[10px] tracking-wider uppercase shadow-xs flex items-center gap-1 animate-pulse">
             <span>HEAD</span>
             <span className="text-blue-200">↓</span>
@@ -81,6 +81,14 @@ export const CLLNodeView: React.FC<CLLNodeViewProps> = ({
         {isTail && !isHead && (
           <div className="px-2 py-0.5 rounded-md bg-indigo-600 dark:bg-indigo-500 text-white font-mono font-bold text-[10px] tracking-wider uppercase shadow-xs flex items-center gap-1">
             <span>TAIL</span>
+            <span className="text-indigo-200">↓</span>
+          </div>
+        )}
+
+        {isHead && isTail && (
+          <div className="px-2 py-0.5 rounded-md bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-mono font-bold text-[10px] tracking-wider uppercase shadow-xs flex items-center gap-1 animate-pulse">
+            <span>HEAD • TAIL</span>
+            <span className="text-blue-200">↓</span>
           </div>
         )}
 

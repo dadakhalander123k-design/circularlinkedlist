@@ -252,6 +252,32 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
     }
   };
 
+  const handleSetHead = (addr: number) => {
+    if (stage === 'partA_beginning') {
+      setPartAHead(addr);
+      setPartANodes((prev) => prev.map((n) => ({ ...n, isHead: n.address === addr })));
+    } else if (stage === 'partB_end') {
+      setPartBHead(addr);
+      setPartBNodes((prev) => prev.map((n) => ({ ...n, isHead: n.address === addr })));
+    } else if (stage === 'partC_position') {
+      setPartCHead(addr);
+      setPartCNodes((prev) => prev.map((n) => ({ ...n, isHead: n.address === addr })));
+    }
+  };
+
+  const handleSetTail = (addr: number) => {
+    if (stage === 'partA_beginning') {
+      setPartATail(addr);
+      setPartANodes((prev) => prev.map((n) => ({ ...n, isTail: n.address === addr })));
+    } else if (stage === 'partB_end') {
+      setPartBTail(addr);
+      setPartBNodes((prev) => prev.map((n) => ({ ...n, isTail: n.address === addr })));
+    } else if (stage === 'partC_position') {
+      setPartCTail(addr);
+      setPartCNodes((prev) => prev.map((n) => ({ ...n, isTail: n.address === addr })));
+    }
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto flex flex-col gap-6 animate-page-enter font-sans">
       <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/20 rounded-2xl p-5 sm:p-6 shadow-xs">
@@ -341,6 +367,8 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
                 ? partBNodes.map((n) => n.address)
                 : partCNodes.map((n) => n.address)
             }
+            onSetHeadAddress={handleSetHead}
+            onSetTailAddress={handleSetTail}
           />
         </div>
 

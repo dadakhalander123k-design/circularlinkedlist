@@ -28,6 +28,9 @@ export const Level2Gameplay: React.FC<Level2GameplayProps> = ({
     { addr: 1006, val: 40, nextAddr: 1000 },
   ];
 
+  const [headAddress, setHeadAddress] = useState<number>(1000);
+  const [tailAddress, setTailAddress] = useState<number>(1006);
+
   const [currentIdx, setCurrentIdx] = useState<number>(0);
   const [visitedIndices, setVisitedIndices] = useState<number[]>([0]);
   const [feedback, setFeedback] = useState<string>(
@@ -53,11 +56,10 @@ export const Level2Gameplay: React.FC<Level2GameplayProps> = ({
     value: spec.val,
     nextId: `l2-node-${spec.nextAddr}`,
     nextAddress: spec.nextAddr,
-    isHead: spec.addr === 1000,
-    isTail: spec.addr === 1006,
+    isHead: spec.addr === headAddress,
+    isTail: spec.addr === tailAddress,
     isCurrent: (phase === 'infinite_loop_demo' ? loopCurrentIdx : currentIdx) === idx,
     isVisited: visitedIndices.includes(idx),
-    customBadge: spec.addr === 1000 ? 'START / HEAD' : spec.addr === 1006 ? 'TAIL' : undefined,
   }));
 
   // Advance CURRENT pointer sequentially
@@ -225,10 +227,12 @@ export const Level2Gameplay: React.FC<Level2GameplayProps> = ({
         {/* Memory Pointer Registers Bar */}
         <div className="pt-4 pb-2">
           <CLLMemoryBar
-            headAddress={1000}
-            tailAddress={1006}
-            tailNextAddress={1000}
+            headAddress={headAddress}
+            tailAddress={tailAddress}
+            tailNextAddress={nodeSpecs.find((n) => n.addr === tailAddress)?.nextAddr ?? 1000}
             validAddresses={nodeSpecs.map((n) => n.addr)}
+            onSetHeadAddress={(addr) => setHeadAddress(addr)}
+            onSetTailAddress={(addr) => setTailAddress(addr)}
           />
         </div>
 
@@ -264,8 +268,8 @@ export const Level2Gameplay: React.FC<Level2GameplayProps> = ({
           <div className="bg-slate-50/60 dark:bg-[#0B1120]/60 rounded-2xl border border-slate-200/80 dark:border-blue-500/20 p-2 sm:p-4 my-2">
             <CLLCanvas
               nodes={visualNodes}
-              headId="l2-node-1000"
-              tailId="l2-node-1006"
+              headId={`l2-node-${headAddress}`}
+              tailId={`l2-node-${tailAddress}`}
               currentId={`l2-node-${currentNode.addr}`}
               onNodeClick={(id) => {
                 if (phase === 'sequential_traversal') {
