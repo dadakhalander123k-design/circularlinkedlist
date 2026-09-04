@@ -56,7 +56,7 @@ export interface ModuleRecord {
   criteriaDescription: string;
   completedAt?: string;
   score?: number;
-  targetTab: 'HOME' | 'THEORY' | 'QUEST' | 'LAB' | 'QUIZ' | 'PROGRESS' | 'GAME' | 'LEARN' | 'SANDBOX' | 'MASTER';
+  targetTab: 'HOME' | 'THEORY' | 'QUEST' | 'LAB' | 'QUIZ' | 'PROGRESS' | 'GAME' | 'LEARN' | 'SANDBOX' | 'MASTER' | 'VIDEO';
   targetLevelId?: number;
   targetChapterId?: string;
 }

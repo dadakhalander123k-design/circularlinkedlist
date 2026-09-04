@@ -33,6 +33,7 @@ import { TheoryVisualEnhancer } from './TheoryVisualEnhancer';
 import {
   CIRCULAR_LINKED_LIST_MODULES,
   CircularLinkedListModule,
+  LINEAR_SEARCH_MODULES,
 } from '../data/circularLinkedListTheory';
 
 export interface LearnCircularLinkedListSectionProps {
