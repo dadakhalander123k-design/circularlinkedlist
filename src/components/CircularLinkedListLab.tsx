@@ -98,6 +98,7 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
   // Traversal / Search timer reference
   const animationTimerRef = useRef<NodeJS.Timeout | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const contentWrapperRef = useRef<HTMLDivElement>(null);
   const [nodePositions, setNodePositions] = useState<Map<string, { x: number; y: number; w: number; h: number }>>(
     new Map()
   );
@@ -155,11 +156,11 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
   }, [nodes]);
 
   // -------------------------------------------------------------
-  // SVG Arrow Coordinate Measurement
+  // SVG Arrow Coordinate Measurement relative to Content Wrapper
   // -------------------------------------------------------------
   const updatePositions = () => {
-    if (!containerRef.current) return;
-    const containerRect = containerRef.current.getBoundingClientRect();
+    if (!contentWrapperRef.current) return;
+    const wrapperRect = contentWrapperRef.current.getBoundingClientRect();
     const posMap = new Map<string, { x: number; y: number; w: number; h: number }>();
 
     nodes.forEach((node) => {
@@ -167,8 +168,8 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
       if (el) {
         const rect = el.getBoundingClientRect();
         posMap.set(node.id, {
-          x: rect.left - containerRect.left,
-          y: rect.top - containerRect.top,
+          x: rect.left - wrapperRect.left,
+          y: rect.top - wrapperRect.top,
           w: rect.width,
           h: rect.height,
         });
@@ -182,9 +183,19 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
     updatePositions();
     const timer = setTimeout(updatePositions, 100);
     window.addEventListener('resize', updatePositions);
+
+    let ro: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined' && contentWrapperRef.current) {
+      ro = new ResizeObserver(() => {
+        updatePositions();
+      });
+      ro.observe(contentWrapperRef.current);
+    }
+
     return () => {
       clearTimeout(timer);
       window.removeEventListener('resize', updatePositions);
+      if (ro) ro.disconnect();
     };
   }, [nodes, currentSearchAddr, currentTraversalAddr, isLoopingBack]);
 
@@ -916,10 +927,14 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
         ) : (
           <div
             ref={containerRef}
-            className="relative w-full overflow-x-auto overflow-y-visible py-8 px-4 min-h-[220px] flex items-center justify-center select-none bg-slate-50/50 dark:bg-[#0B1120]/60 rounded-xl border border-slate-100 dark:border-slate-800"
+            className="relative w-full overflow-x-auto overflow-y-visible py-4 sm:py-6 select-none bg-slate-50/50 dark:bg-[#0B1120]/60 rounded-xl border border-slate-100 dark:border-slate-800 overscroll-x-contain touch-pan-x"
+            style={{ WebkitOverflowScrolling: 'touch' }}
           >
-            {/* Flex row containing nodes */}
-            <div className="flex items-center gap-8 sm:gap-12 z-10 py-6 flex-nowrap">
+            {/* Scrollable content wrapper that expands to fit all nodes + safe padding */}
+            <div
+              ref={contentWrapperRef}
+              className="relative min-w-full w-max flex items-center justify-center gap-6 sm:gap-10 z-10 pt-4 pb-16 px-8 sm:px-14 flex-nowrap"
+            >
               {nodes.map((node, idx) => {
                 const isHead = idx === 0;
                 const isTail = idx === nodes.length - 1;
@@ -938,7 +953,7 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                       setDeleteTargetAddress(String(node.address));
                       soundManager.playClick();
                     }}
-                    className={`relative flex flex-col items-center cursor-pointer transition-all duration-300 ${
+                    className={`relative flex flex-col items-center cursor-pointer transition-all duration-300 shrink-0 ${
                       isFading ? 'opacity-0 scale-75 pointer-events-none' : 'opacity-100 scale-100'
                     }`}
                     title={`Click to select node ${node.address}`}
@@ -1039,7 +1054,6 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                   </div>
                 );
               })}
-            </div>
 
             {/* SVG Arrows & Circular Loopback overlay */}
             <svg
@@ -1195,6 +1209,7 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                   );
                 })()}
             </svg>
+            </div>
           </div>
         )}
       </div>
