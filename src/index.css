@@ -622,19 +622,19 @@
    Special Theme Gradients & Focus Utilities
    ========================================================================= */
 .bg-gradient-brand {
-  background: linear-gradient(135deg, #2563EB 0%, #4F46E5 55%, #6366F1 100%);
+  background: linear-gradient(90deg, #1D4ED8 0%, #2563EB 60%, #6366F1 100%);
 }
 
 .dark .bg-gradient-brand {
-  background: linear-gradient(135deg, #3B82F6 0%, #4F46E5 55%, #6366F1 100%);
+  background: linear-gradient(90deg, #1E40AF 0%, #2563EB 60%, #4F46E5 100%);
 }
 
 .bg-gradient-brand-deep {
-  background: linear-gradient(135deg, #1D4ED8 0%, #2563EB 45%, #4F46E5 70%, #6366F1 100%);
+  background: linear-gradient(90deg, #172554 0%, #1D4ED8 50%, #2563EB 85%, #6366F1 100%);
 }
 
 .dark .bg-gradient-brand-deep {
-  background: linear-gradient(135deg, #2563EB 0%, #3B82F6 45%, #4F46E5 70%, #6366F1 100%);
+  background: linear-gradient(90deg, #0F172A 0%, #1D4ED8 50%, #2563EB 85%, #4F46E5 100%);
 }
 
 .input-focus-brand:focus {

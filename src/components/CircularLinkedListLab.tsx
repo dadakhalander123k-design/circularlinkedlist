@@ -729,7 +729,7 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
       {/* ========================================================= */}
       {/* 1. LAB HEADER & QUICK ACTIONS                             */}
       {/* ========================================================= */}
-      <div className="card-modern p-6 sm:p-8 bg-gradient-to-r from-blue-50/70 via-indigo-50/40 to-white dark:from-[#0f172a] dark:via-[#1e1b4b]/20 dark:to-[#0B1120] border border-blue-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="card-modern p-6 sm:p-8 bg-gradient-to-r from-[#EFF6FF] via-[#F8FAFF] to-white dark:from-[#0F172A] dark:via-[#172033] dark:to-[#0B1120] border border-slate-200 dark:border-blue-500/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <span className="px-3 py-1 rounded-full text-xs sm:text-sm font-mono font-bold uppercase tracking-wider bg-blue-600 text-white shadow-xs">
@@ -824,7 +824,7 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
             TAIL Pointer
           </span>
           <div className="mt-1.5 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-mono font-extrabold text-indigo-600 dark:text-indigo-400">
+            <span className="text-2xl sm:text-3xl font-mono font-extrabold text-[#1D4ED8] dark:text-[#3B82F6]">
               {tailAddress !== null ? tailAddress : '—'}
             </span>
             {tailAddress !== null && (
@@ -952,13 +952,13 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                         </div>
                       )}
                       {isTail && !isHead && (
-                        <div className="px-2.5 py-0.5 rounded-md bg-indigo-600 text-white font-mono font-bold text-xs tracking-wider uppercase shadow-xs flex items-center gap-1">
+                        <div className="px-2.5 py-0.5 rounded-md bg-[#1D4ED8] text-white font-mono font-bold text-xs tracking-wider uppercase shadow-xs flex items-center gap-1">
                           <span>TAIL</span>
-                          <span className="text-indigo-200">↓</span>
+                          <span className="text-blue-200">↓</span>
                         </div>
                       )}
                       {isHead && isTail && (
-                        <div className="px-2.5 py-0.5 rounded-md bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-mono font-bold text-xs tracking-wider uppercase shadow-xs flex items-center gap-1">
+                        <div className="px-2.5 py-0.5 rounded-md bg-gradient-to-r from-[#1D4ED8] via-[#2563EB] to-[#6366F1] text-white font-mono font-bold text-xs tracking-wider uppercase shadow-xs flex items-center gap-1">
                           <span>HEAD • TAIL</span>
                           <span className="text-blue-200">↓</span>
                         </div>
@@ -1663,12 +1663,12 @@ export const CircularLinkedListLab: React.FC<CircularLinkedListLabProps> = ({
                               </span>
                             )}
                             {isTail && !isHead && (
-                              <span className="px-2 py-0.5 rounded bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 text-xs font-bold">
+                              <span className="px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900/60 text-[#1D4ED8] dark:text-[#3B82F6] text-xs font-bold">
                                 TAIL
                               </span>
                             )}
                             {isHead && isTail && (
-                              <span className="px-2 py-0.5 rounded bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300 text-xs font-bold">
+                              <span className="px-2 py-0.5 rounded bg-[#EFF6FF] dark:bg-blue-950/60 text-[#2563EB] dark:text-[#3B82F6] text-xs font-bold">
                                 HEAD/TAIL
                               </span>
                             )}

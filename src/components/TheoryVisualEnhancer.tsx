@@ -182,10 +182,10 @@ export const TheoryVisualEnhancer: React.FC<TheoryVisualEnhancerProps> = ({ chap
               <span className="text-lg font-extrabold text-[#2563EB] dark:text-[#3B82F6]">Address</span>
               <span className="text-[10px] text-slate-500 dark:text-slate-400 block mt-1">Pointer to successor</span>
             </div>
-            <div className="p-3 bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-500/30 rounded-xl">
-              <span className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 block">LAST NODE</span>
+            <div className="p-3 bg-[#EFF6FF] dark:bg-blue-950/40 border border-[#DBEAFE] dark:border-blue-500/30 rounded-xl">
+              <span className="text-[11px] font-bold text-[#2563EB] dark:text-[#3B82F6] block">LAST NODE</span>
               <span className="text-lg font-extrabold text-slate-900 dark:text-white">Node 40</span>
-              <span className="text-[10px] text-indigo-600 dark:text-indigo-400 block mt-1">last.next == head</span>
+              <span className="text-[10px] text-[#2563EB] dark:text-[#3B82F6] block mt-1">last.next == head</span>
             </div>
           </div>
         </div>
@@ -242,9 +242,9 @@ export const TheoryVisualEnhancer: React.FC<TheoryVisualEnhancerProps> = ({ chap
               </ul>
             </div>
 
-            <div className="p-3.5 bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-500/30 rounded-xl space-y-2">
-              <div className="font-bold text-purple-700 dark:text-purple-300 flex items-center gap-1.5">
-                <RotateCcw className="w-3.5 h-3.5" />
+            <div className="p-3.5 bg-[#EFF6FF] dark:bg-blue-950/40 border border-[#DBEAFE] dark:border-blue-500/30 rounded-xl space-y-2">
+              <div className="font-bold text-[#1D4ED8] dark:text-[#3B82F6] flex items-center gap-1.5">
+                <RotateCcw className="w-3.5 h-3.5 text-[#6366F1]" />
                 <span>TRAVERSAL</span>
               </div>
               <ul className="space-y-1 text-slate-600 dark:text-slate-300">
@@ -484,9 +484,9 @@ export const TheoryVisualEnhancer: React.FC<TheoryVisualEnhancerProps> = ({ chap
               </div>
             </div>
 
-            <div className="p-4 bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-500/30 rounded-xl space-y-2">
-              <div className="flex items-center gap-2 font-bold text-purple-700 dark:text-purple-300">
-                <Music className="w-4 h-4" />
+            <div className="p-4 bg-[#EFF6FF] dark:bg-blue-950/40 border border-[#DBEAFE] dark:border-blue-500/30 rounded-xl space-y-2">
+              <div className="flex items-center gap-2 font-bold text-[#1D4ED8] dark:text-[#3B82F6]">
+                <Music className="w-4 h-4 text-[#6366F1]" />
                 <span>Music Playlist</span>
               </div>
               <div className="text-slate-700 dark:text-slate-300 text-[11px] leading-relaxed">

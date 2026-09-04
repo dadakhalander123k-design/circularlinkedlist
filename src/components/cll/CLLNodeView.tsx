@@ -79,14 +79,14 @@ export const CLLNodeView: React.FC<CLLNodeViewProps> = ({
         )}
 
         {isTail && !isHead && (
-          <div className="px-2.5 py-0.5 rounded-md bg-indigo-600 dark:bg-indigo-500 text-white font-mono font-bold text-xs tracking-wider uppercase shadow-xs flex items-center gap-1">
+          <div className="px-2.5 py-0.5 rounded-md bg-[#1D4ED8] dark:bg-[#2563EB] text-white font-mono font-bold text-xs tracking-wider uppercase shadow-xs flex items-center gap-1">
             <span>TAIL</span>
-            <span className="text-indigo-200">↓</span>
+            <span className="text-blue-200">↓</span>
           </div>
         )}
 
         {isHead && isTail && (
-          <div className="px-2.5 py-0.5 rounded-md bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-mono font-bold text-xs tracking-wider uppercase shadow-xs flex items-center gap-1 animate-pulse">
+          <div className="px-2.5 py-0.5 rounded-md bg-gradient-to-r from-[#1D4ED8] via-[#2563EB] to-[#6366F1] text-white font-mono font-bold text-xs tracking-wider uppercase shadow-xs flex items-center gap-1 animate-pulse">
             <span>HEAD • TAIL</span>
             <span className="text-blue-200">↓</span>
           </div>
@@ -100,7 +100,7 @@ export const CLLNodeView: React.FC<CLLNodeViewProps> = ({
         )}
 
         {isPrev && (
-          <div className="px-2.5 py-0.5 rounded-md bg-purple-600 dark:bg-purple-500 text-white font-mono font-bold text-xs tracking-wider uppercase shadow-xs">
+          <div className="px-2.5 py-0.5 rounded-md bg-[#1E40AF] dark:bg-[#1D4ED8] text-white font-mono font-bold text-xs tracking-wider uppercase shadow-xs">
             PREV
           </div>
         )}
@@ -112,7 +112,7 @@ export const CLLNodeView: React.FC<CLLNodeViewProps> = ({
         )}
 
         {isNew && (
-          <div className="px-2.5 py-0.5 rounded-md bg-cyan-600 dark:bg-cyan-500 text-white font-mono font-bold text-xs tracking-wider uppercase shadow-xs flex items-center gap-1">
+          <div className="px-2.5 py-0.5 rounded-md bg-[#2563EB] dark:bg-[#3B82F6] text-white font-mono font-bold text-xs tracking-wider uppercase shadow-xs flex items-center gap-1">
             <Sparkles className="w-3 h-3" />
             <span>NEW</span>
           </div>
@@ -136,9 +136,9 @@ export const CLLNodeView: React.FC<CLLNodeViewProps> = ({
             : isVisited
             ? 'border-emerald-500/80 dark:border-emerald-500/60 bg-emerald-50/30 dark:bg-emerald-950/20'
             : isPrev
-            ? 'border-purple-500 dark:border-purple-400 bg-purple-50/40 dark:bg-purple-950/30'
+            ? 'border-[#1E40AF] dark:border-[#1D4ED8] bg-blue-50/50 dark:bg-blue-950/40'
             : isNew
-            ? 'border-cyan-500 dark:border-cyan-400 bg-cyan-50/40 dark:bg-cyan-950/30'
+            ? 'border-[#2563EB] dark:border-[#3B82F6] bg-blue-50/40 dark:bg-blue-950/30'
             : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-[#111827] hover:border-blue-400 dark:hover:border-blue-500'
         }`}
       >

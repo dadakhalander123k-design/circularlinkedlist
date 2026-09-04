@@ -342,7 +342,7 @@ export const MyProgressView: React.FC<MyProgressViewProps> = ({ onNavigateToTab 
           className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/25 rounded-2xl p-5 shadow-xs hover:border-[#2563EB] dark:hover:border-[#3B82F6] transition-all cursor-pointer group"
         >
           <div className="flex items-center justify-between mb-3">
-            <div className="p-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30">
+            <div className="p-2.5 rounded-xl bg-[#EFF6FF] dark:bg-blue-950/50 text-[#2563EB] dark:text-[#3B82F6] border border-[#DBEAFE] dark:border-blue-500/30">
               <Award className="w-5 h-5" />
             </div>
             <span className={`text-xs font-bold font-mono px-2.5 py-1 rounded-md ${
@@ -364,7 +364,7 @@ export const MyProgressView: React.FC<MyProgressViewProps> = ({ onNavigateToTab 
           </div>
           <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 mt-2 overflow-hidden">
             <div
-              className="bg-indigo-600 dark:bg-indigo-500 h-full rounded-full transition-all duration-500"
+              className="bg-gradient-to-r from-[#2563EB] to-[#6366F1] h-full rounded-full transition-all duration-500"
               style={{ width: `${stats.quiz.percentage}%` }}
             />
           </div>

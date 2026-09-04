@@ -560,11 +560,11 @@ export const Level4Gameplay: React.FC<Level4GameplayProps> = ({
             )}
             {stage === 'partB_end' && (
               <div className="flex items-center gap-2">
-                <span className={`px-2 py-0.5 rounded font-bold ${subStep === 1 ? 'bg-indigo-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}`}>
+                <span className={`px-2 py-0.5 rounded font-bold ${subStep === 1 ? 'bg-[#2563EB] text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}`}>
                   1. TAIL = 1004
                 </span>
                 <span>→</span>
-                <span className={`px-2 py-0.5 rounded font-bold ${subStep === 2 ? 'bg-blue-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}`}>
+                <span className={`px-2 py-0.5 rounded font-bold ${subStep === 2 ? 'bg-[#1D4ED8] text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}`}>
                   2. 1004.NEXT = 1000
                 </span>
                 <span>→</span>
@@ -575,11 +575,11 @@ export const Level4Gameplay: React.FC<Level4GameplayProps> = ({
             )}
             {stage === 'partC_position' && (
               <div className="flex items-center gap-2">
-                <span className={`px-2 py-0.5 rounded font-bold ${subStep === 1 ? 'bg-purple-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}`}>
+                <span className={`px-2 py-0.5 rounded font-bold ${subStep === 1 ? 'bg-[#2563EB] text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}`}>
                   1. Identify Target (1004)
                 </span>
                 <span>→</span>
-                <span className={`px-2 py-0.5 rounded font-bold ${subStep === 2 ? 'bg-blue-600 text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}`}>
+                <span className={`px-2 py-0.5 rounded font-bold ${subStep === 2 ? 'bg-[#1D4ED8] text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}`}>
                   2. 1002.NEXT = 1006
                 </span>
                 <span>→</span>
@@ -756,7 +756,7 @@ export const Level4Gameplay: React.FC<Level4GameplayProps> = ({
                         }
                       }}
                       placeholder="1004"
-                      className="w-16 px-1.5 py-1 text-center font-bold bg-white dark:bg-[#111827] border border-indigo-300 dark:border-indigo-500/40 rounded text-indigo-900 dark:text-indigo-100 focus:outline-hidden"
+                      className="w-16 px-1.5 py-1 text-center font-bold bg-white dark:bg-[#111827] border border-blue-300 dark:border-blue-500/40 rounded text-blue-900 dark:text-blue-100 focus:border-[#2563EB] focus:outline-hidden"
                     />
                     <span className="text-slate-400">]</span>
                   </div>
@@ -860,7 +860,7 @@ export const Level4Gameplay: React.FC<Level4GameplayProps> = ({
                         }
                       }}
                       placeholder="1004"
-                      className="w-16 px-1.5 py-1 text-center font-bold bg-white dark:bg-[#111827] border border-purple-300 dark:border-purple-500/40 rounded text-purple-900 dark:text-purple-100 focus:outline-hidden"
+                      className="w-16 px-1.5 py-1 text-center font-bold bg-white dark:bg-[#111827] border border-blue-300 dark:border-blue-500/40 rounded text-blue-900 dark:text-blue-100 focus:border-[#2563EB] focus:outline-hidden"
                     />
                     <span className="text-slate-400">]</span>
                   </div>

@@ -143,8 +143,8 @@ export const CLLMemoryBar: React.FC<CLLMemoryBarProps> = ({
           </div>
 
           {/* TAIL Register */}
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-[#111827] border border-indigo-200 dark:border-indigo-500/30 shadow-2xs">
-            <label htmlFor="input-tail-address" className="text-xs sm:text-sm font-bold text-indigo-600 dark:text-indigo-400">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white dark:bg-[#111827] border border-blue-200 dark:border-blue-500/30 shadow-2xs">
+            <label htmlFor="input-tail-address" className="text-xs sm:text-sm font-bold text-[#1D4ED8] dark:text-[#3B82F6]">
               TAIL:
             </label>
             <div className="flex items-center gap-1">
@@ -164,7 +164,7 @@ export const CLLMemoryBar: React.FC<CLLMemoryBarProps> = ({
                   }
                 }}
                 placeholder="1006"
-                className="w-16 px-1.5 py-0.5 text-xs sm:text-sm font-bold text-center bg-indigo-50/70 dark:bg-indigo-950/60 border border-indigo-300 dark:border-indigo-500/40 rounded text-indigo-900 dark:text-indigo-100 focus:outline-hidden focus:ring-1 focus:ring-indigo-500 font-mono"
+                className="w-16 px-1.5 py-0.5 text-xs sm:text-sm font-bold text-center bg-blue-50/70 dark:bg-blue-950/60 border border-blue-300 dark:border-blue-500/40 rounded text-blue-900 dark:text-blue-100 focus:outline-hidden focus:ring-1 focus:ring-[#2563EB] font-mono"
                 title="Type node address and press Enter or click Set TAIL"
               />
               <span className="text-slate-400 font-mono text-xs sm:text-sm">]</span>
@@ -172,7 +172,7 @@ export const CLLMemoryBar: React.FC<CLLMemoryBarProps> = ({
                 type="button"
                 id="btn-set-tail-address"
                 onClick={handleApplyTail}
-                className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white rounded text-xs font-bold cursor-pointer transition-transform font-sans"
+                className="px-2.5 py-1 bg-[#2563EB] hover:bg-[#1D4ED8] active:scale-95 text-white rounded text-xs font-bold cursor-pointer transition-transform font-sans"
                 title="Apply TAIL Address"
               >
                 Set TAIL

@@ -45,13 +45,13 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* =========================================================================
           SECTION 01: HERO SECTION & CIRCULAR LINKED LIST DIAGRAM
           ========================================================================= */}
-      <section className="reveal-on-scroll bg-white dark:bg-[#111827] p-6 sm:p-10 rounded-2xl border border-slate-200/90 dark:border-indigo-500/20 shadow-xs dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)] transition-all">
+      <section className="reveal-on-scroll bg-white dark:bg-[#111827] p-6 sm:p-10 rounded-2xl border border-slate-200/90 dark:border-blue-500/20 shadow-xs dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)] transition-all">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
           {/* Left Side: Curriculum Label, Main Heading, & Educational Description */}
           <div className="lg:col-span-6 flex flex-col gap-3.5">
             {/* Small Curriculum Label */}
             <div className="flex items-center">
-              <span className="text-xs sm:text-sm font-mono font-bold tracking-wider text-[#4F46E5] dark:text-[#818CF8] uppercase">
+              <span className="text-xs sm:text-sm font-mono font-bold tracking-wider text-[#2563EB] dark:text-[#3B82F6] uppercase">
                 THEORY CURRICULUM &nbsp;•&nbsp; MODULE 02 &nbsp;•&nbsp; CHAPTER 01
               </span>
             </div>
@@ -76,14 +76,14 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <defs>
                   {/* Subtle Central Radial Glow */}
                   <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="#EDE9FE" stopOpacity="0.75" />
-                    <stop offset="60%" stopColor="#F5F3FF" stopOpacity="0.4" />
+                    <stop offset="0%" stopColor="#EFF6FF" stopOpacity="0.85" />
+                    <stop offset="60%" stopColor="#F8FAFF" stopOpacity="0.5" />
                     <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0" />
                   </radialGradient>
                   {/* Dark Mode Glow */}
                   <radialGradient id="centerGlowDark" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="#4F46E5" stopOpacity="0.25" />
-                    <stop offset="60%" stopColor="#312E81" stopOpacity="0.1" />
+                    <stop offset="0%" stopColor="#1E40AF" stopOpacity="0.25" />
+                    <stop offset="60%" stopColor="#172554" stopOpacity="0.1" />
                     <stop offset="100%" stopColor="#111827" stopOpacity="0" />
                   </radialGradient>
 
@@ -97,7 +97,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                     orient="auto"
                     markerUnits="strokeWidth"
                   >
-                    <path d="M 1 1 L 7 4 L 1 7 Z" fill="#6366F1" />
+                    <path d="M 1 1 L 7 4 L 1 7 Z" fill="#2563EB" />
                   </marker>
                 </defs>
 
@@ -111,54 +111,53 @@ export const HomePage: React.FC<HomePageProps> = ({
                   cy="170"
                   r="88"
                   fill="none"
-                  stroke="#E0E7FF"
+                  stroke="#DBEAFE"
                   strokeWidth="2"
-                  className="dark:stroke-indigo-950/60"
+                  className="dark:stroke-blue-950/60"
                 />
 
-                {/* 4 Clockwise Curved Flow Arrows */}
-                {/* Arc 1: Node 10 (top) -> Node 20 (right) */}
+                {/* 4 Clockwise Curved Flow Arrows                 {/* Arc 1: Node 10 (top) -> Node 20 (right) */}
                 <path
-                  d="M 210 115 A 88 88 0 0 1 245 150"
+                  d="M 190 115 A 88 88 0 0 1 225 150"
                   fill="none"
-                  stroke="#6366F1"
+                  stroke="#2563EB"
                   strokeWidth="2.5"
                   strokeLinecap="round"
                   markerEnd="url(#arrowhead)"
-                  className="dark:stroke-[#818CF8]"
+                  className="dark:stroke-[#3B82F6]"
                 />
 
                 {/* Arc 2: Node 20 (right) -> Node 30 (bottom) */}
                 <path
-                  d="M 245 190 A 88 88 0 0 1 210 225"
+                  d="M 225 190 A 88 88 0 0 1 190 225"
                   fill="none"
-                  stroke="#6366F1"
+                  stroke="#2563EB"
                   strokeWidth="2.5"
                   strokeLinecap="round"
                   markerEnd="url(#arrowhead)"
-                  className="dark:stroke-[#818CF8]"
+                  className="dark:stroke-[#3B82F6]"
                 />
 
                 {/* Arc 3: Node 30 (bottom) -> Node 40 (left) */}
                 <path
                   d="M 150 225 A 88 88 0 0 1 115 190"
                   fill="none"
-                  stroke="#6366F1"
+                  stroke="#2563EB"
                   strokeWidth="2.5"
                   strokeLinecap="round"
                   markerEnd="url(#arrowhead)"
-                  className="dark:stroke-[#818CF8]"
+                  className="dark:stroke-[#3B82F6]"
                 />
 
                 {/* Arc 4: Node 40 (left) -> Node 10 (top) */}
                 <path
                   d="M 115 150 A 88 88 0 0 1 150 115"
                   fill="none"
-                  stroke="#6366F1"
+                  stroke="#2563EB"
                   strokeWidth="2.5"
                   strokeLinecap="round"
                   markerEnd="url(#arrowhead)"
-                  className="dark:stroke-[#818CF8]"
+                  className="dark:stroke-[#3B82F6]"
                 />
 
                 {/* Top-Left: "Head" Badge & Curved Pointer */}
@@ -170,20 +169,20 @@ export const HomePage: React.FC<HomePageProps> = ({
                     width="60"
                     height="28"
                     rx="8"
-                    fill="#EDE9FE"
-                    stroke="#C7D2FE"
+                    fill="#EFF6FF"
+                    stroke="#DBEAFE"
                     strokeWidth="1.2"
-                    className="dark:fill-indigo-950/90 dark:stroke-indigo-500/40"
+                    className="dark:fill-blue-950/90 dark:stroke-blue-500/40"
                   />
                   <text
                     x="86"
                     y="61"
                     textAnchor="middle"
-                    fill="#4F46E5"
+                    fill="#2563EB"
                     fontSize="13"
                     fontWeight="700"
                     fontFamily="sans-serif"
-                    className="dark:fill-[#818CF8]"
+                    className="dark:fill-[#3B82F6]"
                   >
                     Head
                   </text>
@@ -191,11 +190,11 @@ export const HomePage: React.FC<HomePageProps> = ({
                   <path
                     d="M 118 56 Q 146 54 154 74"
                     fill="none"
-                    stroke="#6366F1"
+                    stroke="#2563EB"
                     strokeWidth="2"
                     strokeLinecap="round"
                     markerEnd="url(#arrowhead)"
-                    className="dark:stroke-[#818CF8]"
+                    className="dark:stroke-[#3B82F6]"
                   />
                 </g>
 
@@ -208,20 +207,20 @@ export const HomePage: React.FC<HomePageProps> = ({
                     width="106"
                     height="42"
                     rx="10"
-                    fill="#EDE9FE"
-                    stroke="#C7D2FE"
+                    fill="#EFF6FF"
+                    stroke="#DBEAFE"
                     strokeWidth="1.2"
-                    className="dark:fill-indigo-950/90 dark:stroke-indigo-500/40 shadow-xs"
+                    className="dark:fill-blue-950/90 dark:stroke-blue-500/40 shadow-xs"
                   />
                   <text
                     x="301"
                     y="269"
                     textAnchor="middle"
-                    fill="#4338CA"
+                    fill="#1D4ED8"
                     fontSize="11.5"
                     fontWeight="700"
                     fontFamily="sans-serif"
-                    className="dark:fill-[#A5B4FC]"
+                    className="dark:fill-[#93C5FD]"
                   >
                     Last node
                   </text>
@@ -229,11 +228,11 @@ export const HomePage: React.FC<HomePageProps> = ({
                     x="301"
                     y="284"
                     textAnchor="middle"
-                    fill="#4338CA"
+                    fill="#1D4ED8"
                     fontSize="11.5"
                     fontWeight="700"
                     fontFamily="sans-serif"
-                    className="dark:fill-[#A5B4FC]"
+                    className="dark:fill-[#93C5FD]"
                   >
                     points to first node
                   </text>
@@ -241,11 +240,11 @@ export const HomePage: React.FC<HomePageProps> = ({
                   <path
                     d="M 270 252 Q 256 236 242 232"
                     fill="none"
-                    stroke="#6366F1"
+                    stroke="#2563EB"
                     strokeWidth="2"
                     strokeLinecap="round"
                     markerEnd="url(#arrowhead)"
-                    className="dark:stroke-[#818CF8]"
+                    className="dark:stroke-[#3B82F6]"
                   />
                 </g>
 
@@ -256,19 +255,19 @@ export const HomePage: React.FC<HomePageProps> = ({
                     cy="0"
                     r="25"
                     fill="#FFFFFF"
-                    stroke="#818CF8"
+                    stroke="#2563EB"
                     strokeWidth="2.5"
-                    className="dark:fill-[#172033] dark:stroke-[#6366F1] shadow-md"
+                    className="dark:fill-[#172033] dark:stroke-[#3B82F6] shadow-md"
                   />
                   <text
                     x="0"
                     y="6"
                     textAnchor="middle"
-                    fill="#312E81"
+                    fill="#172554"
                     fontSize="17"
                     fontWeight="800"
                     fontFamily="monospace"
-                    className="dark:fill-[#C7D2FE]"
+                    className="dark:fill-[#F8FAFC]"
                   >
                     10
                   </text>
@@ -281,19 +280,19 @@ export const HomePage: React.FC<HomePageProps> = ({
                     cy="0"
                     r="25"
                     fill="#FFFFFF"
-                    stroke="#818CF8"
+                    stroke="#2563EB"
                     strokeWidth="2.5"
-                    className="dark:fill-[#172033] dark:stroke-[#6366F1] shadow-md"
+                    className="dark:fill-[#172033] dark:stroke-[#3B82F6] shadow-md"
                   />
                   <text
                     x="0"
                     y="6"
                     textAnchor="middle"
-                    fill="#312E81"
+                    fill="#172554"
                     fontSize="17"
                     fontWeight="800"
                     fontFamily="monospace"
-                    className="dark:fill-[#C7D2FE]"
+                    className="dark:fill-[#F8FAFC]"
                   >
                     20
                   </text>
@@ -306,19 +305,19 @@ export const HomePage: React.FC<HomePageProps> = ({
                     cy="0"
                     r="25"
                     fill="#FFFFFF"
-                    stroke="#818CF8"
+                    stroke="#2563EB"
                     strokeWidth="2.5"
-                    className="dark:fill-[#172033] dark:stroke-[#6366F1] shadow-md"
+                    className="dark:fill-[#172033] dark:stroke-[#3B82F6] shadow-md"
                   />
                   <text
                     x="0"
                     y="6"
                     textAnchor="middle"
-                    fill="#312E81"
+                    fill="#172554"
                     fontSize="17"
                     fontWeight="800"
                     fontFamily="monospace"
-                    className="dark:fill-[#C7D2FE]"
+                    className="dark:fill-[#F8FAFC]"
                   >
                     30
                   </text>
@@ -331,19 +330,19 @@ export const HomePage: React.FC<HomePageProps> = ({
                     cy="0"
                     r="25"
                     fill="#FFFFFF"
-                    stroke="#818CF8"
+                    stroke="#2563EB"
                     strokeWidth="2.5"
-                    className="dark:fill-[#172033] dark:stroke-[#6366F1] shadow-md"
+                    className="dark:fill-[#172033] dark:stroke-[#3B82F6] shadow-md"
                   />
                   <text
                     x="0"
                     y="6"
                     textAnchor="middle"
-                    fill="#312E81"
+                    fill="#172554"
                     fontSize="17"
                     fontWeight="800"
                     fontFamily="monospace"
-                    className="dark:fill-[#C7D2FE]"
+                    className="dark:fill-[#F8FAFC]"
                   >
                     40
                   </text>
@@ -356,10 +355,10 @@ export const HomePage: React.FC<HomePageProps> = ({
         {/* =========================================================================
             HERO INFORMATION CARDS (3 Cards)
             ========================================================================= */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 pt-8 border-t border-slate-100 dark:border-indigo-500/15">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 pt-8 border-t border-slate-100 dark:border-blue-500/15">
           {/* Card 1: Core Idea */}
-          <div className="bg-white dark:bg-[#0F172A] border border-slate-200/90 dark:border-indigo-500/20 rounded-2xl p-5 flex items-start gap-3.5 shadow-2xs hover:border-[#6366F1] dark:hover:border-indigo-500/40 transition-all">
-            <div className="w-12 h-12 rounded-2xl bg-[#EDE9FE] dark:bg-indigo-950/70 border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8] shrink-0">
+          <div className="bg-white dark:bg-[#0F172A] border border-slate-200/90 dark:border-blue-500/20 rounded-2xl p-5 flex items-start gap-3.5 shadow-2xs hover:border-[#2563EB] dark:hover:border-blue-500/40 transition-all">
+            <div className="w-12 h-12 rounded-2xl bg-[#EFF6FF] dark:bg-blue-950/70 border border-[#DBEAFE] dark:border-blue-500/30 flex items-center justify-center text-[#2563EB] dark:text-[#3B82F6] shrink-0">
               <Target className="w-6 h-6" />
             </div>
             <div>
@@ -371,8 +370,8 @@ export const HomePage: React.FC<HomePageProps> = ({
           </div>
 
           {/* Card 2: Key Operations */}
-          <div className="bg-white dark:bg-[#0F172A] border border-slate-200/90 dark:border-indigo-500/20 rounded-2xl p-5 flex items-start gap-3.5 shadow-2xs hover:border-[#6366F1] dark:hover:border-indigo-500/40 transition-all">
-            <div className="w-12 h-12 rounded-2xl bg-[#EDE9FE] dark:bg-indigo-950/70 border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8] shrink-0">
+          <div className="bg-white dark:bg-[#0F172A] border border-slate-200/90 dark:border-blue-500/20 rounded-2xl p-5 flex items-start gap-3.5 shadow-2xs hover:border-[#2563EB] dark:hover:border-blue-500/40 transition-all">
+            <div className="w-12 h-12 rounded-2xl bg-[#EFF6FF] dark:bg-blue-950/70 border border-[#DBEAFE] dark:border-blue-500/30 flex items-center justify-center text-[#2563EB] dark:text-[#3B82F6] shrink-0">
               <Link2 className="w-6 h-6 -rotate-45" />
             </div>
             <div>
@@ -384,8 +383,8 @@ export const HomePage: React.FC<HomePageProps> = ({
           </div>
 
           {/* Card 3: Main Advantage */}
-          <div className="bg-white dark:bg-[#0F172A] border border-slate-200/90 dark:border-indigo-500/20 rounded-2xl p-5 flex items-start gap-3.5 shadow-2xs hover:border-[#6366F1] dark:hover:border-indigo-500/40 transition-all">
-            <div className="w-12 h-12 rounded-2xl bg-[#EDE9FE] dark:bg-indigo-950/70 border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8] shrink-0">
+          <div className="bg-white dark:bg-[#0F172A] border border-slate-200/90 dark:border-blue-500/20 rounded-2xl p-5 flex items-start gap-3.5 shadow-2xs hover:border-[#2563EB] dark:hover:border-blue-500/40 transition-all">
+            <div className="w-12 h-12 rounded-2xl bg-[#EFF6FF] dark:bg-blue-950/70 border border-[#DBEAFE] dark:border-blue-500/30 flex items-center justify-center text-[#2563EB] dark:text-[#3B82F6] shrink-0">
               <Shapes className="w-6 h-6" />
             </div>
             <div>
@@ -401,10 +400,10 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* =========================================================================
           SECTION 02: 1. THE MAIN IDEA
           ========================================================================= */}
-      <section className="reveal-on-scroll bg-white dark:bg-[#111827] p-6 sm:p-9 rounded-2xl border border-slate-200/90 dark:border-indigo-500/20 shadow-xs dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)]">
+      <section className="reveal-on-scroll bg-white dark:bg-[#111827] p-6 sm:p-9 rounded-2xl border border-slate-200/90 dark:border-blue-500/20 shadow-xs dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)]">
         {/* Section Header */}
         <div className="flex items-center gap-2.5 mb-6">
-          <div className="w-9 h-9 rounded-full bg-[#EDE9FE] dark:bg-indigo-950/70 border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8]">
+          <div className="w-9 h-9 rounded-full bg-[#EFF6FF] dark:bg-blue-950/70 border border-[#DBEAFE] dark:border-blue-500/30 flex items-center justify-center text-[#2563EB] dark:text-[#3B82F6]">
             <Lightbulb className="w-5 h-5" />
           </div>
           <h2 className="text-xl sm:text-2xl font-extrabold text-[#0F172A] dark:text-white tracking-tight">
@@ -415,7 +414,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
           {/* Left Column: Question & Explanation */}
           <div className="lg:col-span-4 flex flex-col gap-2.5">
-            <h3 className="text-lg sm:text-xl font-bold text-[#4F46E5] dark:text-[#818CF8] leading-snug">
+            <h3 className="text-lg sm:text-xl font-bold text-[#1E40AF] dark:text-[#60A5FA] leading-snug">
               What makes a linked list<br />
               “circular”?
             </h3>
@@ -426,48 +425,48 @@ export const HomePage: React.FC<HomePageProps> = ({
           </div>
 
           {/* Right Column: 4-Step Process Flow Diagram */}
-          <div className="lg:col-span-8 bg-[#FAF8FF] dark:bg-[#0F172A] border border-slate-200/80 dark:border-indigo-500/20 rounded-2xl p-5 sm:p-6">
+          <div className="lg:col-span-8 bg-[#F8FAFF] dark:bg-[#0F172A] border border-slate-200/80 dark:border-blue-500/20 rounded-2xl p-5 sm:p-6">
             <div className="grid grid-cols-2 gap-x-4 gap-y-6 items-start sm:flex sm:flex-nowrap sm:items-center sm:justify-between sm:gap-2">
               {/* Step 1: Node */}
               <div className="flex flex-col items-center text-center w-full sm:w-auto sm:flex-1 sm:min-w-[90px]">
-                <div className="w-13 h-13 rounded-full bg-[#EDE9FE] dark:bg-indigo-950/80 border border-[#DDD6FE] dark:border-indigo-500/30 text-[#4F46E5] dark:text-[#818CF8] flex items-center justify-center shadow-xs mb-2.5 shrink-0">
-                  <FileText className="w-6 h-6 text-[#4F46E5] dark:text-[#818CF8]" />
+                <div className="w-13 h-13 rounded-full bg-[#EFF6FF] dark:bg-blue-950/80 border border-[#DBEAFE] dark:border-blue-500/30 text-[#2563EB] dark:text-[#3B82F6] flex items-center justify-center shadow-xs mb-2.5 shrink-0">
+                  <FileText className="w-6 h-6 text-[#2563EB] dark:text-[#3B82F6]" />
                 </div>
                 <span className="text-base font-bold text-[#0F172A] dark:text-white">Node</span>
                 <span className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 leading-snug">Stores data &amp; address</span>
               </div>
 
               {/* Arrow 1 */}
-              <ArrowRight className="w-4 h-4 text-[#818CF8] dark:text-[#6366F1] shrink-0 hidden sm:block" />
+              <ArrowRight className="w-4 h-4 text-[#3B82F6] dark:text-[#6366F1] shrink-0 hidden sm:block" />
 
               {/* Step 2: Next Pointer */}
               <div className="flex flex-col items-center text-center w-full sm:w-auto sm:flex-1 sm:min-w-[90px]">
-                <div className="w-13 h-13 rounded-full bg-[#EDE9FE] dark:bg-indigo-950/80 border border-[#DDD6FE] dark:border-indigo-500/30 text-[#4F46E5] dark:text-[#818CF8] flex items-center justify-center shadow-xs mb-2.5 shrink-0">
-                  <ArrowRight className="w-6 h-6 text-[#4F46E5] dark:text-[#818CF8] stroke-[2.5]" />
+                <div className="w-13 h-13 rounded-full bg-[#EFF6FF] dark:bg-blue-950/80 border border-[#DBEAFE] dark:border-blue-500/30 text-[#2563EB] dark:text-[#3B82F6] flex items-center justify-center shadow-xs mb-2.5 shrink-0">
+                  <ArrowRight className="w-6 h-6 text-[#2563EB] dark:text-[#3B82F6] stroke-[2.5]" />
                 </div>
                 <span className="text-base font-bold text-[#0F172A] dark:text-white">Next Pointer</span>
                 <span className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 leading-snug">Points to next node</span>
               </div>
 
               {/* Arrow 2 */}
-              <ArrowRight className="w-4 h-4 text-[#818CF8] dark:text-[#6366F1] shrink-0 hidden sm:block" />
+              <ArrowRight className="w-4 h-4 text-[#3B82F6] dark:text-[#6366F1] shrink-0 hidden sm:block" />
 
               {/* Step 3: Last Node */}
               <div className="flex flex-col items-center text-center w-full sm:w-auto sm:flex-1 sm:min-w-[90px]">
-                <div className="w-13 h-13 rounded-full bg-[#EDE9FE] dark:bg-indigo-950/80 border border-[#DDD6FE] dark:border-indigo-500/30 text-[#4F46E5] dark:text-[#818CF8] flex items-center justify-center shadow-xs mb-2.5 shrink-0">
-                  <RotateCw className="w-6 h-6 text-[#4F46E5] dark:text-[#818CF8] stroke-[2.4]" />
+                <div className="w-13 h-13 rounded-full bg-[#EFF6FF] dark:bg-blue-950/80 border border-[#DBEAFE] dark:border-blue-500/30 text-[#2563EB] dark:text-[#3B82F6] flex items-center justify-center shadow-xs mb-2.5 shrink-0">
+                  <RotateCw className="w-6 h-6 text-[#2563EB] dark:text-[#3B82F6] stroke-[2.4]" />
                 </div>
                 <span className="text-base font-bold text-[#0F172A] dark:text-white">Last Node</span>
                 <span className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 leading-snug">Points back to first node</span>
               </div>
 
               {/* Arrow 3 */}
-              <ArrowRight className="w-4 h-4 text-[#818CF8] dark:text-[#6366F1] shrink-0 hidden sm:block" />
+              <ArrowRight className="w-4 h-4 text-[#3B82F6] dark:text-[#6366F1] shrink-0 hidden sm:block" />
 
               {/* Step 4: Circular Traversal */}
               <div className="flex flex-col items-center text-center w-full sm:w-auto sm:flex-1 sm:min-w-[90px]">
-                <div className="w-13 h-13 rounded-full bg-[#EDE9FE] dark:bg-indigo-950/80 border border-[#DDD6FE] dark:border-indigo-500/30 text-[#4F46E5] dark:text-[#818CF8] flex items-center justify-center shadow-xs mb-2.5 shrink-0">
-                  <InfinityIcon className="w-6 h-6 text-[#4F46E5] dark:text-[#818CF8] stroke-[2.4]" />
+                <div className="w-13 h-13 rounded-full bg-[#EFF6FF] dark:bg-blue-950/80 border border-[#DBEAFE] dark:border-blue-500/30 text-[#2563EB] dark:text-[#3B82F6] flex items-center justify-center shadow-xs mb-2.5 shrink-0">
+                  <InfinityIcon className="w-6 h-6 text-[#2563EB] dark:text-[#3B82F6] stroke-[2.4]" />
                 </div>
                 <span className="text-base font-bold text-[#0F172A] dark:text-white">Circular Traversal</span>
                 <span className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 leading-snug">Loop from any node</span>
@@ -480,10 +479,10 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* =========================================================================
           SECTION 03: 2. CONCEPT ROADMAP
           ========================================================================= */}
-      <section className="reveal-on-scroll bg-white dark:bg-[#111827] p-6 sm:p-9 rounded-2xl border border-slate-200/90 dark:border-indigo-500/20 shadow-xs dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)]">
+      <section className="reveal-on-scroll bg-white dark:bg-[#111827] p-6 sm:p-9 rounded-2xl border border-slate-200/90 dark:border-blue-500/20 shadow-xs dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)]">
         {/* Section Header */}
         <div className="flex items-center gap-2.5 mb-8">
-          <div className="w-9 h-9 rounded-full bg-[#EDE9FE] dark:bg-indigo-950/70 border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8]">
+          <div className="w-9 h-9 rounded-full bg-[#EFF6FF] dark:bg-blue-950/70 border border-[#DBEAFE] dark:border-blue-500/30 flex items-center justify-center text-[#2563EB] dark:text-[#3B82F6]">
             <BookOpen className="w-5 h-5" />
           </div>
           <h2 className="text-xl sm:text-2xl font-extrabold text-[#0F172A] dark:text-white tracking-tight">
@@ -494,7 +493,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         {/* 5-Stage Progression */}
         <div className="relative">
           {/* Connected Dashed Line Across the 5 Steps (desktop) */}
-          <div className="hidden md:block absolute top-5 left-[10%] right-[10%] h-0.5 border-t-2 border-dashed border-[#C7D2FE] dark:border-indigo-500/40 z-0" />
+          <div className="hidden md:block absolute top-5 left-[10%] right-[10%] h-0.5 border-t-2 border-dashed border-[#DBEAFE] dark:border-blue-500/40 z-0" />
 
           <div className="flex flex-col items-center md:grid md:grid-cols-5 md:gap-4 md:items-start relative z-10">
             {/* Stage 01: Introduction to Circular Linked List */}
@@ -505,10 +504,10 @@ export const HomePage: React.FC<HomePageProps> = ({
               }}
               className="flex flex-col items-center text-center group cursor-pointer w-full max-w-[220px] md:max-w-none"
             >
-              <div className="w-10 h-10 rounded-full bg-[#EDE9FE] dark:bg-indigo-950 text-[#4F46E5] dark:text-[#818CF8] border-2 border-white dark:border-[#111827] shadow-xs flex items-center justify-center font-mono font-extrabold text-sm mb-3 group-hover:bg-[#4F46E5] group-hover:text-white transition-colors">
+              <div className="w-10 h-10 rounded-full bg-[#EFF6FF] dark:bg-blue-950 text-[#2563EB] dark:text-[#3B82F6] border-2 border-white dark:border-[#111827] shadow-xs flex items-center justify-center font-mono font-extrabold text-sm mb-3 group-hover:bg-[#2563EB] group-hover:text-white transition-colors">
                 01
               </div>
-              <div className="w-13 h-13 rounded-full bg-[#EEF2FF] dark:bg-[#172033] border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8] mb-2.5 shadow-2xs group-hover:border-[#4F46E5] transition-all">
+              <div className="w-13 h-13 rounded-full bg-[#F8FAFF] dark:bg-[#172033] border border-[#DBEAFE] dark:border-blue-500/30 flex items-center justify-center text-[#2563EB] dark:text-[#3B82F6] mb-2.5 shadow-2xs group-hover:border-[#2563EB] transition-all">
                 <GitFork className="w-5 h-5 rotate-180" />
               </div>
               <h3 className="text-sm sm:text-base font-bold text-[#0F172A] dark:text-white leading-snug">
@@ -517,7 +516,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             </div>
 
             {/* Mobile Connector Line: 01 -> 02 */}
-            <div className="md:hidden w-0.5 h-6 border-l-2 border-dashed border-[#C7D2FE] dark:border-indigo-500/40 my-2" />
+            <div className="md:hidden w-0.5 h-6 border-l-2 border-dashed border-[#DBEAFE] dark:border-blue-500/40 my-2" />
 
             {/* Stage 02: Node Structure and Representation */}
             <div
@@ -527,10 +526,10 @@ export const HomePage: React.FC<HomePageProps> = ({
               }}
               className="flex flex-col items-center text-center group cursor-pointer w-full max-w-[220px] md:max-w-none"
             >
-              <div className="w-10 h-10 rounded-full bg-[#EDE9FE] dark:bg-indigo-950 text-[#4F46E5] dark:text-[#818CF8] border-2 border-white dark:border-[#111827] shadow-xs flex items-center justify-center font-mono font-extrabold text-sm mb-3 group-hover:bg-[#4F46E5] group-hover:text-white transition-colors">
+              <div className="w-10 h-10 rounded-full bg-[#EFF6FF] dark:bg-blue-950 text-[#2563EB] dark:text-[#3B82F6] border-2 border-white dark:border-[#111827] shadow-xs flex items-center justify-center font-mono font-extrabold text-sm mb-3 group-hover:bg-[#2563EB] group-hover:text-white transition-colors">
                 02
               </div>
-              <div className="w-13 h-13 rounded-full bg-[#EEF2FF] dark:bg-[#172033] border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8] mb-2.5 shadow-2xs group-hover:border-[#4F46E5] transition-all">
+              <div className="w-13 h-13 rounded-full bg-[#F8FAFF] dark:bg-[#172033] border border-[#DBEAFE] dark:border-blue-500/30 flex items-center justify-center text-[#2563EB] dark:text-[#3B82F6] mb-2.5 shadow-2xs group-hover:border-[#2563EB] transition-all">
                 <FileText className="w-5 h-5" />
               </div>
               <h3 className="text-sm sm:text-base font-bold text-[#0F172A] dark:text-white leading-snug">
@@ -539,7 +538,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             </div>
 
             {/* Mobile Connector Line: 02 -> 03 */}
-            <div className="md:hidden w-0.5 h-6 border-l-2 border-dashed border-[#C7D2FE] dark:border-indigo-500/40 my-2" />
+            <div className="md:hidden w-0.5 h-6 border-l-2 border-dashed border-[#DBEAFE] dark:border-blue-500/40 my-2" />
 
             {/* Stage 03: Operations (Insertion & Deletion) */}
             <div
@@ -549,10 +548,10 @@ export const HomePage: React.FC<HomePageProps> = ({
               }}
               className="flex flex-col items-center text-center group cursor-pointer w-full max-w-[220px] md:max-w-none"
             >
-              <div className="w-10 h-10 rounded-full bg-[#EDE9FE] dark:bg-indigo-950 text-[#4F46E5] dark:text-[#818CF8] border-2 border-white dark:border-[#111827] shadow-xs flex items-center justify-center font-mono font-extrabold text-sm mb-3 group-hover:bg-[#4F46E5] group-hover:text-white transition-colors">
+              <div className="w-10 h-10 rounded-full bg-[#EFF6FF] dark:bg-blue-950 text-[#2563EB] dark:text-[#3B82F6] border-2 border-white dark:border-[#111827] shadow-xs flex items-center justify-center font-mono font-extrabold text-sm mb-3 group-hover:bg-[#2563EB] group-hover:text-white transition-colors">
                 03
               </div>
-              <div className="w-13 h-13 rounded-full bg-[#EEF2FF] dark:bg-[#172033] border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8] mb-2.5 shadow-2xs group-hover:border-[#4F46E5] transition-all">
+              <div className="w-13 h-13 rounded-full bg-[#F8FAFF] dark:bg-[#172033] border border-[#DBEAFE] dark:border-blue-500/30 flex items-center justify-center text-[#2563EB] dark:text-[#3B82F6] mb-2.5 shadow-2xs group-hover:border-[#2563EB] transition-all">
                 <Settings className="w-5 h-5" />
               </div>
               <h3 className="text-sm sm:text-base font-bold text-[#0F172A] dark:text-white leading-snug">
@@ -561,7 +560,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             </div>
 
             {/* Mobile Connector Line: 03 -> 04 */}
-            <div className="md:hidden w-0.5 h-6 border-l-2 border-dashed border-[#C7D2FE] dark:border-indigo-500/40 my-2" />
+            <div className="md:hidden w-0.5 h-6 border-l-2 border-dashed border-[#DBEAFE] dark:border-blue-500/40 my-2" />
 
             {/* Stage 04: Traversal Techniques */}
             <div
@@ -571,10 +570,10 @@ export const HomePage: React.FC<HomePageProps> = ({
               }}
               className="flex flex-col items-center text-center group cursor-pointer w-full max-w-[220px] md:max-w-none"
             >
-              <div className="w-10 h-10 rounded-full bg-[#EDE9FE] dark:bg-indigo-950 text-[#4F46E5] dark:text-[#818CF8] border-2 border-white dark:border-[#111827] shadow-xs flex items-center justify-center font-mono font-extrabold text-sm mb-3 group-hover:bg-[#4F46E5] group-hover:text-white transition-colors">
+              <div className="w-10 h-10 rounded-full bg-[#EFF6FF] dark:bg-blue-950 text-[#2563EB] dark:text-[#3B82F6] border-2 border-white dark:border-[#111827] shadow-xs flex items-center justify-center font-mono font-extrabold text-sm mb-3 group-hover:bg-[#2563EB] group-hover:text-white transition-colors">
                 04
               </div>
-              <div className="w-13 h-13 rounded-full bg-[#EEF2FF] dark:bg-[#172033] border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8] mb-2.5 shadow-2xs group-hover:border-[#4F46E5] transition-all">
+              <div className="w-13 h-13 rounded-full bg-[#F8FAFF] dark:bg-[#172033] border border-[#DBEAFE] dark:border-blue-500/30 flex items-center justify-center text-[#2563EB] dark:text-[#3B82F6] mb-2.5 shadow-2xs group-hover:border-[#2563EB] transition-all">
                 <RotateCw className="w-5 h-5 stroke-[2.4]" />
               </div>
               <h3 className="text-sm sm:text-base font-bold text-[#0F172A] dark:text-white leading-snug">
@@ -583,7 +582,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             </div>
 
             {/* Mobile Connector Line: 04 -> 05 */}
-            <div className="md:hidden w-0.5 h-6 border-l-2 border-dashed border-[#C7D2FE] dark:border-indigo-500/40 my-2" />
+            <div className="md:hidden w-0.5 h-6 border-l-2 border-dashed border-[#DBEAFE] dark:border-blue-500/40 my-2" />
 
             {/* Stage 05: Applications and Advantages */}
             <div
@@ -593,10 +592,10 @@ export const HomePage: React.FC<HomePageProps> = ({
               }}
               className="flex flex-col items-center text-center group cursor-pointer w-full max-w-[220px] md:max-w-none"
             >
-              <div className="w-10 h-10 rounded-full bg-[#EDE9FE] dark:bg-indigo-950 text-[#4F46E5] dark:text-[#818CF8] border-2 border-white dark:border-[#111827] shadow-xs flex items-center justify-center font-mono font-extrabold text-sm mb-3 group-hover:bg-[#4F46E5] group-hover:text-white transition-colors">
+              <div className="w-10 h-10 rounded-full bg-[#EFF6FF] dark:bg-blue-950 text-[#2563EB] dark:text-[#3B82F6] border-2 border-white dark:border-[#111827] shadow-xs flex items-center justify-center font-mono font-extrabold text-sm mb-3 group-hover:bg-[#2563EB] group-hover:text-white transition-colors">
                 05
               </div>
-              <div className="w-13 h-13 rounded-full bg-[#EEF2FF] dark:bg-[#172033] border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#2563EB] dark:text-[#3B82F6] mb-2.5 shadow-2xs group-hover:border-[#2563EB] transition-all">
+              <div className="w-13 h-13 rounded-full bg-[#F8FAFF] dark:bg-[#172033] border border-[#DBEAFE] dark:border-blue-500/30 flex items-center justify-center text-[#2563EB] dark:text-[#3B82F6] mb-2.5 shadow-2xs group-hover:border-[#2563EB] transition-all">
                 <CheckSquare className="w-5 h-5 fill-[#2563EB] text-white dark:fill-[#3B82F6] dark:text-[#172033]" />
               </div>
               <h3 className="text-sm sm:text-base font-bold text-[#0F172A] dark:text-white leading-snug">
@@ -610,10 +609,10 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* =========================================================================
           SECTION 04: 3. WHY THIS TOPIC MATTERS
           ========================================================================= */}
-      <section className="reveal-on-scroll bg-white dark:bg-[#111827] p-6 sm:p-9 rounded-2xl border border-slate-200/90 dark:border-indigo-500/20 shadow-xs dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)]">
+      <section className="reveal-on-scroll bg-white dark:bg-[#111827] p-6 sm:p-9 rounded-2xl border border-slate-200/90 dark:border-blue-500/20 shadow-xs dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)]">
         {/* Section Header */}
         <div className="flex items-center gap-2.5 mb-6">
-          <div className="w-9 h-9 rounded-full bg-[#EDE9FE] dark:bg-indigo-950/70 border border-[#DDD6FE] dark:border-indigo-500/30 flex items-center justify-center text-[#4F46E5] dark:text-[#818CF8]">
+          <div className="w-9 h-9 rounded-full bg-[#EFF6FF] dark:bg-blue-950/70 border border-[#DBEAFE] dark:border-blue-500/30 flex items-center justify-center text-[#2563EB] dark:text-[#3B82F6]">
             <Star className="w-5 h-5" />
           </div>
           <h2 className="text-xl sm:text-2xl font-extrabold text-[#0F172A] dark:text-white tracking-tight">
@@ -623,9 +622,9 @@ export const HomePage: React.FC<HomePageProps> = ({
 
         {/* 3 Value Cards Matching Exact Reference */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {/* Card 1: Continuous Access (Subtle Purple Tint) */}
-          <div className="bg-[#F5F3FF] dark:bg-[#172033] border border-[#EDE9FE] dark:border-indigo-500/25 rounded-2xl p-5 sm:p-6 flex flex-col justify-between gap-4 shadow-2xs">
-            <div className="w-12 h-12 rounded-full bg-[#6366F1] text-white flex items-center justify-center shadow-xs">
+          {/* Card 1: Continuous Access (Subtle Violet Accent at right edge) */}
+          <div className="bg-[#EFF6FF] dark:bg-[#172033] border border-[#DBEAFE] dark:border-blue-500/25 rounded-2xl p-5 sm:p-6 flex flex-col justify-between gap-4 shadow-2xs">
+            <div className="w-12 h-12 rounded-full bg-gradient-to-r from-[#1D4ED8] to-[#6366F1] text-white flex items-center justify-center shadow-xs">
               <RotateCw className="w-5 h-5 stroke-[2.4]" />
             </div>
             <div>
@@ -667,7 +666,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* =========================================================================
           SECTION 05: 4. READY TO START?
           ========================================================================= */}
-      <section className="reveal-on-scroll bg-gradient-to-r from-[#F5F3FF] via-[#F8FAFF] to-[#EFF6FF] dark:from-[#111827] dark:via-[#172033] dark:to-[#111827] border border-[#E0E7FF] dark:border-indigo-500/30 p-6 sm:p-8 rounded-2xl shadow-xs dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)]">
+      <section className="reveal-on-scroll bg-gradient-to-r from-[#EFF6FF] via-[#F8FAFF] to-[#F0F4FF] dark:from-[#111827] dark:via-[#172033] dark:to-[#111827] border border-[#DBEAFE] dark:border-blue-500/30 p-6 sm:p-8 rounded-2xl shadow-xs dark:shadow-[0_8px_32px_rgba(0,0,0,0.35)]">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Left Side: Educational Rocket Visual & Supporting Text */}
           <div className="flex items-center gap-5 sm:gap-6">
@@ -682,13 +681,13 @@ export const HomePage: React.FC<HomePageProps> = ({
                     <stop offset="100%" stopColor="#CBD5E1" />
                   </linearGradient>
                   <linearGradient id="purpleNoseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#4338CA" />
-                    <stop offset="60%" stopColor="#4F46E5" />
+                    <stop offset="0%" stopColor="#1D4ED8" />
+                    <stop offset="60%" stopColor="#2563EB" />
                     <stop offset="100%" stopColor="#6366F1" />
                   </linearGradient>
                   <linearGradient id="purpleFinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#4338CA" />
-                    <stop offset="60%" stopColor="#4F46E5" />
+                    <stop offset="0%" stopColor="#1D4ED8" />
+                    <stop offset="60%" stopColor="#2563EB" />
                     <stop offset="100%" stopColor="#6366F1" />
                   </linearGradient>
                   <linearGradient id="exhaustBeamGrad" x1="100%" y1="0%" x2="0%" y2="100%">
@@ -746,13 +745,13 @@ export const HomePage: React.FC<HomePageProps> = ({
 
                 {/* --- ROCKET STRUCTURE (Oriented ~45deg diagonally) --- */}
                 <g transform="rotate(45, 68, 52)">
-                  {/* Left Purple Fin (flared out) */}
+                  {/* Left Fin (flared out) */}
                   <path
                     d="M 54 58 C 42 64 38 74 42 78 C 50 76 56 70 58 64 Z"
                     fill="url(#purpleFinGrad)"
                   />
 
-                  {/* Right Purple Fin (flared down/back) */}
+                  {/* Right Fin (flared down/back) */}
                   <path
                     d="M 82 58 C 94 64 98 74 94 78 C 86 76 80 70 78 64 Z"
                     fill="url(#purpleFinGrad)"
@@ -777,21 +776,21 @@ export const HomePage: React.FC<HomePageProps> = ({
                     strokeWidth="0.5"
                   />
 
-                  {/* Purple Nosecone */}
+                  {/* Nosecone */}
                   <path
                     d="M 68 16 C 60 23 55 31 54 37 L 82 37 C 81 31 76 23 68 16 Z"
                     fill="url(#purpleNoseGrad)"
                   />
 
-                  {/* Purple Dorsal Spine Fin */}
+                  {/* Dorsal Spine Fin */}
                   <path
                     d="M 66 37 Q 68 56 65 67 L 71 67 Q 68 56 70 37 Z"
                     fill="url(#purpleFinGrad)"
                   />
 
-                  {/* 3D Purple Porthole / Window */}
+                  {/* 3D Porthole / Window */}
                   <circle cx="68" cy="46" r="8" fill="url(#purpleNoseGrad)" stroke="#FFFFFF" strokeWidth="2" />
-                  <circle cx="68" cy="46" r="5" fill="#312E81" />
+                  <circle cx="68" cy="46" r="5" fill="#172554" />
                   <circle cx="66" cy="44" r="1.75" fill="#FFFFFF" opacity="0.9" />
                 </g>
               </svg>
@@ -812,7 +811,7 @@ export const HomePage: React.FC<HomePageProps> = ({
           <button
             id="btn-home-start-learning"
             onClick={handleStartLearning}
-            className="w-full md:w-auto px-8 py-4 bg-[#4F46E5] hover:bg-[#4338CA] dark:bg-[#6366F1] dark:hover:bg-[#4F46E5] text-white font-bold text-base sm:text-lg rounded-xl transition-all shadow-md flex items-center justify-center gap-2.5 cursor-pointer shrink-0 group hover:scale-[1.02] active:scale-[0.98]"
+            className="w-full md:w-auto px-8 py-4 bg-gradient-to-r from-[#1D4ED8] via-[#2563EB] to-[#6366F1] hover:from-[#1E40AF] hover:via-[#1D4ED8] hover:to-[#4F46E5] text-white font-bold text-base sm:text-lg rounded-xl transition-all shadow-md shadow-blue-500/20 flex items-center justify-center gap-2.5 cursor-pointer shrink-0 group hover:scale-[1.02] active:scale-[0.98]"
           >
             <span>Start Learning</span>
             <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
