@@ -31,17 +31,19 @@ import { soundManager } from '../utils/audio';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { TheoryVisualEnhancer } from './TheoryVisualEnhancer';
 import {
-  LINEAR_SEARCH_MODULES,
-  LinearSearchModule,
-} from '../data/linearSearchTheory';
+  CIRCULAR_LINKED_LIST_MODULES,
+  CircularLinkedListModule,
+} from '../data/circularLinkedListTheory';
 
-export interface LearnLinearSearchSectionProps {
+export interface LearnCircularLinkedListSectionProps {
   initialTopic?: string;
   onStartLevel: (levelId: number) => void;
   onOpenSandbox: (technique?: TechniqueType, size?: number) => void;
 }
 
-export const LearnLinearSearchSection: React.FC<LearnLinearSearchSectionProps> = ({
+export type LearnLinearSearchSectionProps = LearnCircularLinkedListSectionProps;
+
+export const LearnCircularLinkedListSection: React.FC<LearnCircularLinkedListSectionProps> = ({
   initialTopic = 'theory-01',
   onStartLevel,
   onOpenSandbox,
@@ -738,4 +740,6 @@ export const LearnLinearSearchSection: React.FC<LearnLinearSearchSectionProps> =
   );
 };
 
-export default LearnLinearSearchSection;
+export const LearnLinearSearchSection = LearnCircularLinkedListSection;
+
+export default LearnCircularLinkedListSection;

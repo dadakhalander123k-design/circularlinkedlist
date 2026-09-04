@@ -1,16 +1,20 @@
 import React from 'react';
 import { CircularLinkedListLab } from './CircularLinkedListLab';
 
-export interface LinearSearchLabProps {
+export interface CircularLinkedListLabProps {
   onExit?: () => void;
   onOpenTheory?: () => void;
 }
 
+export type LinearSearchLabProps = CircularLinkedListLabProps;
+
 /**
- * Replaced Linear Search Lab with Circular Linked List Lab
+ * Circular Linked List Lab compatibility wrapper
  */
-export const LinearSearchLab: React.FC<LinearSearchLabProps> = (props) => {
+export const CircularLinkedListLabCompat: React.FC<CircularLinkedListLabProps> = (props) => {
   return <CircularLinkedListLab {...props} />;
 };
 
-export default LinearSearchLab;
+export const LinearSearchLab = CircularLinkedListLabCompat;
+
+export default CircularLinkedListLabCompat;

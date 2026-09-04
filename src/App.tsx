@@ -7,10 +7,10 @@ import { SidebarNav } from './components/SidebarNav';
 import { TopHeader } from './components/TopHeader';
 import { HomePage } from './components/HomePage';
 import { LevelProgressBar } from './components/LevelProgressBar';
-import { LinearSearchGameplay } from './components/LinearSearchGameplay';
+import { CircularLinkedListGameplay } from './components/CircularLinkedListGameplay';
 import { LevelCompleteModal } from './components/LevelCompleteModal';
 import { SandboxMode } from './components/SandboxMode';
-import { LearnLinearSearchSection } from './components/LearnLinearSearchSection';
+import { LearnCircularLinkedListSection } from './components/LearnCircularLinkedListSection';
 import { VideoTutorialsView } from './components/VideoTutorialsView';
 import { MyProgressView } from './components/MyProgressView';
 import { QuizView } from './components/QuizView';
@@ -23,7 +23,7 @@ import { Sparkles } from 'lucide-react';
 import { progressManager } from './utils/progressManager';
 import { useScrollReveal } from './hooks/useScrollReveal';
 import { updateSEO } from './utils/seo';
-import { LINEAR_SEARCH_MODULES } from './data/linearSearchTheory';
+import { CIRCULAR_LINKED_LIST_MODULES } from './data/circularLinkedListTheory';
 
 // Hash-to-Tab mappings for clean, production-grade URL synchronizations
 const HASH_MAP: Record<string, MainViewTab> = {
@@ -118,7 +118,7 @@ export default function App() {
 
     let chapterTitle: string | undefined;
     if (activeTab === 'THEORY') {
-      const activeModule = LINEAR_SEARCH_MODULES.find((m) => m.id === activeTheoryTopic);
+      const activeModule = CIRCULAR_LINKED_LIST_MODULES.find((m) => m.id === activeTheoryTopic);
       if (activeModule) {
         chapterTitle = `${activeModule.number}. ${activeModule.title}`;
       }
@@ -400,7 +400,7 @@ export default function App() {
 
                 {/* 2. THEORY SECTION */}
                 {activeTab === 'THEORY' && (
-                  <LearnLinearSearchSection
+                  <LearnCircularLinkedListSection
                     initialTopic={activeTheoryTopic}
                     onStartLevel={(lvlId) => {
                       if (lvlId === 6 && !isAllLevelsCompleted) {
@@ -477,7 +477,7 @@ export default function App() {
                         </div>
 
                         {/* Circular Linked List 5-Level Progressive Learning Gameplay */}
-                        <LinearSearchGameplay
+                        <CircularLinkedListGameplay
                           key={`cll-game-level-${currentLevel.id}`}
                           level={currentLevel}
                           onLevelComplete={(lvlId, _lvlScore) => {

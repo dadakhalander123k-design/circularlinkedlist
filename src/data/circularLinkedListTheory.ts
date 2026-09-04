@@ -11,7 +11,7 @@ export interface CodeExplanationLine {
   explanation: string;
 }
 
-export interface LinearSearchModule {
+export interface CircularLinkedListModule {
   id: string; // 'theory-01' to 'theory-17'
   number: string; // '01' to '17'
   category: string;
@@ -84,7 +84,9 @@ export interface LinearSearchModule {
   keyTakeaway: string;
 }
 
-export const LINEAR_SEARCH_MODULES: LinearSearchModule[] = [
+export type LinearSearchModule = CircularLinkedListModule;
+
+export const CIRCULAR_LINKED_LIST_MODULES: CircularLinkedListModule[] = [
   // =========================================================================
   // MODULE 01: INTRODUCTION TO CIRCULAR LINKED LIST
   // =========================================================================
@@ -1080,3 +1082,8 @@ class CircularLinkedList:
       'Maintaining a tail pointer reduces beginning and end insertions to O(1); all other operations are O(n).',
   },
 ];
+
+// Backwards-compatible alias for any legacy references
+export const LINEAR_SEARCH_MODULES = CIRCULAR_LINKED_LIST_MODULES;
+
+export default CIRCULAR_LINKED_LIST_MODULES;
