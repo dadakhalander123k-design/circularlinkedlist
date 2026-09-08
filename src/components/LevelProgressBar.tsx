@@ -9,6 +9,7 @@ interface LevelProgressBarProps {
   onSelectLevel: (levelId: number) => void;
   onOpenLab?: () => void;
   isCompletionActive?: boolean;
+  onBackToSelection?: () => void;
 }
 
 export const LevelProgressBar: React.FC<LevelProgressBarProps> = ({
@@ -17,6 +18,7 @@ export const LevelProgressBar: React.FC<LevelProgressBarProps> = ({
   onSelectLevel,
   onOpenLab,
   isCompletionActive = false,
+  onBackToSelection,
 }) => {
   const pState = progressManager.getState();
 
@@ -34,7 +36,25 @@ export const LevelProgressBar: React.FC<LevelProgressBarProps> = ({
   const isLevel6Active = (currentLevelId === 6 || isCompletionActive) && isAllQuestCompleted;
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-4 flex flex-col items-center">
+    <div className="w-full max-w-4xl mx-auto px-4 py-3 flex flex-col items-center">
+      {onBackToSelection && (
+        <div className="w-full flex items-center justify-between mb-3 text-xs">
+          <button
+            id="btn-stepper-back-to-levels"
+            onClick={() => {
+              soundManager.playSelect();
+              onBackToSelection();
+            }}
+            className="btn-modern-secondary px-3 py-1 text-xs font-mono font-bold uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shadow-2xs hover:shadow-xs transition-all"
+          >
+            <span>← All Levels</span>
+          </button>
+          <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
+            Level {currentLevelId <= 5 ? `0${currentLevelId}` : '06'} of 05
+          </span>
+        </div>
+      )}
+
       <div className="w-full flex items-center justify-between relative font-sans">
         {/* Connecting Line */}
         <div className="absolute left-6 right-6 top-4.5 h-[2px] bg-slate-200 dark:bg-blue-500/25 -z-0" />
@@ -42,6 +62,11 @@ export const LevelProgressBar: React.FC<LevelProgressBarProps> = ({
         {steps.map((step) => {
           const isMastered = pState.levelsMastered.includes(step.id);
           const isCompleted = completedLevels.includes(step.id) || pState.levelsCompleted.includes(step.id) || isMastered;
+          const isUnlocked =
+            step.id === 1 ||
+            completedLevels.includes(step.id - 1) ||
+            pState.levelsCompleted.includes(step.id - 1) ||
+            isCompleted;
           const isCurrent = currentLevelId === step.id && !isLevel6Active;
 
           return (
@@ -49,10 +74,19 @@ export const LevelProgressBar: React.FC<LevelProgressBarProps> = ({
               key={step.id}
               id={`step-progress-node-${step.id}`}
               onClick={() => {
+                if (!isUnlocked) {
+                  soundManager.playError();
+                  return;
+                }
                 soundManager.playSelect();
                 onSelectLevel(step.id);
               }}
-              className="group flex flex-col items-center gap-2 relative z-10 focus:outline-hidden cursor-pointer"
+              disabled={!isUnlocked}
+              title={isUnlocked ? `Level ${step.code}: ${step.name}` : `Locked: Complete Level 0${step.id - 1} to unlock`}
+              aria-disabled={!isUnlocked}
+              className={`group flex flex-col items-center gap-2 relative z-10 focus:outline-hidden ${
+                isUnlocked ? 'cursor-pointer' : 'cursor-not-allowed opacity-60'
+              }`}
             >
               <div
                 className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs transition-all duration-200 border-2 ${isCurrent

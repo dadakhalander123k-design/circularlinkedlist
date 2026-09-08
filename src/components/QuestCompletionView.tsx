@@ -17,6 +17,7 @@ interface QuestCompletionViewProps {
   onOpenSandbox: () => void;
   onOpenQuiz: () => void;
   onOpenProgress: () => void;
+  onBackToLevels?: () => void;
 }
 
 export const QuestCompletionView: React.FC<QuestCompletionViewProps> = ({
@@ -24,6 +25,7 @@ export const QuestCompletionView: React.FC<QuestCompletionViewProps> = ({
   onOpenSandbox,
   onOpenQuiz,
   onOpenProgress,
+  onBackToLevels,
 }) => {
   const [pState, setPState] = React.useState(() => progressManager.getState());
 
@@ -81,9 +83,23 @@ export const QuestCompletionView: React.FC<QuestCompletionViewProps> = ({
             <Trophy className="w-4 h-4 text-amber-600 dark:text-amber-400" />
             <span>Game Level 06 // Completion Milestone</span>
           </div>
-          <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">
-            Status: 5 of 5 Levels Mastered
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-slate-500 dark:text-slate-400 font-semibold">
+              Status: 5 of 5 Levels Mastered
+            </span>
+            {onBackToLevels && (
+              <button
+                id="btn-completion-back-to-levels"
+                onClick={() => {
+                  soundManager.playSelect();
+                  onBackToLevels();
+                }}
+                className="btn-modern-secondary px-3 py-1 text-xs font-bold font-mono uppercase tracking-wider flex items-center gap-1.5 cursor-pointer shadow-2xs"
+              >
+                <span>← All Levels</span>
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
