@@ -22,7 +22,7 @@ export const AIBotFloatingButton: React.FC = () => {
       }}
     >
       <img
-        src="/ai-bot-icon.png"
+        src="/webicon.png"
         alt="AI Assistant"
         className="w-full h-full rounded-full object-contain pointer-events-none select-none"
         draggable={false}
