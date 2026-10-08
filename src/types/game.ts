@@ -1,6 +1,6 @@
 export type TechniqueType = 'basic' | 'chaining' | 'linear' | 'quadratic' | 'double_hashing';
 
-export type MainViewTab = 'HOME' | 'THEORY' | 'VIDEO' | 'GAME' | 'QUEST' | 'LAB' | 'QUIZ' | 'PROGRESS';
+export type MainViewTab = 'HOME' | 'THEORY' | 'VIDEO' | 'GAME' | 'QUEST' | 'LAB' | 'QUIZ' | 'PROGRESS' | 'POINTS';
 
 export interface VideoChapter {
   title: string;

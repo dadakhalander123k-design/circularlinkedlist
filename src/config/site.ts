@@ -93,6 +93,13 @@ export const ROUTE_METADATA: Record<string, PageMeta> = {
     canonicalPath: '/#progress',
     ogType: 'website',
   },
+  POINTS: {
+    title: 'Points & Activity Ledger | AlgoLearn',
+    description:
+      'Inspect your earned learning Points, activity breakdown across Theory, Visualizations, Games, and Quizzes, and full activity history.',
+    canonicalPath: '/#points',
+    ogType: 'website',
+  },
   NOT_FOUND: {
     title: '404 Page Not Found | AlgoLearn',
     description: 'The requested learning resource or section could not be found. Navigate back to the AlgoLearn Circular Linked List curriculum.',

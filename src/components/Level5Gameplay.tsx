@@ -9,6 +9,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { soundManager } from '../utils/audio';
+import { pointsManager } from '../utils/pointsManager';
 import { GuidedSolvePanel } from './GuidedSolvePanel';
 import { CLLCanvas, VisualNodeData } from './cll/CLLCanvas';
 import { CLLMemoryBar } from './cll/CLLMemoryBar';
@@ -148,7 +149,7 @@ export const Level5Gameplay: React.FC<Level5GameplayProps> = ({
   const [masterCurrentId, setMasterCurrentId] = useState<string | null>(null);
 
   // Address input handler for Task 3 and Task 4
-  const handleApplyNextAddress = (fromNodeId: string, targetAddress: number) => {
+  const handleApplyNextAddress = (fromNodeId: number | string, targetAddress: number) => {
     setMistakeText(null);
 
     if (task === 'task3_repair') {
@@ -291,6 +292,7 @@ export const Level5Gameplay: React.FC<Level5GameplayProps> = ({
                 onClick={() => {
                   soundManager.playClick();
                   setIsGuidedSolveActive(true);
+                  pointsManager.deductGuidedSolve('game-level-5', 'Used Guided Solve: Level 5');
                 }}
                 className="btn-modern-secondary px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs select-none"
                 title="Start Guided Solve step-by-step assistant"
@@ -336,7 +338,7 @@ export const Level5Gameplay: React.FC<Level5GameplayProps> = ({
             <CLLMemoryBar
               headAddress={t1Head}
               tailAddress={t1Tail}
-              tailNextAddress={t1Nodes.find((n) => n.address === t1Tail)?.nextAddress ?? 1000}
+              tailNextAddress={Number(t1Nodes.find((n) => n.address === t1Tail)?.nextAddress) || 1000}
               validAddresses={[1000, 1002, 1004, 1006]}
               onSetHeadAddress={(addr) => {
                 setT1Head(addr);
@@ -400,7 +402,7 @@ export const Level5Gameplay: React.FC<Level5GameplayProps> = ({
             <CLLMemoryBar
               headAddress={t2Head}
               tailAddress={t2Tail}
-              tailNextAddress={t2Nodes.find((n) => n.address === t2Tail)?.nextAddress ?? 1000}
+              tailNextAddress={Number(t2Nodes.find((n) => n.address === t2Tail)?.nextAddress) || 1000}
               validAddresses={[1000, 1002, 1004, 1006]}
               onSetHeadAddress={(addr) => {
                 setT2Head(addr);

@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { TechniqueType } from '../types/game';
 import { progressManager, normalizeTheoryChapterId } from '../utils/progressManager';
+import { pointsManager } from '../utils/pointsManager';
 import { soundManager } from '../utils/audio';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { TheoryVisualEnhancer } from './TheoryVisualEnhancer';
@@ -120,6 +121,7 @@ export const LearnCircularLinkedListSection: React.FC<LearnCircularLinkedListSec
     const newlyCompleted = progressManager.completeTheoryChapter(activeModule.id);
     if (newlyCompleted) {
       soundManager.playTheoryComplete();
+      pointsManager.awardTheoryCompletion(activeModule.id, `Completed Theory: ${activeModule.title}`);
     }
   };
 

@@ -17,6 +17,7 @@ import {
 import { LessonItem, VIDEO_LESSONS } from '../data/videoLessons';
 import { soundManager } from '../utils/audio';
 import { progressManager } from '../utils/progressManager';
+import { pointsManager } from '../utils/pointsManager';
 
 export const VideoTutorialsView: React.FC = () => {
   const [selectedLesson, setSelectedLesson] = useState<LessonItem | null>(null);
@@ -285,7 +286,10 @@ export const VideoTutorialsView: React.FC = () => {
     setIsPlaying(false);
     if (selectedLesson) {
       soundManager.playVideoComplete();
-      progressManager.completeVideo(selectedLesson.id);
+      const newlyCompleted = progressManager.completeVideo(selectedLesson.id);
+      if (newlyCompleted) {
+        pointsManager.awardVideoCompletion(selectedLesson.id, `Completed Visualization: ${selectedLesson.title}`);
+      }
     }
   };
 

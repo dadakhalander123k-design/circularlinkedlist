@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowRight, CheckCircle2, AlertTriangle, Lightbulb, Sparkles, StopCircle, Cpu } from 'lucide-react';
 import { soundManager } from '../utils/audio';
+import { pointsManager } from '../utils/pointsManager';
 import { GuidedSolvePanel } from './GuidedSolvePanel';
 import { CLLCanvas, VisualNodeData } from './cll/CLLCanvas';
 import { CLLMemoryBar } from './cll/CLLMemoryBar';
@@ -190,6 +191,7 @@ export const Level2Gameplay: React.FC<Level2GameplayProps> = ({
                 onClick={() => {
                   soundManager.playClick();
                   setIsGuidedSolveActive(true);
+                  pointsManager.deductGuidedSolve('game-level-2', 'Used Guided Solve: Level 2');
                 }}
                 className="btn-modern-secondary px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs select-none"
                 title="Start Guided Solve step-by-step assistant"

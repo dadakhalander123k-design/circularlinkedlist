@@ -25,7 +25,7 @@ import { ResetProgressModal } from './ResetProgressModal';
 import { soundManager } from '../utils/audio';
 
 interface MyProgressViewProps {
-  onNavigateToTab: (tab: MainViewTab, levelId?: number, chapterId?: string) => void;
+  onNavigateToTab: (tab: ModuleRecord['targetTab'] | MainViewTab, levelId?: number, chapterId?: string) => void;
 }
 
 export const MyProgressView: React.FC<MyProgressViewProps> = ({ onNavigateToTab }) => {

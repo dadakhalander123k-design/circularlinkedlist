@@ -20,8 +20,11 @@ import { ResetProgressModal } from './components/ResetProgressModal';
 import { AIBotFloatingButton } from './components/AIBotFloatingButton';
 import { NotFoundView } from './components/NotFoundView';
 import { GameLevelSelectionView } from './components/GameLevelSelectionView';
+import { PointsView } from './components/PointsView';
+import { PointsToast } from './components/PointsToast';
 import { Sparkles } from 'lucide-react';
 import { progressManager } from './utils/progressManager';
+import { pointsManager } from './utils/pointsManager';
 import { useScrollReveal } from './hooks/useScrollReveal';
 import { updateSEO } from './utils/seo';
 import { CIRCULAR_LINKED_LIST_MODULES } from './data/circularLinkedListTheory';
@@ -41,6 +44,7 @@ const HASH_MAP: Record<string, MainViewTab> = {
   quiz: 'QUIZ',
   exam: 'QUIZ',
   progress: 'PROGRESS',
+  points: 'POINTS',
 };
 
 const TAB_HASH_MAP: Record<MainViewTab, string> = {
@@ -52,6 +56,7 @@ const TAB_HASH_MAP: Record<MainViewTab, string> = {
   LAB: 'lab',
   QUIZ: 'quiz',
   PROGRESS: 'progress',
+  POINTS: 'points',
 };
 
 export default function App() {
@@ -551,6 +556,7 @@ export default function App() {
                               level={currentLevel}
                               onLevelComplete={(lvlId, _lvlScore) => {
                                 progressManager.markLevelCompleted(lvlId, 100, true);
+                                pointsManager.awardGameCompletion(lvlId, `Completed Game Level ${lvlId}`);
                                 setShowLevelCompleteModal(true);
                               }}
                               onScoreUpdate={(delta) => setScore((s) => s + delta)}
@@ -590,7 +596,7 @@ export default function App() {
                 {/* 6. PROGRESS AUDIT SECTION */}
                 {activeTab === 'PROGRESS' && (
                   <MyProgressView
-                    onNavigateToTab={(tab, levelId, chapterId) => {
+                    onNavigateToTab={(tab: any, levelId, chapterId) => {
                       if (tab === 'THEORY' || tab === 'LEARN') {
                         navigateToTab('THEORY', chapterId);
                       } else if (tab === 'QUEST' || tab === 'GAME') {
@@ -615,6 +621,9 @@ export default function App() {
                     }}
                   />
                 )}
+
+                {/* 7. POINTS ACTIVITY SECTION */}
+                {activeTab === 'POINTS' && <PointsView />}
               </>
             )}
           </div>
@@ -659,6 +668,7 @@ export default function App() {
         onClose={() => setShowResetModal(false)}
         onConfirm={() => {
           progressManager.resetProgress();
+          pointsManager.reset();
           setScore(0);
           setStreak(0);
           setCompletedLevels([]);
@@ -671,6 +681,9 @@ export default function App() {
 
       {/* Global AI Bot Floating Icon */}
       <AIBotFloatingButton />
+
+      {/* Global Points Toast Notifications */}
+      <PointsToast />
     </div>
   );
 }

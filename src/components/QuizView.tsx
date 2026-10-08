@@ -20,6 +20,7 @@ import {
   Home,
 } from 'lucide-react';
 import { progressManager } from '../utils/progressManager';
+import { pointsManager } from '../utils/pointsManager';
 import { soundManager } from '../utils/audio';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
@@ -513,11 +514,13 @@ export const QuizView: React.FC<QuizViewProps> = ({
 
     setStudentAnswers(updatedAnswers);
 
-    // Play appropriate interaction sound
+    // Play appropriate interaction sound and record points
     if (isCorrect) {
       soundManager.playQuizCorrect();
+      pointsManager.recordQuizAnswer(q.id, true, `Quiz Q${q.id}: Correct Answer`);
     } else {
       soundManager.playQuizWrong();
+      pointsManager.recordQuizAnswer(q.id, false, `Quiz Q${q.id}: Wrong Answer`);
     }
   };
 
