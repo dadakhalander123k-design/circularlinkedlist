@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, MinusCircle, PlusCircle } from 'lucide-react';
+import { CheckCircle2, AlertCircle, PlusCircle, MinusCircle } from 'lucide-react';
 import { PointChangeEventDetail } from '../utils/pointsManager';
 
 export const PointsToast: React.FC = () => {
@@ -12,12 +12,17 @@ export const PointsToast: React.FC = () => {
       const customEvent = event as CustomEvent<PointChangeEventDetail>;
       if (!customEvent.detail) return;
 
+      const delta = customEvent.detail.actualDelta ?? customEvent.detail.delta;
+      // Do not display toast if no points were awarded or deducted
+      if (delta === 0) return;
+
       setCurrentToast(customEvent.detail);
 
       clearTimeout(timeoutId);
+      // Auto-dismiss in 2.5 seconds (2–3 seconds requirement)
       timeoutId = setTimeout(() => {
         setCurrentToast(null);
-      }, 2600);
+      }, 2500);
     };
 
     window.addEventListener('points_changed', handlePointsChanged);
@@ -29,42 +34,72 @@ export const PointsToast: React.FC = () => {
 
   if (!currentToast) return null;
 
-  const isPositive = currentToast.delta > 0;
-  const deltaString = isPositive ? `+${currentToast.delta}` : `${currentToast.delta}`;
+  const delta = currentToast.actualDelta ?? currentToast.delta;
+  if (delta === 0) return null;
+
+  const isPositive = delta > 0;
+  const deltaString = isPositive ? `+${delta}` : `${delta}`;
+  const pointsWord = Math.abs(delta) === 1 ? 'Point' : 'Points';
+
+  // Format activity description to match prompt examples cleanly
+  let activityLabel = currentToast.description;
+  if (currentToast.type === 'QUIZ_CORRECT') activityLabel = 'Correct Answer!';
+  else if (currentToast.type === 'QUIZ_WRONG') activityLabel = 'Incorrect Answer';
+  else if (currentToast.type === 'THEORY_COMPLETED') activityLabel = 'Theory Module Completed';
+  else if (currentToast.type === 'VIDEO_COMPLETED' || currentToast.type === 'VISUALIZE_COMPLETED') activityLabel = 'Visualization Completed';
+  else if (currentToast.type === 'GAME_COMPLETED') activityLabel = 'Game Level Completed';
+  else if (currentToast.type === 'HINT_USED') activityLabel = 'Hint Used';
+  else if (currentToast.type === 'GUIDED_SOLVE_USED') activityLabel = 'Guided Solve Used';
 
   return (
     <div
       role="status"
       aria-live="polite"
-      className="fixed bottom-20 right-4 sm:right-6 z-50 pointer-events-none animate-fadeIn select-none"
+      className="fixed bottom-20 right-4 sm:right-6 z-50 pointer-events-none select-none animate-fadeIn"
     >
       <div
-        className={`px-4 py-2.5 rounded-2xl shadow-lg border backdrop-blur-md flex items-center gap-3 transition-all transform duration-200 ${
+        className={`px-4 py-3 rounded-2xl shadow-xl border-2 backdrop-blur-md flex items-center gap-3 transition-all duration-200 transform max-w-sm sm:max-w-md ${
           isPositive
-            ? 'bg-emerald-50/95 dark:bg-emerald-950/90 border-emerald-300 dark:border-emerald-500/40 text-emerald-900 dark:text-emerald-100'
-            : 'bg-rose-50/95 dark:bg-rose-950/90 border-rose-300 dark:border-rose-500/40 text-rose-900 dark:text-rose-100'
+            ? 'bg-white dark:bg-[#0F172A] border-emerald-500/80 text-slate-900 dark:text-white shadow-emerald-500/10'
+            : 'bg-white dark:bg-[#0F172A] border-rose-500/80 text-slate-900 dark:text-white shadow-rose-500/10'
         }`}
       >
+        {/* Status Indicator Icon */}
         <div
-          className={`w-7 h-7 rounded-xl flex items-center justify-center shrink-0 ${
+          className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 shadow-xs ${
             isPositive
-              ? 'bg-emerald-500 text-white shadow-xs'
-              : 'bg-rose-500 text-white shadow-xs'
+              ? 'bg-emerald-500 text-white'
+              : 'bg-rose-500 text-white'
           }`}
         >
-          {isPositive ? <PlusCircle className="w-4 h-4" /> : <MinusCircle className="w-4 h-4" />}
+          {isPositive ? (
+            <PlusCircle className="w-4 h-4 stroke-[2.5]" />
+          ) : (
+            <MinusCircle className="w-4 h-4 stroke-[2.5]" />
+          )}
         </div>
 
-        <div className="flex flex-col">
-          <div className="flex items-center gap-1.5">
-            <span className="font-mono font-black text-sm">
-              {deltaString} {Math.abs(currentToast.delta) === 1 ? 'Point' : 'Points'}
+        {/* Message and Amount */}
+        <div className="flex flex-col min-w-0">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span
+              className={`font-mono font-black text-sm sm:text-base ${
+                isPositive ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'
+              }`}
+            >
+              {deltaString} {pointsWord}
             </span>
-            <span className="text-xs opacity-75">• Total: {currentToast.totalPoints}</span>
+            <span className="text-slate-400 dark:text-slate-500 font-bold text-xs sm:text-sm">
+              —
+            </span>
+            <span className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100 truncate">
+              {activityLabel}
+            </span>
           </div>
-          <span className="text-xs font-medium opacity-90 truncate max-w-xs">
-            {currentToast.description}
-          </span>
+
+          <div className="text-[11px] font-mono text-slate-400 dark:text-slate-500 mt-0.5">
+            Total: {currentToast.totalPoints} Points
+          </div>
         </div>
       </div>
     </div>

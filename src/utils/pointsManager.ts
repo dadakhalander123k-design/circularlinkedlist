@@ -320,10 +320,10 @@ class PointsManager {
 
     this.saveState();
 
-    // Broadcast toast/feedback event
-    if (typeof window !== 'undefined') {
+    // Broadcast toast/feedback event ONLY if actual points change
+    if (actualDelta !== 0 && typeof window !== 'undefined') {
       const detail: PointChangeEventDetail = {
-        delta: requestedPoints,
+        delta: actualDelta,
         actualDelta,
         description,
         type,
@@ -342,7 +342,7 @@ class PointsManager {
     const sourceId = `theory:${chapterId}`;
     const result = this.triggerEvent('THEORY_COMPLETED', {
       sourceId,
-      description: description || `Completed Theory Module: ${chapterId}`,
+      description: description || 'Theory Module Completed',
       isOneTimeReward: true,
     });
     return result.success;
@@ -355,7 +355,7 @@ class PointsManager {
     const sourceId = `video:${videoId}`;
     const result = this.triggerEvent('VIDEO_COMPLETED', {
       sourceId,
-      description: description || `Completed Visualization: ${videoId}`,
+      description: description || 'Visualization Completed',
       isOneTimeReward: true,
     });
     return result.success;
@@ -368,7 +368,7 @@ class PointsManager {
     const sourceId = `game:level-${levelId}`;
     const result = this.triggerEvent('GAME_COMPLETED', {
       sourceId,
-      description: description || `Completed Game Level ${levelId}`,
+      description: description || 'Game Level Completed',
       isOneTimeReward: true,
     });
     return result.success;
@@ -380,7 +380,7 @@ class PointsManager {
   public deductGuidedSolve(sourceId: string = 'game', description?: string): boolean {
     const result = this.triggerEvent('GUIDED_SOLVE_USED', {
       sourceId,
-      description: description || 'Used Guided Solve',
+      description: description || 'Guided Solve Used',
       isOneTimeReward: false,
     });
     return result.success;
@@ -392,10 +392,17 @@ class PointsManager {
   public deductHint(sourceId: string = 'game', description?: string): boolean {
     const result = this.triggerEvent('HINT_USED', {
       sourceId,
-      description: description || 'Used Hint',
+      description: description || 'Hint Used',
       isOneTimeReward: false,
     });
     return result.success;
+  }
+
+  /**
+   * Pre-marks a question as answered in current session (e.g. from persisted answers)
+   */
+  public markQuestionAnsweredInSession(questionId: number) {
+    this.quizAnsweredInSession.add(questionId);
   }
 
   /**
@@ -409,7 +416,7 @@ class PointsManager {
     this.quizAnsweredInSession.add(questionId);
 
     const type: PointEventType = isCorrect ? 'QUIZ_CORRECT' : 'QUIZ_WRONG';
-    const desc = description || (isCorrect ? `Correct Quiz Answer (Q${questionId})` : `Wrong Quiz Answer (Q${questionId})`);
+    const desc = description || (isCorrect ? 'Correct Answer!' : 'Incorrect Answer');
 
     const result = this.triggerEvent(type, {
       sourceId: `quiz:q-${questionId}`,
@@ -421,10 +428,26 @@ class PointsManager {
   }
 
   /**
-   * Clears session question deduplication when quiz is reset for a fresh attempt
+   * Clears session question deduplication when quiz is reset for a fresh attempt,
+   * resetting prior quiz attempt's score so the fresh attempt can be legitimately scored
    */
   public clearQuizSession() {
     this.quizAnsweredInSession.clear();
+    let priorQuizScore = 0;
+    this.state.activities = this.state.activities.filter((act) => {
+      if (act.type === 'QUIZ_CORRECT' || act.type === 'QUIZ_WRONG') {
+        priorQuizScore += act.points;
+        return false;
+      }
+      return true;
+    });
+    if (priorQuizScore !== 0) {
+      this.state.totalPoints = Math.min(
+        CATEGORY_CAPS.TOTAL,
+        this.state.totalPoints - priorQuizScore
+      );
+    }
+    this.saveState();
   }
 
   /**

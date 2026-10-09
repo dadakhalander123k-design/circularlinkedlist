@@ -250,9 +250,6 @@ export const QuizView: React.FC<QuizViewProps> = ({
   // Load persisted student answers
   const [studentAnswers, setStudentAnswers] = useState<Record<number, StudentAnswerRecord>>(() => {
     try {
-      if (!progressManager.getState().quizSubmitted && Object.keys(progressManager.getState().quizScores || {}).length === 0) {
-        return {};
-      }
       const stored = localStorage.getItem(QUIZ_STORAGE_ANSWERS_KEY);
       if (stored) {
         return JSON.parse(stored);
@@ -337,13 +334,16 @@ export const QuizView: React.FC<QuizViewProps> = ({
     }
   }, [currentQuestionIndex, currentAnswerRecord]);
 
-  // Persist answers to localStorage whenever they change
+  // Persist answers to localStorage and synchronize session with pointsManager
   useEffect(() => {
     try {
       localStorage.setItem(QUIZ_STORAGE_ANSWERS_KEY, JSON.stringify(studentAnswers));
     } catch {
       // Ignore storage errors
     }
+    Object.keys(studentAnswers).forEach((qId) => {
+      pointsManager.markQuestionAnsweredInSession(Number(qId));
+    });
   }, [studentAnswers]);
 
   // Calculate score deterministically from stored answers
@@ -485,7 +485,7 @@ export const QuizView: React.FC<QuizViewProps> = ({
 
   // Handle student selecting an option (before or during answering)
   const handleSelectOption = (optionIndex: number) => {
-    if (isCurrentQuestionAnswered && isSubmitted) return;
+    if (isCurrentQuestionAnswered) return;
     soundManager.playQuizSelect();
     setPendingSelection(optionIndex);
   };
@@ -514,13 +514,13 @@ export const QuizView: React.FC<QuizViewProps> = ({
 
     setStudentAnswers(updatedAnswers);
 
-    // Play appropriate interaction sound and record points
+    // Play appropriate interaction sound and record points immediately
     if (isCorrect) {
       soundManager.playQuizCorrect();
-      pointsManager.recordQuizAnswer(q.id, true, `Quiz Q${q.id}: Correct Answer`);
+      pointsManager.recordQuizAnswer(q.id, true, 'Correct Answer!');
     } else {
       soundManager.playQuizWrong();
-      pointsManager.recordQuizAnswer(q.id, false, `Quiz Q${q.id}: Wrong Answer`);
+      pointsManager.recordQuizAnswer(q.id, false, 'Incorrect Answer');
     }
   };
 
