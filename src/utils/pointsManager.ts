@@ -1,9 +1,21 @@
 /**
  * Centralized Points System for AlgoLearn
  *
- * Implements a strict, single-source-of-truth Points management engine.
+ * Implements a strict, single-source-of-truth Points management engine
+ * with a 100-point total distribution scale:
+ * - Theory:          17 modules × 2 pts  = 34 pts max
+ * - Visualize/Video:  2 modules × 3 pts  =  6 pts max
+ * - Game:             5 levels × 8 pts   = 40 pts max
+ * - Quiz:            +2 correct, -1 wrong = 20 pts max
+ * ----------------------------------------------------
+ * TOTAL:                                 100 pts max
+ *
+ * Penalties:
+ * - Use Hint:         -2 pts per genuine use
+ * - Use Guided Solve: -3 pts per genuine use
+ *
  * Governs all points rewards, penalties, activity logging, idempotency checks,
- * and persistence.
+ * non-negative balance enforcement (min 0, max 100), and persistence.
  */
 
 export type PointEventType =
@@ -16,15 +28,23 @@ export type PointEventType =
   | 'QUIZ_CORRECT'
   | 'QUIZ_WRONG';
 
+export const CATEGORY_CAPS = {
+  THEORY: 34,
+  QUIZ: 20,
+  VISUALIZE: 6,
+  GAME: 40,
+  TOTAL: 100,
+} as const;
+
 export const POINT_VALUES: Record<PointEventType, number> = {
   THEORY_COMPLETED: 2,
   VISUALIZE_COMPLETED: 3,
   VIDEO_COMPLETED: 3,
-  GAME_COMPLETED: 4,
-  HINT_USED: -1,
-  GUIDED_SOLVE_USED: -2,
-  QUIZ_CORRECT: 1,
+  GAME_COMPLETED: 8,
+  QUIZ_CORRECT: 2,
   QUIZ_WRONG: -1,
+  HINT_USED: -2,
+  GUIDED_SOLVE_USED: -3,
 } as const;
 
 export interface PointActivity {
@@ -32,7 +52,9 @@ export interface PointActivity {
   type: PointEventType;
   sourceId: string;
   description: string;
-  points: number;
+  points: number;       // Requested points change (+2, +3, +8, +2, -1, -2, -3)
+  actualDelta: number;  // Actual balance change after applying 0 floor and 100 cap
+  balanceAfter: number; // Balance after the event (always 0 <= balance <= 100)
   timestamp: number;
 }
 
@@ -41,7 +63,13 @@ export interface PointsBreakdown {
   visualization: number;
   games: number;
   quiz: number;
+  quizCorrect: number;
+  quizPenalties: number;
+  hintPenalties: number;
+  guidedSolvePenalties: number;
+  totalGrossPenalties: number;
   penalties: number;
+  currentBalance: number;
   total: number;
 }
 
@@ -54,6 +82,7 @@ export interface PointsState {
 
 export interface PointChangeEventDetail {
   delta: number;
+  actualDelta: number;
   description: string;
   type: PointEventType;
   totalPoints: number;
@@ -62,7 +91,7 @@ export interface PointChangeEventDetail {
 const STORAGE_KEY = 'queue-learning-points';
 
 const INITIAL_POINTS_STATE: PointsState = {
-  version: 1,
+  version: 4,
   totalPoints: 0,
   rewardedItems: {},
   activities: [],
@@ -74,6 +103,7 @@ class PointsManager {
   private state: PointsState;
   private listeners: Set<PointsListener> = new Set();
   private quizAnsweredInSession: Set<number> = new Set();
+  private lastActionTimestamps: Map<string, number> = new Map();
 
   constructor() {
     this.state = this.loadState();
@@ -84,7 +114,7 @@ class PointsManager {
       });
 
       window.addEventListener('cll_reset_quiz', () => {
-        this.quizAnsweredInSession.clear();
+        this.clearQuizSession();
       });
     }
   }
@@ -103,14 +133,31 @@ class PointsManager {
         return INITIAL_POINTS_STATE;
       }
 
-      const totalPoints = typeof parsed.totalPoints === 'number' ? parsed.totalPoints : 0;
+      const totalPoints = typeof parsed.totalPoints === 'number'
+        ? Math.min(CATEGORY_CAPS.TOTAL, parsed.totalPoints)
+        : 0;
       const rewardedItems = typeof parsed.rewardedItems === 'object' && parsed.rewardedItems !== null
         ? parsed.rewardedItems
         : {};
-      const activities = Array.isArray(parsed.activities) ? parsed.activities : [];
+      const activities: PointActivity[] = Array.isArray(parsed.activities)
+        ? parsed.activities.map((act: any) => ({
+            id: act.id || `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+            type: act.type,
+            sourceId: act.sourceId || '',
+            description: act.description || '',
+            points: typeof act.points === 'number' ? act.points : 0,
+            actualDelta: typeof act.actualDelta === 'number'
+              ? act.actualDelta
+              : (typeof act.points === 'number' ? act.points : 0),
+            balanceAfter: typeof act.balanceAfter === 'number'
+              ? Math.min(CATEGORY_CAPS.TOTAL, act.balanceAfter)
+              : 0,
+            timestamp: typeof act.timestamp === 'number' ? act.timestamp : Date.now(),
+          }))
+        : [];
 
       return {
-        version: parsed.version || 1,
+        version: parsed.version || 4,
         totalPoints,
         rewardedItems,
         activities,
@@ -156,8 +203,50 @@ class PointsManager {
   }
 
   /**
+   * Helper to calculate the current category points accumulated from activities
+   */
+  public getCategoryContributions(): {
+    theory: number;
+    visualization: number;
+    game: number;
+    quiz: number;
+  } {
+    let theory = 0;
+    let visualization = 0;
+    let game = 0;
+    let quiz = 0;
+
+    for (const act of this.state.activities) {
+      switch (act.type) {
+        case 'THEORY_COMPLETED':
+          theory += act.points;
+          break;
+        case 'VISUALIZE_COMPLETED':
+        case 'VIDEO_COMPLETED':
+          visualization += act.points;
+          break;
+        case 'GAME_COMPLETED':
+          game += act.points;
+          break;
+        case 'QUIZ_CORRECT':
+        case 'QUIZ_WRONG':
+          quiz += act.points;
+          break;
+      }
+    }
+
+    return {
+      theory: Math.min(CATEGORY_CAPS.THEORY, Math.max(0, theory)),
+      visualization: Math.min(CATEGORY_CAPS.VISUALIZE, Math.max(0, visualization)),
+      game: Math.min(CATEGORY_CAPS.GAME, Math.max(0, game)),
+      quiz: Math.min(CATEGORY_CAPS.QUIZ, Math.max(0, quiz)),
+    };
+  }
+
+  /**
    * Internal dispatcher for recording an event, validating idempotency,
-   * updating state, and dispatching UI feedback.
+   * enforcing category caps and the 0-100 balance bounds,
+   * recording activity, updating state, and dispatching UI feedback.
    */
   public triggerEvent(
     type: PointEventType,
@@ -168,48 +257,86 @@ class PointsManager {
     }
   ): { success: boolean; pointsAwarded: number } {
     const { sourceId, description, isOneTimeReward = false } = options;
-    const points = POINT_VALUES[type];
+    const requestedPoints = POINT_VALUES[type];
 
-    // Idempotency check for completion rewards
+    // Idempotency check for one-time completion rewards
     if (isOneTimeReward && this.state.rewardedItems[sourceId]) {
       return { success: false, pointsAwarded: 0 };
+    }
+
+    // Debounce protection (250ms) for repeatable actions against StrictMode double-invocations or bounce
+    if (!isOneTimeReward) {
+      const now = Date.now();
+      const actionKey = `${type}:${sourceId}`;
+      const lastTime = this.lastActionTimestamps.get(actionKey) || 0;
+      if (now - lastTime < 250) {
+        return { success: false, pointsAwarded: 0 };
+      }
+      this.lastActionTimestamps.set(actionKey, now);
+    }
+
+    // Check category cap for positive additions
+    let effectivePoints = requestedPoints;
+    if (requestedPoints > 0) {
+      const contributions = this.getCategoryContributions();
+      if (type === 'THEORY_COMPLETED') {
+        const remaining = Math.max(0, CATEGORY_CAPS.THEORY - contributions.theory);
+        effectivePoints = Math.min(requestedPoints, remaining);
+      } else if (type === 'VISUALIZE_COMPLETED' || type === 'VIDEO_COMPLETED') {
+        const remaining = Math.max(0, CATEGORY_CAPS.VISUALIZE - contributions.visualization);
+        effectivePoints = Math.min(requestedPoints, remaining);
+      } else if (type === 'GAME_COMPLETED') {
+        const remaining = Math.max(0, CATEGORY_CAPS.GAME - contributions.game);
+        effectivePoints = Math.min(requestedPoints, remaining);
+      } else if (type === 'QUIZ_CORRECT') {
+        const remaining = Math.max(0, CATEGORY_CAPS.QUIZ - contributions.quiz);
+        effectivePoints = Math.min(requestedPoints, remaining);
+      }
     }
 
     if (isOneTimeReward) {
       this.state.rewardedItems[sourceId] = true;
     }
 
+    // Allow score to become negative while enforcing the 100 upper cap
+    const prevBalance = this.state.totalPoints;
+    const newBalance = Math.min(CATEGORY_CAPS.TOTAL, prevBalance + effectivePoints);
+    const actualDelta = newBalance - prevBalance;
+
     const activity: PointActivity = {
       id: `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
       type,
       sourceId,
       description,
-      points,
+      points: requestedPoints,
+      actualDelta,
+      balanceAfter: newBalance,
       timestamp: Date.now(),
     };
 
     // Prepend new activity so recent activities appear first
     this.state.activities.unshift(activity);
-    this.state.totalPoints += points;
+    this.state.totalPoints = newBalance;
 
     this.saveState();
 
     // Broadcast toast/feedback event
     if (typeof window !== 'undefined') {
       const detail: PointChangeEventDetail = {
-        delta: points,
+        delta: requestedPoints,
+        actualDelta,
         description,
         type,
-        totalPoints: this.state.totalPoints,
+        totalPoints: newBalance,
       };
       window.dispatchEvent(new CustomEvent('points_changed', { detail }));
     }
 
-    return { success: true, pointsAwarded: points };
+    return { success: true, pointsAwarded: effectivePoints };
   }
 
   /**
-   * Theory Module Completion: +2 Points (Idempotent)
+   * Theory Module Completion: +2 Points (17 modules × 2 pts = 34 pts max, one-time each)
    */
   public awardTheoryCompletion(chapterId: string, description?: string): boolean {
     const sourceId = `theory:${chapterId}`;
@@ -222,7 +349,7 @@ class PointsManager {
   }
 
   /**
-   * Video / Visualization Module Completion: +3 Points (Idempotent)
+   * Video / Visualization Module Completion: +3 Points (2 modules × 3 pts = 6 pts max, one-time each)
    */
   public awardVideoCompletion(videoId: string, description?: string): boolean {
     const sourceId = `video:${videoId}`;
@@ -235,7 +362,7 @@ class PointsManager {
   }
 
   /**
-   * Game Level Completion: +4 Points (Idempotent)
+   * Game Level Completion: +8 Points (5 levels × 8 pts = 40 pts max, one-time each)
    */
   public awardGameCompletion(levelId: number, description?: string): boolean {
     const sourceId = `game:level-${levelId}`;
@@ -248,7 +375,7 @@ class PointsManager {
   }
 
   /**
-   * Use Guided Solve: -2 Points (Per Genuine Use)
+   * Use Guided Solve: -3 Points (Per Genuine Use)
    */
   public deductGuidedSolve(sourceId: string = 'game', description?: string): boolean {
     const result = this.triggerEvent('GUIDED_SOLVE_USED', {
@@ -260,7 +387,7 @@ class PointsManager {
   }
 
   /**
-   * Use Hint: -1 Point (Per Genuine Use)
+   * Use Hint: -2 Points (Per Genuine Use)
    */
   public deductHint(sourceId: string = 'game', description?: string): boolean {
     const result = this.triggerEvent('HINT_USED', {
@@ -272,12 +399,12 @@ class PointsManager {
   }
 
   /**
-   * Quiz Question Answer Submission: Correct -> +1, Wrong -> -1
+   * Quiz Question Answer Submission: Correct -> +2, Wrong -> -1 (Quiz max 20 pts)
    * Guaranteed duplicate-protection per question in current quiz session.
    */
   public recordQuizAnswer(questionId: number, isCorrect: boolean, description?: string): boolean {
     if (this.quizAnsweredInSession.has(questionId)) {
-      return false; // Prevent double trigger
+      return false; // Prevent double trigger within same attempt
     }
     this.quizAnsweredInSession.add(questionId);
 
@@ -294,14 +421,23 @@ class PointsManager {
   }
 
   /**
+   * Clears session question deduplication when quiz is reset for a fresh attempt
+   */
+  public clearQuizSession() {
+    this.quizAnsweredInSession.clear();
+  }
+
+  /**
    * Calculates the full Points Breakdown dynamically from state activities.
    */
   public getBreakdown(): PointsBreakdown {
     let theory = 0;
     let visualization = 0;
     let games = 0;
-    let quiz = 0;
-    let penalties = 0;
+    let quizCorrect = 0;
+    let quizPenalties = 0;
+    let hintPenalties = 0;
+    let guidedSolvePenalties = 0;
 
     for (const act of this.state.activities) {
       switch (act.type) {
@@ -316,25 +452,39 @@ class PointsManager {
           games += act.points;
           break;
         case 'QUIZ_CORRECT':
+          quizCorrect += act.points;
+          break;
         case 'QUIZ_WRONG':
-          quiz += act.points;
+          quizPenalties += act.points; // Negative values, e.g. -1, -2...
           break;
         case 'HINT_USED':
+          hintPenalties += act.points; // Negative values, e.g. -2, -4...
+          break;
         case 'GUIDED_SOLVE_USED':
-          penalties += act.points; // Negative values, e.g. -4
+          guidedSolvePenalties += act.points; // Negative values, e.g. -3, -6...
           break;
       }
     }
 
-    const total = theory + visualization + games + quiz + penalties;
+    const cappedTheory = Math.min(CATEGORY_CAPS.THEORY, Math.max(0, theory));
+    const cappedVis = Math.min(CATEGORY_CAPS.VISUALIZE, Math.max(0, visualization));
+    const cappedGames = Math.min(CATEGORY_CAPS.GAME, Math.max(0, games));
+    const netQuiz = Math.min(CATEGORY_CAPS.QUIZ, Math.max(0, quizCorrect + quizPenalties));
+    const totalGrossPenalties = quizPenalties + hintPenalties + guidedSolvePenalties;
 
     return {
-      theory,
-      visualization,
-      games,
-      quiz,
-      penalties,
-      total,
+      theory: cappedTheory,
+      visualization: cappedVis,
+      games: cappedGames,
+      quiz: netQuiz,
+      quizCorrect,
+      quizPenalties,
+      hintPenalties,
+      guidedSolvePenalties,
+      totalGrossPenalties,
+      penalties: totalGrossPenalties,
+      currentBalance: this.state.totalPoints,
+      total: this.state.totalPoints,
     };
   }
 
@@ -343,8 +493,9 @@ class PointsManager {
    */
   public reset() {
     this.quizAnsweredInSession.clear();
+    this.lastActionTimestamps.clear();
     this.state = {
-      version: 1,
+      version: 4,
       totalPoints: 0,
       rewardedItems: {},
       activities: [],

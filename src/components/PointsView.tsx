@@ -5,13 +5,9 @@ import {
   Sparkles,
   Gamepad2,
   HelpCircle,
-  AlertCircle,
   TrendingUp,
   Clock,
   History,
-  CheckCircle2,
-  MinusCircle,
-  PlusCircle,
   ShieldAlert,
 } from 'lucide-react';
 import { pointsManager, PointsState, PointsBreakdown } from '../utils/pointsManager';
@@ -33,27 +29,6 @@ export const PointsView: React.FC = () => {
   const totalPoints = pointsState.totalPoints;
   const recentActivities = pointsState.activities;
 
-  const getActivityIcon = (type: string) => {
-    switch (type) {
-      case 'THEORY_COMPLETED':
-        return BookOpen;
-      case 'VISUALIZE_COMPLETED':
-      case 'VIDEO_COMPLETED':
-        return Sparkles;
-      case 'GAME_COMPLETED':
-        return Gamepad2;
-      case 'QUIZ_CORRECT':
-        return CheckCircle2;
-      case 'QUIZ_WRONG':
-        return AlertCircle;
-      case 'HINT_USED':
-      case 'GUIDED_SOLVE_USED':
-        return ShieldAlert;
-      default:
-        return Award;
-    }
-  };
-
   const formatActivityTime = (timestamp: number) => {
     const diff = Math.floor((Date.now() - timestamp) / 1000);
     if (diff < 60) return 'Just now';
@@ -66,217 +41,247 @@ export const PointsView: React.FC = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 font-sans text-slate-900 dark:text-white animate-page-enter pb-24 space-y-8">
-      {/* 1. Header Banner */}
-      <div className="border-b border-slate-200 dark:border-blue-500/20 pb-6">
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-2">
-          <div className="flex items-center gap-3">
-            <span className="text-xs sm:text-sm font-bold font-mono uppercase tracking-widest text-[#2563EB] dark:text-[#3B82F6] bg-[#EFF6FF] dark:bg-blue-950/60 px-3 py-1 rounded-md border border-[#DBEAFE] dark:border-blue-500/30">
-              Central Points Ledger
-            </span>
-            <span className="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400">
-              Live Tracker
-            </span>
-          </div>
-        </div>
-
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight animate-heading-enter">
-          Points & Activity
-        </h1>
-        <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl mt-2 leading-relaxed">
-          Transparent ledger of all Points earned across Theory modules, Visualizations, Game levels, and Quizzes.
-        </p>
-      </div>
-
-      {/* 2. Main Total Points Display Card */}
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 font-sans text-slate-900 dark:text-white animate-page-enter space-y-6 pb-24">
+      {/* 1. Header Card Matching Screenshot 1 */}
       <section
-        id="points-total-card"
-        aria-label="Current Total Points"
-        className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/20 rounded-3xl p-8 sm:p-10 shadow-xs text-center flex flex-col items-center justify-center relative overflow-hidden"
+        id="points-header-card"
+        aria-label="Points Overview"
+        className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-blue-500/20 rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-6"
       >
-        <div className="absolute top-0 right-0 transform translate-x-8 -translate-y-8 w-48 h-48 bg-blue-500/5 dark:bg-blue-500/10 rounded-full blur-2xl pointer-events-none" />
+        {/* Left Side */}
+        <div className="space-y-2.5 max-w-xl">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EFF6FF] dark:bg-blue-950/60 border border-[#DBEAFE] dark:border-blue-500/30 text-[#2563EB] dark:text-[#3B82F6] text-xs font-bold font-mono tracking-wider">
+            <Award className="w-3.5 h-3.5" />
+            <span>CENTRAL POINTS SYSTEM</span>
+          </div>
 
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-500/30 text-amber-700 dark:text-amber-400 rounded-full text-xs font-bold font-mono uppercase tracking-wider mb-3">
-          <Award className="w-3.5 h-3.5" />
-          <span>Active Total</span>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] dark:text-white tracking-tight">
+            Points
+          </h1>
+
+          <p className="text-xs sm:text-sm text-[#475569] dark:text-slate-300 leading-relaxed font-sans">
+            Overall score earned across Theory modules, Quiz challenges, Visualizations, and Game levels.
+          </p>
         </div>
 
-        <div className="text-5xl sm:text-7xl font-black text-slate-900 dark:text-white tracking-tight flex items-center justify-center gap-3 my-1">
-          <span className="text-amber-500 select-none animate-pulse">⭐</span>
-          <span className="font-mono">{totalPoints}</span>
-          <span className="text-2xl sm:text-4xl font-extrabold text-[#2563EB] dark:text-[#3B82F6] ml-1">
-            Points
+        {/* Right Side: Total Points Card */}
+        <div className="bg-[#EFF6FF] dark:bg-blue-950/40 border border-[#DBEAFE] dark:border-blue-500/30 rounded-2xl p-5 sm:px-6 sm:py-5 text-right flex flex-col items-end justify-center min-w-[170px] sm:min-w-[190px] shadow-xs shrink-0">
+          <span className="text-[11px] sm:text-xs font-bold font-mono uppercase tracking-wider text-[#2563EB] dark:text-[#3B82F6]">
+            TOTAL POINTS
+          </span>
+
+          <div className="text-3xl sm:text-4xl font-black text-[#0F172A] dark:text-white font-mono my-1 tracking-tight flex items-baseline justify-end gap-1">
+            <span>{totalPoints}</span>
+            <span className="text-lg sm:text-xl font-bold text-[#64748B] dark:text-slate-400">/ 100</span>
+          </div>
+
+          <span className="text-xs font-medium text-[#64748B] dark:text-slate-400 font-mono">
+            {totalPoints} / 100 Points
           </span>
         </div>
-
-        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium max-w-md mt-2">
-          Earn points by completing theory lessons (+2), visualizations (+3), and game levels (+4).
-        </p>
       </section>
 
-      {/* 3. Two-Column Layout: Breakdown & Scoring Rules */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Column: Points Breakdown (Takes 2 columns on lg) */}
+      {/* 2. Two-Column Layout Matching Screenshot 2: Points Breakdown & Scoring Rules */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Left Column: Points Breakdown Card (Wider, ~2/3) */}
         <section
           id="points-breakdown-section"
           aria-label="Points Breakdown"
-          className="lg:col-span-2 bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/20 rounded-2xl p-6 sm:p-7 shadow-xs space-y-5"
+          className="lg:col-span-7 xl:col-span-8 bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-blue-500/20 rounded-2xl p-6 sm:p-7 shadow-xs space-y-4"
         >
           <div className="flex items-center justify-between border-b border-slate-100 dark:border-blue-500/15 pb-4">
             <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-xl bg-[#EFF6FF] dark:bg-blue-950/50 text-[#2563EB] dark:text-[#3B82F6] border border-[#DBEAFE] dark:border-blue-500/30">
+              <div className="w-8 h-8 rounded-lg bg-[#EFF6FF] dark:bg-blue-950/50 text-[#2563EB] dark:text-[#3B82F6] border border-[#DBEAFE] dark:border-blue-500/30 flex items-center justify-center">
                 <TrendingUp className="w-4 h-4" />
               </div>
-              <h2 className="text-lg sm:text-xl font-bold font-sans text-slate-900 dark:text-white">
+              <h2 className="text-lg font-bold font-sans text-[#0F172A] dark:text-white">
                 Points Breakdown
               </h2>
             </div>
-            <span className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400">
+            <span className="text-xs font-mono font-medium text-[#94A3B8] dark:text-slate-500">
               Categorized
             </span>
           </div>
 
           <div className="divide-y divide-slate-100 dark:divide-blue-500/10">
             {/* Theory */}
-            <div className="py-3.5 flex items-center justify-between text-sm sm:text-base">
+            <div className="py-3 flex items-center justify-between text-sm sm:text-base">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200/60 dark:border-blue-500/20 flex items-center justify-center text-[#2563EB] dark:text-[#3B82F6]">
+                <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200/60 dark:border-blue-500/20 flex items-center justify-center text-[#2563EB] dark:text-[#3B82F6] shrink-0">
                   <BookOpen className="w-4 h-4" />
                 </div>
-                <span className="font-semibold text-slate-700 dark:text-slate-200">Theory</span>
+                <span className="font-semibold text-[#1E293B] dark:text-slate-200 text-sm sm:text-base">
+                  Theory (Max 34)
+                </span>
               </div>
-              <span className="font-mono font-bold text-slate-900 dark:text-white">
+              <span className="font-mono font-bold text-[#0F172A] dark:text-white text-sm sm:text-base">
                 {breakdown.theory >= 0 ? `+${breakdown.theory}` : breakdown.theory}
               </span>
             </div>
 
             {/* Visualization */}
-            <div className="py-3.5 flex items-center justify-between text-sm sm:text-base">
+            <div className="py-3 flex items-center justify-between text-sm sm:text-base">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200/60 dark:border-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                <div className="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200/60 dark:border-indigo-500/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shrink-0">
                   <Sparkles className="w-4 h-4" />
                 </div>
-                <span className="font-semibold text-slate-700 dark:text-slate-200">Visualization</span>
+                <span className="font-semibold text-[#1E293B] dark:text-slate-200 text-sm sm:text-base">
+                  Visualization (Max 6)
+                </span>
               </div>
-              <span className="font-mono font-bold text-slate-900 dark:text-white">
+              <span className="font-mono font-bold text-[#0F172A] dark:text-white text-sm sm:text-base">
                 {breakdown.visualization >= 0 ? `+${breakdown.visualization}` : breakdown.visualization}
               </span>
             </div>
 
             {/* Games */}
-            <div className="py-3.5 flex items-center justify-between text-sm sm:text-base">
+            <div className="py-3 flex items-center justify-between text-sm sm:text-base">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/60 dark:border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+                <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/60 dark:border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0">
                   <Gamepad2 className="w-4 h-4" />
                 </div>
-                <span className="font-semibold text-slate-700 dark:text-slate-200">Games</span>
+                <span className="font-semibold text-[#1E293B] dark:text-slate-200 text-sm sm:text-base">
+                  Games (Max 40)
+                </span>
               </div>
-              <span className="font-mono font-bold text-slate-900 dark:text-white">
+              <span className="font-mono font-bold text-[#0F172A] dark:text-white text-sm sm:text-base">
                 {breakdown.games >= 0 ? `+${breakdown.games}` : breakdown.games}
               </span>
             </div>
 
             {/* Quiz */}
-            <div className="py-3.5 flex items-center justify-between text-sm sm:text-base">
+            <div className="py-3 flex items-center justify-between text-sm sm:text-base">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-purple-50 dark:bg-purple-950/40 border border-purple-200/60 dark:border-purple-500/20 flex items-center justify-center text-purple-600 dark:text-purple-400">
+                <div className="w-8 h-8 rounded-lg bg-purple-50 dark:bg-purple-950/40 border border-purple-200/60 dark:border-purple-500/20 flex items-center justify-center text-purple-600 dark:text-purple-400 shrink-0">
                   <HelpCircle className="w-4 h-4" />
                 </div>
-                <span className="font-semibold text-slate-700 dark:text-slate-200">Quiz</span>
+                <span className="font-semibold text-[#1E293B] dark:text-slate-200 text-sm sm:text-base">
+                  Quiz (Max 20)
+                </span>
               </div>
-              <span className="font-mono font-bold text-slate-900 dark:text-white">
+              <span className="font-mono font-bold text-[#0F172A] dark:text-white text-sm sm:text-base">
                 {breakdown.quiz >= 0 ? `+${breakdown.quiz}` : breakdown.quiz}
               </span>
             </div>
 
             {/* Penalties */}
-            <div className="py-3.5 flex items-center justify-between text-sm sm:text-base">
+            <div className="py-3 flex items-center justify-between text-sm sm:text-base">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200/60 dark:border-rose-500/20 flex items-center justify-center text-rose-600 dark:text-rose-400">
+                <div className="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200/60 dark:border-rose-500/20 flex items-center justify-center text-rose-600 dark:text-rose-400 shrink-0">
                   <ShieldAlert className="w-4 h-4" />
                 </div>
-                <span className="font-semibold text-slate-700 dark:text-slate-200">Penalties</span>
+                <span className="font-semibold text-[#1E293B] dark:text-slate-200 text-sm sm:text-base">
+                  Penalties
+                </span>
               </div>
-              <span className="font-mono font-bold text-rose-600 dark:text-rose-400">
+              <span className="font-mono font-bold text-rose-600 dark:text-rose-400 text-sm sm:text-base">
                 {breakdown.penalties <= 0 ? breakdown.penalties : `-${breakdown.penalties}`}
               </span>
             </div>
 
             {/* Total Line */}
-            <div className="pt-4 mt-2 flex items-center justify-between border-t-2 border-slate-200 dark:border-blue-500/30 font-bold text-base sm:text-lg">
-              <span className="text-slate-900 dark:text-white">Total</span>
-              <span className="font-mono text-xl sm:text-2xl text-[#2563EB] dark:text-[#3B82F6]">
-                {breakdown.total}
+            <div className="pt-4 mt-1 flex items-center justify-between border-t-2 border-slate-100 dark:border-blue-500/20">
+              <span className="font-bold text-[#0F172A] dark:text-white text-base sm:text-lg">
+                Total
+              </span>
+              <span className="font-mono font-bold text-lg sm:text-xl text-[#2563EB] dark:text-[#3B82F6]">
+                {totalPoints}
               </span>
             </div>
           </div>
         </section>
 
-        {/* Right Column: Scoring Rules Reference */}
+        {/* Right Column: Scoring Rules Card (Narrower, ~1/3) */}
         <section
           aria-label="Scoring Rules Reference"
-          className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/20 rounded-2xl p-6 shadow-xs space-y-4"
+          className="lg:col-span-5 xl:col-span-4 bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-blue-500/20 rounded-2xl p-6 shadow-xs space-y-4"
         >
           <div className="flex items-center gap-2 border-b border-slate-100 dark:border-blue-500/15 pb-3">
-            <Award className="w-4 h-4 text-[#2563EB] dark:text-[#3B82F6]" />
-            <h3 className="font-bold text-sm uppercase tracking-wider text-slate-800 dark:text-slate-100">
-              Scoring Rules
+            <Award className="w-4 h-4 text-[#2563EB] dark:text-[#3B82F6] shrink-0" />
+            <h3 className="font-bold text-xs sm:text-sm uppercase tracking-wider text-[#0F172A] dark:text-slate-100 font-mono">
+              SCORING RULES
             </h3>
           </div>
 
-          <ul className="space-y-2.5 text-xs sm:text-sm">
-            <li className="flex items-center justify-between py-1 border-b border-slate-50 dark:border-blue-900/20">
-              <span className="text-slate-600 dark:text-slate-300">Complete Theory module</span>
-              <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">+2</span>
+          <ul className="divide-y divide-slate-100 dark:divide-blue-500/10 text-xs sm:text-[13px]">
+            <li className="flex items-center justify-between py-2">
+              <span className="text-[#475569] dark:text-slate-300">Complete Theory module (17 × 2)</span>
+              <span className="font-mono font-bold text-[#059669] dark:text-emerald-400 text-right shrink-0">
+                +2 (max 34)
+              </span>
             </li>
-            <li className="flex items-center justify-between py-1 border-b border-slate-50 dark:border-blue-900/20">
-              <span className="text-slate-600 dark:text-slate-300">Complete Visualize module</span>
-              <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">+3</span>
+            <li className="flex items-center justify-between py-2">
+              <span className="text-[#475569] dark:text-slate-300">Complete Visualize module (2 × 3)</span>
+              <span className="font-mono font-bold text-[#059669] dark:text-emerald-400 text-right shrink-0">
+                +3 (max 6)
+              </span>
             </li>
-            <li className="flex items-center justify-between py-1 border-b border-slate-50 dark:border-blue-900/20">
-              <span className="text-slate-600 dark:text-slate-300">Complete Game level</span>
-              <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">+4</span>
+            <li className="flex items-center justify-between py-2">
+              <span className="text-[#475569] dark:text-slate-300">Complete Game level (5 × 8)</span>
+              <span className="font-mono font-bold text-[#059669] dark:text-emerald-400 text-right shrink-0">
+                +8 (max 40)
+              </span>
             </li>
-            <li className="flex items-center justify-between py-1 border-b border-slate-50 dark:border-blue-900/20">
-              <span className="text-slate-600 dark:text-slate-300">Use Hint</span>
-              <span className="font-mono font-bold text-rose-600 dark:text-rose-400">-1</span>
+            <li className="flex items-center justify-between py-2">
+              <span className="text-[#475569] dark:text-slate-300">Quiz question correct</span>
+              <span className="font-mono font-bold text-[#059669] dark:text-emerald-400 text-right shrink-0">
+                +2
+              </span>
             </li>
-            <li className="flex items-center justify-between py-1 border-b border-slate-50 dark:border-blue-900/20">
-              <span className="text-slate-600 dark:text-slate-300">Use Guided Solve</span>
-              <span className="font-mono font-bold text-rose-600 dark:text-rose-400">-2</span>
+            <li className="flex items-center justify-between py-2">
+              <span className="text-[#475569] dark:text-slate-300">Quiz question incorrect</span>
+              <span className="font-mono font-bold text-[#E11D48] dark:text-rose-400 text-right shrink-0">
+                -1
+              </span>
             </li>
-            <li className="flex items-center justify-between py-1 border-b border-slate-50 dark:border-blue-900/20">
-              <span className="text-slate-600 dark:text-slate-300">Quiz correct answer</span>
-              <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">+1</span>
+            <li className="flex items-center justify-between py-2">
+              <span className="text-[#475569] dark:text-slate-300">Quiz Category Cap</span>
+              <span className="font-mono font-bold text-[#0F172A] dark:text-slate-200 text-right shrink-0">
+                Max 20
+              </span>
             </li>
-            <li className="flex items-center justify-between py-1">
-              <span className="text-slate-600 dark:text-slate-300">Quiz wrong answer</span>
-              <span className="font-mono font-bold text-rose-600 dark:text-rose-400">-1</span>
+            <li className="flex items-center justify-between py-2">
+              <span className="text-[#475569] dark:text-slate-300">Use Hint (per actual use)</span>
+              <span className="font-mono font-bold text-[#E11D48] dark:text-rose-400 text-right shrink-0">
+                -2
+              </span>
+            </li>
+            <li className="flex items-center justify-between py-2">
+              <span className="text-[#475569] dark:text-slate-300">Use Guided Solve (per actual use)</span>
+              <span className="font-mono font-bold text-[#E11D48] dark:text-rose-400 text-right shrink-0">
+                -3
+              </span>
+            </li>
+            <li className="flex items-center justify-between py-2">
+              <span className="text-[#475569] dark:text-slate-300">Total Score Scale</span>
+              <span className="font-mono font-bold text-[#0F172A] dark:text-slate-200 text-right shrink-0">
+                0 – 100 Points
+              </span>
             </li>
           </ul>
 
-          <div className="pt-2 text-[11px] text-slate-500 dark:text-slate-400 leading-normal">
-            Completion rewards are awarded once per unique module or level.
+          <div className="pt-2 text-[11px] text-[#64748B] dark:text-slate-400 leading-relaxed font-sans">
+            Completion rewards are awarded once per unique module or level. Hints and Guided Solves deduct points for every actual use, including repeated uses in the same level. The total reflects all earned points and deductions.
           </div>
         </section>
       </div>
 
-      {/* 4. Recent Activity Ledger */}
+      {/* 3. Recent Activity Section Matching Screenshot 3 */}
       <section
         id="points-activity-section"
         aria-label="Recent Points Activity"
-        className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/20 rounded-2xl p-6 sm:p-7 shadow-xs space-y-4"
+        className="bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-blue-500/20 rounded-2xl p-6 sm:p-7 shadow-xs space-y-4"
       >
         <div className="flex items-center justify-between border-b border-slate-100 dark:border-blue-500/15 pb-4">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-[#EFF6FF] dark:bg-blue-950/50 text-[#2563EB] dark:text-[#3B82F6] border border-[#DBEAFE] dark:border-blue-500/30">
+            <div className="w-8 h-8 rounded-lg bg-[#EFF6FF] dark:bg-blue-950/50 text-[#2563EB] dark:text-[#3B82F6] border border-[#DBEAFE] dark:border-blue-500/30 flex items-center justify-center">
               <History className="w-4 h-4" />
             </div>
-            <h2 className="text-lg sm:text-xl font-bold font-sans text-slate-900 dark:text-white">
+            <h2 className="text-lg font-bold font-sans text-[#0F172A] dark:text-white">
               Recent Activity
             </h2>
           </div>
-          <span className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400">
+          <span className="text-xs font-mono font-medium text-[#64748B] dark:text-slate-400">
             {recentActivities.length} {recentActivities.length === 1 ? 'event' : 'events'}
           </span>
         </div>
@@ -285,52 +290,46 @@ export const PointsView: React.FC = () => {
           <div className="py-12 text-center text-slate-500 dark:text-slate-400 space-y-2">
             <Clock className="w-8 h-8 mx-auto text-slate-400 dark:text-slate-600" />
             <p className="font-semibold text-sm">No Points activity recorded yet.</p>
-            <p className="text-xs max-w-sm mx-auto">
+            <p className="text-xs max-w-sm mx-auto text-slate-400">
               Complete Theory chapters, watch video lessons, solve game levels, or answer quiz questions to begin accumulating Points.
             </p>
           </div>
         ) : (
-          <div className="space-y-2.5">
+          <div className="space-y-3">
             {recentActivities.map((act) => {
               const isPositive = act.points > 0;
               const pointsDisplay = isPositive ? `+${act.points}` : `${act.points}`;
-              const Icon = getActivityIcon(act.type);
 
               return (
                 <div
                   key={act.id}
-                  className="p-3.5 sm:p-4 rounded-xl bg-slate-50/70 dark:bg-[#0B1120]/60 border border-slate-100 dark:border-blue-500/15 flex items-center justify-between gap-3 transition-colors hover:border-slate-200 dark:hover:border-blue-500/30"
+                  className="p-3.5 sm:p-4 rounded-xl bg-[#F8FAFC] dark:bg-[#0B1120]/70 border border-slate-100 dark:border-blue-500/15 flex items-center justify-between gap-4 transition-colors hover:border-slate-200 dark:hover:border-blue-500/30"
                 >
-                  <div className="flex items-center gap-3 min-w-0">
-                    {/* Points Value Tag */}
+                  <div className="flex items-center gap-3.5 min-w-0 flex-1">
+                    {/* Points Value Tag Badge */}
                     <span
-                      className={`px-2.5 py-1 rounded-lg font-mono font-extrabold text-xs sm:text-sm shrink-0 border ${
+                      className={`px-2.5 py-1 rounded-lg font-mono font-bold text-xs sm:text-sm shrink-0 border ${
                         isPositive
-                          ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-500/30'
-                          : 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-500/30'
+                          ? 'bg-emerald-50 dark:bg-emerald-950/50 text-[#059669] dark:text-emerald-300 border-emerald-200 dark:border-emerald-500/30'
+                          : 'bg-rose-50 dark:bg-rose-950/50 text-[#E11D48] dark:text-rose-300 border-rose-200 dark:border-rose-500/30'
                       }`}
                     >
                       {pointsDisplay}
                     </span>
 
-                    {/* Activity Icon */}
-                    <div className="p-1.5 rounded-lg bg-white dark:bg-blue-950/50 border border-slate-200/80 dark:border-blue-500/20 text-slate-600 dark:text-slate-300 shrink-0 hidden xs:flex">
-                      <Icon className="w-3.5 h-3.5" />
-                    </div>
-
-                    {/* Activity Description */}
+                    {/* Activity Title & Uppercase Type */}
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-100 truncate">
+                      <p className="text-xs sm:text-sm font-semibold text-[#0F172A] dark:text-slate-100 truncate">
                         {act.description}
                       </p>
-                      <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
+                      <span className="text-[11px] font-mono uppercase text-[#64748B] dark:text-slate-400 tracking-wider">
                         {act.type.replace(/_/g, ' ')}
                       </span>
                     </div>
                   </div>
 
                   {/* Relative Timestamp */}
-                  <span className="text-xs font-mono text-slate-400 dark:text-slate-500 shrink-0">
+                  <span className="text-xs font-mono text-[#64748B] dark:text-slate-400 shrink-0">
                     {formatActivityTime(act.timestamp)}
                   </span>
                 </div>

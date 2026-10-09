@@ -241,7 +241,7 @@ export const Level2Gameplay: React.FC<Level2GameplayProps> = ({
                   type="button"
                   onClick={handleHintClick}
                   className="btn-modern-secondary px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs select-none"
-                  title="Get a hint for the current challenge (-1 Point)"
+                  title="Get a hint for the current challenge (-2 Points)"
                 >
                   <span>💡</span>
                   <span>Hint</span>
