@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle2, AlertTriangle, Lightbulb, Sparkles, StopCircl
 import { soundManager } from '../utils/audio';
 import { pointsManager } from '../utils/pointsManager';
 import { GuidedSolvePanel } from './GuidedSolvePanel';
+import { HintCard } from './HintCard';
 import { CLLCanvas, VisualNodeData } from './cll/CLLCanvas';
 import { CLLMemoryBar } from './cll/CLLMemoryBar';
 
@@ -40,6 +41,7 @@ export const Level2Gameplay: React.FC<Level2GameplayProps> = ({
 
   // Guided Solve state
   const [isGuidedSolveActive, setIsGuidedSolveActive] = useState<boolean>(false);
+  const [showHint, setShowHint] = useState<boolean>(false);
   const [guidedStep, setGuidedStep] = useState<number>(1);
 
   // Infinite loop demo state
@@ -169,6 +171,38 @@ export const Level2Gameplay: React.FC<Level2GameplayProps> = ({
     }
   };
 
+  const getCurrentHint = () => {
+    if (phase === 'completed') {
+      return 'Traversal mastered! A circular loop terminates when CURRENT returns to HEAD.';
+    }
+    if (phase === 'sequential_traversal') {
+      if (currentIdx === 0) {
+        return 'CURRENT starts at HEAD (1000). Click "Follow NEXT Address" to read its pointer and visit the next node.';
+      }
+      if (currentIdx < 3) {
+        return 'Dereference the NEXT address stored in the current node to continue stepping through the circle.';
+      }
+      return 'You are at the tail node (1006). Notice that NEXT loops back to the HEAD address (1000).';
+    }
+    if (phase === 'stopping_decision') {
+      return 'CURRENT has returned to the HEAD address. Choose STOP to halt traversal and avoid an infinite loop.';
+    }
+    if (phase === 'infinite_loop_demo') {
+      return 'Without an address check, traversal loops forever. Click "Engage Stopping Condition" to halt the cycle.';
+    }
+    return 'Follow memory addresses sequentially and detect return to the HEAD address.';
+  };
+
+  const handleHintClick = () => {
+    soundManager.playClick();
+    if (showHint) {
+      setShowHint(false);
+      return;
+    }
+    setShowHint(true);
+    pointsManager.deductHint('game-level-2', 'Used Hint: Level 2');
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto flex flex-col gap-6 animate-page-enter font-sans">
       <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/20 rounded-2xl p-5 sm:p-6 shadow-xs">
@@ -183,25 +217,49 @@ export const Level2Gameplay: React.FC<Level2GameplayProps> = ({
             </span>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {!isGuidedSolveActive && phase !== 'completed' && (
-              <button
-                id="btn-lvl2-start-guided-solve"
-                type="button"
-                onClick={() => {
-                  soundManager.playClick();
-                  setIsGuidedSolveActive(true);
-                  pointsManager.deductGuidedSolve('game-level-2', 'Used Guided Solve: Level 2');
-                }}
-                className="btn-modern-secondary px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs select-none"
-                title="Start Guided Solve step-by-step assistant"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#3B82F6]" />
-                <span>Guided Solve</span>
-              </button>
+              <>
+                <button
+                  id="btn-lvl2-start-guided-solve"
+                  type="button"
+                  onClick={() => {
+                    soundManager.playClick();
+                    setIsGuidedSolveActive(true);
+                    setShowHint(false);
+                    pointsManager.deductGuidedSolve('game-level-2', 'Used Guided Solve: Level 2');
+                  }}
+                  className="btn-modern-secondary px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs select-none"
+                  title="Start Guided Solve step-by-step assistant"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#3B82F6]" />
+                  <span>Guided Solve</span>
+                </button>
+
+                <button
+                  id="btn-lvl2-hint"
+                  type="button"
+                  onClick={handleHintClick}
+                  className="btn-modern-secondary px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs select-none"
+                  title="Get a hint for the current challenge (-1 Point)"
+                >
+                  <span>💡</span>
+                  <span>Hint</span>
+                </button>
+              </>
             )}
           </div>
         </div>
+
+        {/* Challenge Hint Card */}
+        {showHint && !isGuidedSolveActive && phase !== 'completed' && (
+          <div className="pt-4">
+            <HintCard
+              hint={getCurrentHint()}
+              onClose={() => setShowHint(false)}
+            />
+          </div>
+        )}
 
         {/* Guided Solve Step-by-Step Panel */}
         {isGuidedSolveActive && (

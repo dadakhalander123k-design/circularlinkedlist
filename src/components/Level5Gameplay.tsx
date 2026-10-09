@@ -11,6 +11,7 @@ import {
 import { soundManager } from '../utils/audio';
 import { pointsManager } from '../utils/pointsManager';
 import { GuidedSolvePanel } from './GuidedSolvePanel';
+import { HintCard } from './HintCard';
 import { CLLCanvas, VisualNodeData } from './cll/CLLCanvas';
 import { CLLMemoryBar } from './cll/CLLMemoryBar';
 
@@ -32,6 +33,7 @@ export const Level5Gameplay: React.FC<Level5GameplayProps> = ({
 
   // Guided Solve state
   const [isGuidedSolveActive, setIsGuidedSolveActive] = useState<boolean>(false);
+  const [showHint, setShowHint] = useState<boolean>(false);
   const [mistakeText, setMistakeText] = useState<string | null>(null);
 
   // -------------------------------------------------------------
@@ -266,6 +268,49 @@ export const Level5Gameplay: React.FC<Level5GameplayProps> = ({
     }
   };
 
+  const getCurrentHint = () => {
+    if (task === 'completed') {
+      return 'Master challenge completed! You demonstrated full command of Circular Linked List operations.';
+    }
+    if (task === 'task1_search') {
+      return 'Follow NEXT pointer addresses sequentially until CURRENT matches the node containing target value 30.';
+    }
+    if (task === 'task2_search_missing') {
+      return 'Step through the circle until you loop back to HEAD. If value 50 was never found, conclude it is not in the list.';
+    }
+    if (task === 'task3_repair') {
+      return 'A circular list cannot terminate in NULL. Connect broken tail 1004\'s NEXT pointer back to HEAD address 1000.';
+    }
+    if (task === 'task4_master_challenge') {
+      if (masterStep === 1) {
+        return 'Insert node 5 at the beginning: link 1006 to HEAD (1000) and update the HEAD register to 1006.';
+      }
+      if (masterStep === 2) {
+        return 'Insert node 25 between 1002 and 1004: splice the pointers so 1002 → 1008 → 1004.';
+      }
+      if (masterStep === 3) {
+        return 'Delete node 10: bypass address 1000 so the previous node points directly to 1002.';
+      }
+      if (masterStep === 4) {
+        return 'Search for value 25: traverse from HEAD until CURRENT matches address 1008.';
+      }
+      if (masterStep === 5) {
+        return 'Final verification: traverse the completed circular list to verify the full cycle.';
+      }
+    }
+    return 'Master Circular Linked List operations using memory addresses.';
+  };
+
+  const handleHintClick = () => {
+    soundManager.playClick();
+    if (showHint) {
+      setShowHint(false);
+      return;
+    }
+    setShowHint(true);
+    pointsManager.deductHint('game-level-5', 'Used Hint: Level 5');
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto flex flex-col gap-6 animate-page-enter font-sans">
       <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/20 rounded-2xl p-5 sm:p-6 shadow-xs">
@@ -284,25 +329,49 @@ export const Level5Gameplay: React.FC<Level5GameplayProps> = ({
             </span>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {!isGuidedSolveActive && task !== 'completed' && (
-              <button
-                id="btn-lvl5-start-guided-solve"
-                type="button"
-                onClick={() => {
-                  soundManager.playClick();
-                  setIsGuidedSolveActive(true);
-                  pointsManager.deductGuidedSolve('game-level-5', 'Used Guided Solve: Level 5');
-                }}
-                className="btn-modern-secondary px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs select-none"
-                title="Start Guided Solve step-by-step assistant"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#3B82F6]" />
-                <span>Guided Solve</span>
-              </button>
+              <>
+                <button
+                  id="btn-lvl5-start-guided-solve"
+                  type="button"
+                  onClick={() => {
+                    soundManager.playClick();
+                    setIsGuidedSolveActive(true);
+                    setShowHint(false);
+                    pointsManager.deductGuidedSolve('game-level-5', 'Used Guided Solve: Level 5');
+                  }}
+                  className="btn-modern-secondary px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs select-none"
+                  title="Start Guided Solve step-by-step assistant"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#3B82F6]" />
+                  <span>Guided Solve</span>
+                </button>
+
+                <button
+                  id="btn-lvl5-hint"
+                  type="button"
+                  onClick={handleHintClick}
+                  className="btn-modern-secondary px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs select-none"
+                  title="Get a hint for the current challenge (-1 Point)"
+                >
+                  <span>💡</span>
+                  <span>Hint</span>
+                </button>
+              </>
             )}
           </div>
         </div>
+
+        {/* Challenge Hint Card */}
+        {showHint && !isGuidedSolveActive && task !== 'completed' && (
+          <div className="pt-4">
+            <HintCard
+              hint={getCurrentHint()}
+              onClose={() => setShowHint(false)}
+            />
+          </div>
+        )}
 
         {/* Guided Solve Step-by-Step Panel */}
         {isGuidedSolveActive && (

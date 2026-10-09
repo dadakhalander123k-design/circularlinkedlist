@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle2, AlertCircle, Lightbulb, Sparkles } from 'luci
 import { soundManager } from '../utils/audio';
 import { pointsManager } from '../utils/pointsManager';
 import { GuidedSolvePanel } from './GuidedSolvePanel';
+import { HintCard } from './HintCard';
 import { CLLCanvas, VisualNodeData } from './cll/CLLCanvas';
 import { CLLMemoryBar } from './cll/CLLMemoryBar';
 
@@ -29,6 +30,7 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
 
   // Guided Solve state
   const [isGuidedSolveActive, setIsGuidedSolveActive] = useState<boolean>(false);
+  const [showHint, setShowHint] = useState<boolean>(false);
 
   // -------------------------------------------------------------
   // PART A: Insert 5 (addr 1006) at Beginning of [1000, 1002, 1004]
@@ -279,6 +281,53 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
     }
   };
 
+  const getCurrentHint = () => {
+    if (stage === 'completed') {
+      return 'All insertion techniques completed! Pointers were safely connected without breaking the circle.';
+    }
+    if (stage === 'partA_beginning') {
+      if (subStep === 1) {
+        return 'Point the new node (1006) to current HEAD (1000) first so existing nodes remain reachable.';
+      }
+      if (subStep === 2) {
+        return 'Update tail node 1004\'s NEXT pointer to point to the new node at 1006.';
+      }
+      if (subStep === 3) {
+        return 'Update the HEAD pointer register to 1006 to designate the new node as the start of the list.';
+      }
+      return 'Part A is complete! Proceed to insert at the end.';
+    }
+    if (stage === 'partB_end') {
+      if (subStep === 1) {
+        return 'Connect old tail 1004 to new node 1006 by setting 1004.NEXT = 1006.';
+      }
+      if (subStep === 2) {
+        return 'Close the loop by setting the new node\'s NEXT pointer (1006) back to HEAD address (1000).';
+      }
+      return 'Part B is complete! Proceed to insert at position.';
+    }
+    if (stage === 'partC_position') {
+      if (subStep === 1) {
+        return 'Connect new node 1008 to next node 1004 first so the remaining chain is not lost.';
+      }
+      if (subStep === 2) {
+        return 'Now update the previous node (1002) so its NEXT pointer references new node 1008.';
+      }
+      return 'Part C is complete!';
+    }
+    return 'Insert nodes into the circular linked list by updating pointer links.';
+  };
+
+  const handleHintClick = () => {
+    soundManager.playClick();
+    if (showHint) {
+      setShowHint(false);
+      return;
+    }
+    setShowHint(true);
+    pointsManager.deductHint('game-level-3', 'Used Hint: Level 3');
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto flex flex-col gap-6 animate-page-enter font-sans">
       <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/20 rounded-2xl p-5 sm:p-6 shadow-xs">
@@ -301,25 +350,49 @@ export const Level3Gameplay: React.FC<Level3GameplayProps> = ({
             </span>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {!isGuidedSolveActive && stage !== 'completed' && (
-              <button
-                id="btn-lvl3-start-guided-solve"
-                type="button"
-                onClick={() => {
-                  soundManager.playClick();
-                  setIsGuidedSolveActive(true);
-                  pointsManager.deductGuidedSolve('game-level-3', 'Used Guided Solve: Level 3');
-                }}
-                className="btn-modern-secondary px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs select-none"
-                title="Start Guided Solve step-by-step assistant"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#3B82F6]" />
-                <span>Guided Solve</span>
-              </button>
+              <>
+                <button
+                  id="btn-lvl3-start-guided-solve"
+                  type="button"
+                  onClick={() => {
+                    soundManager.playClick();
+                    setIsGuidedSolveActive(true);
+                    setShowHint(false);
+                    pointsManager.deductGuidedSolve('game-level-3', 'Used Guided Solve: Level 3');
+                  }}
+                  className="btn-modern-secondary px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs select-none"
+                  title="Start Guided Solve step-by-step assistant"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#3B82F6]" />
+                  <span>Guided Solve</span>
+                </button>
+
+                <button
+                  id="btn-lvl3-hint"
+                  type="button"
+                  onClick={handleHintClick}
+                  className="btn-modern-secondary px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs select-none"
+                  title="Get a hint for the current challenge (-1 Point)"
+                >
+                  <span>💡</span>
+                  <span>Hint</span>
+                </button>
+              </>
             )}
           </div>
         </div>
+
+        {/* Challenge Hint Card */}
+        {showHint && !isGuidedSolveActive && stage !== 'completed' && (
+          <div className="pt-4">
+            <HintCard
+              hint={getCurrentHint()}
+              onClose={() => setShowHint(false)}
+            />
+          </div>
+        )}
 
         {/* Guided Solve Step-by-Step Panel */}
         {isGuidedSolveActive && (

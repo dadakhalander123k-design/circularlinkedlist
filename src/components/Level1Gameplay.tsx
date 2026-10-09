@@ -3,6 +3,7 @@ import { CheckCircle2, ArrowRight, Lightbulb, Sparkles, AlertCircle } from 'luci
 import { soundManager } from '../utils/audio';
 import { pointsManager } from '../utils/pointsManager';
 import { GuidedSolvePanel } from './GuidedSolvePanel';
+import { HintCard } from './HintCard';
 import { CLLCanvas, VisualNodeData } from './cll/CLLCanvas';
 import { CLLMemoryBar } from './cll/CLLMemoryBar';
 
@@ -46,6 +47,7 @@ export const Level1Gameplay: React.FC<Level1GameplayProps> = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isAnimatingLoop, setIsAnimatingLoop] = useState<boolean>(false);
   const [isGuidedSolveActive, setIsGuidedSolveActive] = useState<boolean>(false);
+  const [showHint, setShowHint] = useState<boolean>(false);
   const [guidedStep, setGuidedStep] = useState<number>(1);
 
   // Visual nodes mapper with addresses
@@ -227,6 +229,35 @@ export const Level1Gameplay: React.FC<Level1GameplayProps> = ({
     }
   };
 
+  const getCurrentHint = () => {
+    if (phase === 'completed') {
+      return 'The circular list is complete! Every node links sequentially and the tail loops back to HEAD.';
+    }
+    if (nextAddresses[1000] !== 1002) {
+      return 'Connect Node 1000 to Node 1002 by setting its NEXT pointer to address 1002.';
+    }
+    if (nextAddresses[1002] !== 1004) {
+      return 'Advance the circle by linking Node 1002 forward to the next node at address 1004.';
+    }
+    if (nextAddresses[1004] !== 1006) {
+      return 'Connect Node 1004 to Node 1006 to reach the tail of the list.';
+    }
+    if (nextAddresses[1006] !== 1000) {
+      return 'In a Circular Linked List, the TAIL node wraps back to HEAD (1000) instead of pointing to NULL. Connect 1006 to 1000.';
+    }
+    return 'Build Circular Connections Using Addresses: 1000 → 1002 → 1004 → 1006 → 1000.';
+  };
+
+  const handleHintClick = () => {
+    soundManager.playClick();
+    if (showHint) {
+      setShowHint(false);
+      return;
+    }
+    setShowHint(true);
+    pointsManager.deductHint('game-level-1', 'Used Hint: Level 1');
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto flex flex-col gap-6 animate-page-enter font-sans">
       <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/20 rounded-2xl p-5 sm:p-6 shadow-xs">
@@ -241,25 +272,49 @@ export const Level1Gameplay: React.FC<Level1GameplayProps> = ({
             </span>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {!isGuidedSolveActive && phase !== 'completed' && (
-              <button
-                id="btn-lvl1-start-guided-solve"
-                type="button"
-                onClick={() => {
-                  soundManager.playClick();
-                  setIsGuidedSolveActive(true);
-                  pointsManager.deductGuidedSolve('game-level-1', 'Used Guided Solve: Level 1');
-                }}
-                className="btn-modern-secondary px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs select-none"
-                title="Start Guided Solve step-by-step assistant"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#3B82F6]" />
-                <span>Guided Solve</span>
-              </button>
+              <>
+                <button
+                  id="btn-lvl1-start-guided-solve"
+                  type="button"
+                  onClick={() => {
+                    soundManager.playClick();
+                    setIsGuidedSolveActive(true);
+                    setShowHint(false);
+                    pointsManager.deductGuidedSolve('game-level-1', 'Used Guided Solve: Level 1');
+                  }}
+                  className="btn-modern-secondary px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs select-none"
+                  title="Start Guided Solve step-by-step assistant"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#3B82F6]" />
+                  <span>Guided Solve</span>
+                </button>
+
+                <button
+                  id="btn-lvl1-hint"
+                  type="button"
+                  onClick={handleHintClick}
+                  className="btn-modern-secondary px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs select-none"
+                  title="Get a hint for the current challenge (-1 Point)"
+                >
+                  <span>💡</span>
+                  <span>Hint</span>
+                </button>
+              </>
             )}
           </div>
         </div>
+
+        {/* Challenge Hint Card */}
+        {showHint && !isGuidedSolveActive && phase !== 'completed' && (
+          <div className="pt-4">
+            <HintCard
+              hint={getCurrentHint()}
+              onClose={() => setShowHint(false)}
+            />
+          </div>
+        )}
 
         {/* Guided Solve Step-by-Step Panel */}
         {isGuidedSolveActive && (

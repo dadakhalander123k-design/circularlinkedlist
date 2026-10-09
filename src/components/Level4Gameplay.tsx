@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle2, Trash2, Sparkles, AlertCircle, RefreshCw, Lin
 import { soundManager } from '../utils/audio';
 import { pointsManager } from '../utils/pointsManager';
 import { GuidedSolvePanel } from './GuidedSolvePanel';
+import { HintCard } from './HintCard';
 import { CLLCanvas, VisualNodeData } from './cll/CLLCanvas';
 import { CLLMemoryBar } from './cll/CLLMemoryBar';
 
@@ -29,6 +30,7 @@ export const Level4Gameplay: React.FC<Level4GameplayProps> = ({
 
   // Guided Solve state
   const [isGuidedSolveActive, setIsGuidedSolveActive] = useState<boolean>(false);
+  const [showHint, setShowHint] = useState<boolean>(false);
 
   // -------------------------------------------------------------
   // PART A: Initial [1000: 10, 1002: 20, 1004: 30, 1006: 40]
@@ -456,6 +458,59 @@ export const Level4Gameplay: React.FC<Level4GameplayProps> = ({
     }
   };
 
+  const getCurrentHint = () => {
+    if (stage === 'completed') {
+      return 'All deletion cases completed! Detached nodes were safely freed while preserving circularity.';
+    }
+    if (stage === 'partA_beginning') {
+      if (subStep === 1) {
+        return 'Before deleting HEAD, reconnect TAIL\'s NEXT pointer (1006) to point to the second node (1002).';
+      }
+      if (subStep === 2) {
+        return 'Advance the HEAD pointer register to address 1002 so it references the new first node.';
+      }
+      if (subStep === 3) {
+        return 'The old HEAD node (1000) is safely detached. Click "Delete Old HEAD" to free it.';
+      }
+      return 'Part A is complete! Proceed to delete the ending node.';
+    }
+    if (stage === 'partB_end') {
+      if (subStep === 1) {
+        return 'Move the TAIL pointer register to the preceding node at address 1004.';
+      }
+      if (subStep === 2) {
+        return 'Reconnect the new TAIL\'s NEXT pointer (1004) back to HEAD (1000) to keep the list circular.';
+      }
+      if (subStep === 3) {
+        return 'The old tail node (1006) is unlinked. Click "Delete Old TAIL" to remove it.';
+      }
+      return 'Part B is complete! Proceed to delete at position.';
+    }
+    if (stage === 'partC_position') {
+      if (subStep === 1) {
+        return 'Enter address 1004 to designate which node you want to remove from the circle.';
+      }
+      if (subStep === 2) {
+        return 'Bypass node 1004 by connecting the previous node (1002) directly to the next node (1006).';
+      }
+      if (subStep === 3) {
+        return 'Node 1004 is completely bypassed. Click "Delete Target Node" to free its memory.';
+      }
+      return 'Part C is complete!';
+    }
+    return 'Delete nodes from the circular linked list by safely rerouting pointers.';
+  };
+
+  const handleHintClick = () => {
+    soundManager.playClick();
+    if (showHint) {
+      setShowHint(false);
+      return;
+    }
+    setShowHint(true);
+    pointsManager.deductHint('game-level-4', 'Used Hint: Level 4');
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto flex flex-col gap-6 animate-page-enter font-sans">
       <div className="bg-white dark:bg-[#111827] border border-slate-200 dark:border-blue-500/20 rounded-2xl p-5 sm:p-6 shadow-xs">
@@ -478,25 +533,49 @@ export const Level4Gameplay: React.FC<Level4GameplayProps> = ({
             </span>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {!isGuidedSolveActive && stage !== 'completed' && (
-              <button
-                id="btn-lvl4-start-guided-solve"
-                type="button"
-                onClick={() => {
-                  soundManager.playClick();
-                  setIsGuidedSolveActive(true);
-                  pointsManager.deductGuidedSolve('game-level-4', 'Used Guided Solve: Level 4');
-                }}
-                className="btn-modern-secondary px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs select-none"
-                title="Start Guided Solve step-by-step assistant"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#3B82F6]" />
-                <span>Guided Solve</span>
-              </button>
+              <>
+                <button
+                  id="btn-lvl4-start-guided-solve"
+                  type="button"
+                  onClick={() => {
+                    soundManager.playClick();
+                    setIsGuidedSolveActive(true);
+                    setShowHint(false);
+                    pointsManager.deductGuidedSolve('game-level-4', 'Used Guided Solve: Level 4');
+                  }}
+                  className="btn-modern-secondary px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs select-none"
+                  title="Start Guided Solve step-by-step assistant"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#3B82F6]" />
+                  <span>Guided Solve</span>
+                </button>
+
+                <button
+                  id="btn-lvl4-hint"
+                  type="button"
+                  onClick={handleHintClick}
+                  className="btn-modern-secondary px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs select-none"
+                  title="Get a hint for the current challenge (-1 Point)"
+                >
+                  <span>💡</span>
+                  <span>Hint</span>
+                </button>
+              </>
             )}
           </div>
         </div>
+
+        {/* Challenge Hint Card */}
+        {showHint && !isGuidedSolveActive && stage !== 'completed' && (
+          <div className="pt-4">
+            <HintCard
+              hint={getCurrentHint()}
+              onClose={() => setShowHint(false)}
+            />
+          </div>
+        )}
 
         {/* Guided Solve Step-by-Step Panel */}
         {isGuidedSolveActive && (
