@@ -27,7 +27,7 @@ export const HintCard: React.FC<HintCardProps> = ({ hint, onClose }) => {
           </div>
           <div>
             <span className="text-[11px] font-bold font-mono uppercase tracking-wider text-amber-800 dark:text-amber-300 block">
-              Hint (-2 Points)
+              Hint (−2 pts)
             </span>
             <p className="text-xs sm:text-sm text-slate-800 dark:text-slate-200 mt-0.5 font-medium leading-relaxed font-sans">
               {hint}

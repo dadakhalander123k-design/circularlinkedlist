@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import {
   CheckCircle2,
   XCircle,
   HelpCircle,
   Award,
-  RotateCcw,
   Sparkles,
   ArrowRight,
   ArrowLeft,
@@ -18,6 +17,7 @@ import {
   ListOrdered,
   Trophy,
   Home,
+  Clock,
 } from 'lucide-react';
 import { progressManager } from '../utils/progressManager';
 import { pointsManager } from '../utils/pointsManager';
@@ -51,6 +51,7 @@ export interface StudentAnswerRecord {
   correctOptionIndex: number;
   correctAnswerText: string;
   isCorrect: boolean;
+  isTimeout?: boolean;
 }
 
 export const QUIZ_QUESTIONS: QuizQuestion[] = [
@@ -365,6 +366,41 @@ export const QuizView: React.FC<QuizViewProps> = ({
     };
   }, [studentAnswers]);
 
+  // Points calculation matching +3 correct, -2 wrong, 0 timeout, capped at 30
+  const liveQuizPoints = useMemo(() => {
+    let pts = 0;
+    QUIZ_QUESTIONS.forEach((q) => {
+      const rec = studentAnswers[q.id];
+      if (rec) {
+        if (rec.isCorrect) {
+          pts += 3;
+        } else if (!rec.isTimeout && rec.selectedOptionIndex !== -1) {
+          pts -= 2;
+        }
+      }
+    });
+    return Math.min(30, pts);
+  }, [studentAnswers]);
+
+  const { correctCount, wrongCount, timeoutCount } = useMemo(() => {
+    let correct = 0;
+    let wrong = 0;
+    let timeout = 0;
+    QUIZ_QUESTIONS.forEach((q) => {
+      const rec = studentAnswers[q.id];
+      if (rec) {
+        if (rec.isCorrect) {
+          correct++;
+        } else if (rec.isTimeout || rec.selectedOptionIndex === -1) {
+          timeout++;
+        } else {
+          wrong++;
+        }
+      }
+    });
+    return { correctCount: correct, wrongCount: wrong, timeoutCount: timeout };
+  }, [studentAnswers]);
+
   // Get result tier based on final score
   // Get result tier based on final score
   const getResultTier = (correctCount: number) => {
@@ -490,6 +526,57 @@ export const QuizView: React.FC<QuizViewProps> = ({
     setPendingSelection(optionIndex);
   };
 
+  // Handle question timeout (awards 0 points immediately, prevents duplicate submissions)
+  const handleTimeout = useCallback(() => {
+    if (studentAnswers[currentQuestion.id] || isSubmitted) return;
+
+    const q = currentQuestion;
+    const newRecord: StudentAnswerRecord = {
+      questionId: q.id,
+      selectedOptionIndex: -1,
+      selectedAnswerText: 'Time expired (No answer submitted)',
+      correctOptionIndex: q.correctIndex,
+      correctAnswerText: q.correctAnswerText,
+      isCorrect: false,
+      isTimeout: true,
+    };
+
+    setStudentAnswers((prev) => ({
+      ...prev,
+      [q.id]: newRecord,
+    }));
+
+    soundManager.playQuizWrong();
+    pointsManager.recordQuizTimeout(q.id, `Quiz Question ${q.id} Timed Out (0 pts)`);
+  }, [currentQuestion, studentAnswers, isSubmitted]);
+
+  const handleTimeoutRef = useRef(handleTimeout);
+  useEffect(() => {
+    handleTimeoutRef.current = handleTimeout;
+  });
+
+  const QUESTION_TIME_LIMIT = 30;
+  const [timeLeft, setTimeLeft] = useState<number>(QUESTION_TIME_LIMIT);
+
+  useEffect(() => {
+    if (isSubmitted || isCurrentQuestionAnswered) {
+      return;
+    }
+    setTimeLeft(QUESTION_TIME_LIMIT);
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          handleTimeoutRef.current();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [currentQuestionIndex, isCurrentQuestionAnswered, isSubmitted]);
+
   // Handle confirming answer for current question (Records answer without revealing final result screen)
   const handleConfirmAnswer = () => {
     if (pendingSelection === null || isCurrentQuestionAnswered) return;
@@ -505,6 +592,7 @@ export const QuizView: React.FC<QuizViewProps> = ({
       correctOptionIndex: q.correctIndex,
       correctAnswerText: q.correctAnswerText,
       isCorrect,
+      isTimeout: false,
     };
 
     const updatedAnswers = {
@@ -514,13 +602,13 @@ export const QuizView: React.FC<QuizViewProps> = ({
 
     setStudentAnswers(updatedAnswers);
 
-    // Play appropriate interaction sound and record points immediately
+    // Play appropriate interaction sound and record points immediately (+3 correct / -2 wrong)
     if (isCorrect) {
       soundManager.playQuizCorrect();
-      pointsManager.recordQuizAnswer(q.id, true, 'Correct Answer!');
+      pointsManager.recordQuizAnswer(q.id, true, `Quiz Question ${q.id} Correct (+3 pts)`);
     } else {
       soundManager.playQuizWrong();
-      pointsManager.recordQuizAnswer(q.id, false, 'Incorrect Answer');
+      pointsManager.recordQuizAnswer(q.id, false, `Quiz Question ${q.id} Incorrect (−2 pts)`);
     }
   };
 
@@ -614,14 +702,40 @@ export const QuizView: React.FC<QuizViewProps> = ({
           Test your understanding of circular linked list concepts, node connections, head pointers, traversals, and operations.
         </p>
 
+        {/* Scoring Banner */}
+        <div className="mt-5 p-4 rounded-xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-500/30 flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm font-mono">
+          <div className="flex flex-wrap items-center gap-3 sm:gap-5">
+            <span className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 font-bold">
+              <span className="w-2 h-2 rounded-full bg-emerald-500" />
+              Correct answer: +3 pts
+            </span>
+            <span className="flex items-center gap-1.5 text-rose-700 dark:text-rose-400 font-bold">
+              <span className="w-2 h-2 rounded-full bg-rose-500" />
+              Wrong answer: −2 pts
+            </span>
+            <span className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 font-semibold">
+              <span className="w-2 h-2 rounded-full bg-slate-400" />
+              Timeout or unanswered: 0 pts
+            </span>
+          </div>
+          <div className="px-3 py-1 bg-white dark:bg-[#111827] rounded-lg border border-blue-200 dark:border-blue-500/30 font-bold text-[#2563EB] dark:text-[#3B82F6]">
+            Max positive Quiz score: 30 pts
+          </div>
+        </div>
+
         {/* Question Index Tabs / Progress Tracker */}
         <div className="mt-6 pt-5 border-t border-slate-100 dark:border-blue-500/15">
-          <div className="flex items-center justify-between gap-2 mb-3 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300">
-            <div className="flex items-center gap-1.5">
-              <Sparkles className="w-4 h-4 text-[#2563EB] dark:text-[#3B82F6]" />
-              <span>
-                Progress: <strong className="text-[#2563EB] dark:text-[#3B82F6] font-mono text-sm sm:text-base">{answeredCount}</strong> / {totalQuestions} Answered
-              </span>
+          <div className="flex flex-wrap items-center justify-between gap-2 mb-3 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-5">
+              <div className="flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-[#2563EB] dark:text-[#3B82F6]" />
+                <span>
+                  Progress: <strong className="text-[#2563EB] dark:text-[#3B82F6] font-mono text-sm sm:text-base">{answeredCount}</strong> / {totalQuestions}
+                </span>
+              </div>
+              <div className="px-2.5 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-500/30 text-xs font-mono font-bold text-[#2563EB] dark:text-[#3B82F6]">
+                Score: {liveQuizPoints} / 30 pts
+              </div>
             </div>
             {isSubmitted && (
               <div className="flex items-center gap-2">
@@ -650,7 +764,9 @@ export const QuizView: React.FC<QuizViewProps> = ({
               if (isCurrent) {
                 pillStyle = 'bg-[#2563EB] dark:bg-[#3B82F6] text-white border-[#2563EB] dark:border-[#3B82F6] font-bold shadow-xs';
               } else if (isAnswered) {
-                if (rec.isCorrect) {
+                if (rec.isTimeout) {
+                  pillStyle = 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-300 dark:border-slate-700 font-bold';
+                } else if (rec.isCorrect) {
                   pillStyle = 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-500/30 font-bold';
                 } else {
                   pillStyle = 'bg-rose-50 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border-rose-200 dark:border-rose-500/30 font-bold';
@@ -720,59 +836,62 @@ export const QuizView: React.FC<QuizViewProps> = ({
             <div className={`text-6xl sm:text-7xl font-black ${certificateTheme.scoreAccent} font-sans tracking-tight leading-none my-2`}>
               {percentage}%
             </div>
-            <div className={`mt-3 px-5 py-2 rounded-xl bg-slate-50 dark:bg-blue-950/40 border ${certificateTheme.scoreSubBorder} text-slate-700 dark:text-slate-300 font-mono text-sm sm:text-base font-bold`}>
-              {score} / {totalQuestions} Questions Correct
+            <div className={`mt-3 px-5 py-2 rounded-xl bg-slate-50 dark:bg-blue-950/40 border ${certificateTheme.scoreSubBorder} text-slate-700 dark:text-slate-300 font-mono text-sm sm:text-base font-bold flex items-center gap-3`}>
+              <span>{score} / {totalQuestions} Correct</span>
+              <span>•</span>
+              <span className="text-[#2563EB] dark:text-[#3B82F6]">Score: {liveQuizPoints} / 30 pts</span>
             </div>
           </div>
 
-          {/* 6. Summary Statistics Cards (CORRECT, INCORRECT, ACCURACY - STRICTLY NO XP) */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 w-full max-w-2xl mx-auto">
+          {/* 6. Summary Statistics Cards */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 w-full max-w-3xl mx-auto">
+            {/* QUIZ SCORE CARD */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#0F172A] border border-blue-200/90 dark:border-blue-500/30 shadow-xs flex flex-col items-center justify-center text-center">
+              <span className="text-xs font-mono font-bold tracking-widest text-[#2563EB] dark:text-[#3B82F6] uppercase mb-1.5">
+                QUIZ SCORE
+              </span>
+              <span className="text-2xl sm:text-3xl font-extrabold text-[#2563EB] dark:text-[#3B82F6] font-mono">
+                {liveQuizPoints} / 30
+              </span>
+            </div>
+
             {/* CORRECT CARD */}
             <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#0F172A] border border-slate-200/90 dark:border-blue-500/30 shadow-xs flex flex-col items-center justify-center text-center">
               <span className="text-xs font-mono font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase mb-1.5">
-                CORRECT
+                CORRECT (+3)
               </span>
-              <span className={`text-2xl sm:text-3xl font-extrabold ${certificateTheme.scoreAccent} font-mono flex items-center justify-center gap-1.5`}>
-                <Check className="w-6 h-6 stroke-[2.5]" />
-                {score}
+              <span className={`text-2xl sm:text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 font-mono flex items-center justify-center gap-1.5`}>
+                <Check className="w-5 h-5 stroke-[2.5]" />
+                {correctCount}
               </span>
             </div>
 
             {/* INCORRECT CARD */}
             <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#0F172A] border border-slate-200/90 dark:border-blue-500/30 shadow-xs flex flex-col items-center justify-center text-center">
               <span className="text-xs font-mono font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase mb-1.5">
-                INCORRECT
+                WRONG (−2)
               </span>
-              <span className="text-2xl sm:text-3xl font-extrabold text-rose-500 dark:text-rose-400 font-mono">
-                {totalQuestions - score}
+              <span className="text-2xl sm:text-3xl font-extrabold text-rose-500 dark:text-rose-400 font-mono flex items-center justify-center gap-1.5">
+                <XCircle className="w-5 h-5 stroke-[2.5]" />
+                {wrongCount}
               </span>
             </div>
 
-            {/* ACCURACY CARD */}
+            {/* TIMEOUT CARD */}
             <div className="p-4 sm:p-5 rounded-2xl bg-white dark:bg-[#0F172A] border border-slate-200/90 dark:border-blue-500/30 shadow-xs flex flex-col items-center justify-center text-center">
               <span className="text-xs font-mono font-bold tracking-widest text-slate-400 dark:text-slate-500 uppercase mb-1.5">
-                ACCURACY
+                TIMEOUT (0)
               </span>
-              <span className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white font-mono">
-                {percentage}%
+              <span className="text-2xl sm:text-3xl font-extrabold text-slate-600 dark:text-slate-400 font-mono flex items-center justify-center gap-1.5">
+                <Clock className="w-5 h-5" />
+                {timeoutCount}
               </span>
             </div>
           </div>
 
-          {/* 7. Action Buttons (Retake Quiz & Back to Home) */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 mt-8 w-full max-w-md mx-auto">
-            {/* 1. Retake Quiz (Primary Action) */}
-            <button
-              id="btn-quiz-retake"
-              type="button"
-              onClick={handleResetQuiz}
-              className="w-full sm:w-auto px-7 sm:px-8 py-3.5 rounded-2xl bg-[#2563EB] hover:bg-[#1D4ED8] dark:bg-[#2563EB] dark:hover:bg-[#1D4ED8] text-white font-sans text-sm sm:text-base font-bold shadow-xs transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-98 flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <RotateCcw className="w-4 h-4 stroke-[2.2]" />
-              <span>Retake Quiz</span>
-            </button>
-
-            {/* 2. Back to Home (Secondary Action) */}
+          {/* 7. Action Button (Back to Home) - Refresh & Reset removed strictly */}
+          <div className="flex items-center justify-center mt-8 w-full max-w-md mx-auto">
+            {/* Back to Home */}
             <button
               id="btn-quiz-back-to-home"
               type="button"
@@ -782,7 +901,7 @@ export const QuizView: React.FC<QuizViewProps> = ({
                   onNavigateToHome();
                 }
               }}
-              className="w-full sm:w-auto px-7 sm:px-8 py-3.5 rounded-2xl bg-white hover:bg-slate-50 dark:bg-[#0F172A] dark:hover:bg-[#172033] text-slate-800 dark:text-slate-200 border border-slate-200/90 dark:border-blue-500/30 font-sans text-sm sm:text-base font-bold shadow-xs transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-98 flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-white hover:bg-slate-50 dark:bg-[#0F172A] dark:hover:bg-[#172033] text-slate-800 dark:text-slate-200 border border-slate-200/90 dark:border-blue-500/30 font-sans text-sm sm:text-base font-bold shadow-xs transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 active:scale-98 flex items-center justify-center gap-2 cursor-pointer"
             >
               <Home className="w-4 h-4 stroke-[2.2] text-[#2563EB] dark:text-[#3B82F6]" />
               <span>Back to Home</span>
@@ -805,7 +924,7 @@ export const QuizView: React.FC<QuizViewProps> = ({
               }`}
           >
             {/* Question Header */}
-            <div className="flex items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100 dark:border-blue-500/15">
+            <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100 dark:border-blue-500/15">
               <div className="flex items-center gap-2">
                 <span className="px-3 py-1 bg-[#2563EB] dark:bg-[#3B82F6] text-white rounded-md text-xs sm:text-sm font-bold font-mono shadow-xs">
                   Question {currentQuestionIndex + 1 < 10 ? `0${currentQuestionIndex + 1}` : currentQuestionIndex + 1} of {totalQuestions}
@@ -813,21 +932,47 @@ export const QuizView: React.FC<QuizViewProps> = ({
                 <span className="text-xs sm:text-sm font-bold text-[#2563EB] dark:text-[#3B82F6] font-mono">{currentQuestion.techniqueCode}</span>
               </div>
 
-              {isCurrentQuestionAnswered && (
-                <div>
-                  {currentAnswerRecord?.isCorrect ? (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-950/60 text-xs sm:text-sm font-bold text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 rounded-lg">
-                      <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-                      <span>Correct</span>
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-50 dark:bg-rose-950/60 text-xs sm:text-sm font-bold text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-500/30 rounded-lg">
-                      <XCircle className="w-4 h-4 text-rose-600 dark:text-rose-400" />
-                      <span>Incorrect</span>
-                    </span>
-                  )}
-                </div>
-              )}
+              {/* Quiz Points and Status / Countdown Timer */}
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-1 rounded-md text-xs font-mono font-bold bg-slate-100 dark:bg-[#0F172A] text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-blue-500/30">
+                  Quiz Score: <strong className="text-[#2563EB] dark:text-[#3B82F6]">{liveQuizPoints}</strong> / 30 pts
+                </span>
+
+                {!isCurrentQuestionAnswered ? (
+                  <span
+                    id="quiz-countdown-timer"
+                    className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs sm:text-sm font-bold font-mono rounded-lg border transition-all ${
+                      timeLeft <= 5
+                        ? 'bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 border-rose-300 dark:border-rose-500/40 animate-pulse'
+                        : timeLeft <= 10
+                        ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-300 dark:border-amber-500/40'
+                        : 'bg-blue-50 dark:bg-blue-950/60 text-[#2563EB] dark:text-[#3B82F6] border-blue-200 dark:border-blue-500/30'
+                    }`}
+                  >
+                    <Clock className="w-3.5 h-3.5" />
+                    <span>{timeLeft}s</span>
+                  </span>
+                ) : (
+                  <div>
+                    {currentAnswerRecord?.isTimeout ? (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100 dark:bg-slate-800 text-xs sm:text-sm font-bold font-mono text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 rounded-lg">
+                        <Clock className="w-4 h-4 text-slate-500" />
+                        <span>Timed Out (0 pts)</span>
+                      </span>
+                    ) : currentAnswerRecord?.isCorrect ? (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-950/60 text-xs sm:text-sm font-bold font-mono text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 rounded-lg">
+                        <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                        <span>+3 pts • Correct</span>
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-50 dark:bg-rose-950/60 text-xs sm:text-sm font-bold font-mono text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-500/30 rounded-lg">
+                        <XCircle className="w-4 h-4 text-rose-600 dark:text-rose-400" />
+                        <span>−2 pts • Incorrect</span>
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Question Statement */}
@@ -1023,18 +1168,22 @@ export const QuizView: React.FC<QuizViewProps> = ({
 
                     <div>
                       {isAnswered ? (
-                        isCorrect ? (
+                        rec?.isTimeout ? (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100 dark:bg-slate-800 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 rounded-md">
+                            <Clock className="w-4 h-4 text-slate-500" /> Timed Out (0 pts)
+                          </span>
+                        ) : isCorrect ? (
                           <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-950/60 text-xs sm:text-sm font-bold text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 rounded-md">
-                            <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> Correct
+                            <Check className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> +3 pts • Correct
                           </span>
                         ) : (
                           <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-rose-50 dark:bg-rose-950/60 text-xs sm:text-sm font-bold text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-500/30 rounded-md">
-                            <XCircle className="w-4 h-4 text-rose-600 dark:text-rose-400" /> Incorrect
+                            <XCircle className="w-4 h-4 text-rose-600 dark:text-rose-400" /> −2 pts • Incorrect
                           </span>
                         )
                       ) : (
                         <span className="px-2.5 py-1 bg-slate-100 dark:bg-[#0F172A] rounded-md text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400">
-                          Unanswered
+                          Unanswered (0 pts)
                         </span>
                       )}
                     </div>
@@ -1047,12 +1196,12 @@ export const QuizView: React.FC<QuizViewProps> = ({
 
                   {/* Stored Comparison */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4 text-xs sm:text-sm font-mono">
-                    <div className={`p-3.5 rounded-xl border ${isCorrect ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-500/30 text-emerald-950 dark:text-emerald-200' : 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-500/30 text-rose-950 dark:text-rose-200'}`}>
+                    <div className={`p-3.5 rounded-xl border ${rec?.isTimeout ? 'bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300' : isCorrect ? 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-500/30 text-emerald-950 dark:text-emerald-200' : 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-500/30 text-rose-950 dark:text-rose-200'}`}>
                       <div className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1 font-sans">
                         Your Submission:
                       </div>
                       <div className="font-bold text-sm sm:text-base">
-                        {rec ? `${String.fromCharCode(65 + rec.selectedOptionIndex)}: ${rec.selectedAnswerText}` : 'No Answer Submitted'}
+                        {rec?.isTimeout ? 'Timed out (No answer submitted - 0 pts)' : rec ? `${String.fromCharCode(65 + rec.selectedOptionIndex)}: ${rec.selectedAnswerText}` : 'No Answer Submitted'}
                       </div>
                     </div>
 

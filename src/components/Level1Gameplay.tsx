@@ -255,7 +255,7 @@ export const Level1Gameplay: React.FC<Level1GameplayProps> = ({
       return;
     }
     setShowHint(true);
-    pointsManager.deductHint('game-level-1', 'Used Hint: Level 1');
+    pointsManager.deductHint(`game-level-1-hint-${Date.now()}`, 'Used Hint: Level 1');
   };
 
   return (
@@ -282,13 +282,13 @@ export const Level1Gameplay: React.FC<Level1GameplayProps> = ({
                     soundManager.playClick();
                     setIsGuidedSolveActive(true);
                     setShowHint(false);
-                    pointsManager.deductGuidedSolve('game-level-1', 'Used Guided Solve: Level 1');
+                    pointsManager.deductGuidedSolve(`game-level-1-gs-${Date.now()}`, 'Used Guided Solve: Level 1');
                   }}
                   className="btn-modern-secondary px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs select-none"
-                  title="Start Guided Solve step-by-step assistant"
+                  title="Start Guided Solve step-by-step assistant (−4 pts)"
                 >
                   <Sparkles className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#3B82F6]" />
-                  <span>Guided Solve</span>
+                  <span>Guided Solve (−4 pts)</span>
                 </button>
 
                 <button
@@ -296,10 +296,10 @@ export const Level1Gameplay: React.FC<Level1GameplayProps> = ({
                   type="button"
                   onClick={handleHintClick}
                   className="btn-modern-secondary px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 cursor-pointer shadow-2xs select-none"
-                  title="Get a hint for the current challenge (-2 Points)"
+                  title="Get a hint for the current challenge (−2 pts)"
                 >
                   <span>💡</span>
-                  <span>Hint</span>
+                  <span>Hint (−2 pts)</span>
                 </button>
               </>
             )}

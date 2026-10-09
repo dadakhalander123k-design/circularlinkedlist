@@ -54,7 +54,7 @@ export const GuidedSolvePanel: React.FC<GuidedSolvePanelProps> = ({
             )}
           </div>
           <span className="text-xs font-bold font-mono uppercase tracking-wider text-[#2563EB] dark:text-[#3B82F6]">
-            Guided Solve
+            Guided Solve (−4 pts)
           </span>
         </div>
 

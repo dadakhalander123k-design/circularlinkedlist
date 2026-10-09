@@ -60,7 +60,7 @@ export const PointsView: React.FC = () => {
           </h1>
 
           <p className="text-xs sm:text-sm text-[#475569] dark:text-slate-300 leading-relaxed font-sans">
-            Overall score earned across Theory modules, Quiz challenges, Visualizations, and Game levels.
+            Circular Linked List scoring: Visualization (20 pts), Game Levels (50 pts), and Quiz Assessment (30 pts).
           </p>
         </div>
 
@@ -104,21 +104,6 @@ export const PointsView: React.FC = () => {
           </div>
 
           <div className="divide-y divide-slate-100 dark:divide-blue-500/10">
-            {/* Theory */}
-            <div className="py-3 flex items-center justify-between text-sm sm:text-base">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/40 border border-blue-200/60 dark:border-blue-500/20 flex items-center justify-center text-[#2563EB] dark:text-[#3B82F6] shrink-0">
-                  <BookOpen className="w-4 h-4" />
-                </div>
-                <span className="font-semibold text-[#1E293B] dark:text-slate-200 text-sm sm:text-base">
-                  Theory (Max 34)
-                </span>
-              </div>
-              <span className="font-mono font-bold text-[#0F172A] dark:text-white text-sm sm:text-base">
-                {breakdown.theory >= 0 ? `+${breakdown.theory}` : breakdown.theory}
-              </span>
-            </div>
-
             {/* Visualization */}
             <div className="py-3 flex items-center justify-between text-sm sm:text-base">
               <div className="flex items-center gap-3">
@@ -126,7 +111,7 @@ export const PointsView: React.FC = () => {
                   <Sparkles className="w-4 h-4" />
                 </div>
                 <span className="font-semibold text-[#1E293B] dark:text-slate-200 text-sm sm:text-base">
-                  Visualization (Max 6)
+                  Visualization (Max 20)
                 </span>
               </div>
               <span className="font-mono font-bold text-[#0F172A] dark:text-white text-sm sm:text-base">
@@ -141,7 +126,7 @@ export const PointsView: React.FC = () => {
                   <Gamepad2 className="w-4 h-4" />
                 </div>
                 <span className="font-semibold text-[#1E293B] dark:text-slate-200 text-sm sm:text-base">
-                  Games (Max 40)
+                  Games (Max 50)
                 </span>
               </div>
               <span className="font-mono font-bold text-[#0F172A] dark:text-white text-sm sm:text-base">
@@ -156,7 +141,7 @@ export const PointsView: React.FC = () => {
                   <HelpCircle className="w-4 h-4" />
                 </div>
                 <span className="font-semibold text-[#1E293B] dark:text-slate-200 text-sm sm:text-base">
-                  Quiz (Max 20)
+                  Quiz (Max 30)
                 </span>
               </div>
               <span className="font-mono font-bold text-[#0F172A] dark:text-white text-sm sm:text-base">
@@ -164,14 +149,14 @@ export const PointsView: React.FC = () => {
               </span>
             </div>
 
-            {/* Penalties */}
+            {/* Deductions */}
             <div className="py-3 flex items-center justify-between text-sm sm:text-base">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200/60 dark:border-rose-500/20 flex items-center justify-center text-rose-600 dark:text-rose-400 shrink-0">
                   <ShieldAlert className="w-4 h-4" />
                 </div>
                 <span className="font-semibold text-[#1E293B] dark:text-slate-200 text-sm sm:text-base">
-                  Penalties
+                  Deductions (Hints −2 / Guided −4)
                 </span>
               </div>
               <span className="font-mono font-bold text-rose-600 dark:text-rose-400 text-sm sm:text-base">
@@ -185,7 +170,7 @@ export const PointsView: React.FC = () => {
                 Total
               </span>
               <span className="font-mono font-bold text-lg sm:text-xl text-[#2563EB] dark:text-[#3B82F6]">
-                {totalPoints}
+                {totalPoints} / 100
               </span>
             </div>
           </div>
@@ -205,51 +190,57 @@ export const PointsView: React.FC = () => {
 
           <ul className="divide-y divide-slate-100 dark:divide-blue-500/10 text-xs sm:text-[13px]">
             <li className="flex items-center justify-between py-2">
-              <span className="text-[#475569] dark:text-slate-300">Complete Theory module (17 × 2)</span>
+              <span className="text-[#475569] dark:text-slate-300">Complete Video Lesson (2 × 10)</span>
               <span className="font-mono font-bold text-[#059669] dark:text-emerald-400 text-right shrink-0">
-                +2 (max 34)
+                +10 (max 20)
               </span>
             </li>
             <li className="flex items-center justify-between py-2">
-              <span className="text-[#475569] dark:text-slate-300">Complete Visualize module (2 × 3)</span>
+              <span className="text-[#475569] dark:text-slate-300">Complete Game Level (5 × 10)</span>
               <span className="font-mono font-bold text-[#059669] dark:text-emerald-400 text-right shrink-0">
-                +3 (max 6)
+                +10 (max 50)
               </span>
             </li>
             <li className="flex items-center justify-between py-2">
-              <span className="text-[#475569] dark:text-slate-300">Complete Game level (5 × 8)</span>
+              <span className="text-[#475569] dark:text-slate-300">Quiz Question Correct</span>
               <span className="font-mono font-bold text-[#059669] dark:text-emerald-400 text-right shrink-0">
-                +8 (max 40)
+                +3
               </span>
             </li>
             <li className="flex items-center justify-between py-2">
-              <span className="text-[#475569] dark:text-slate-300">Quiz question correct</span>
-              <span className="font-mono font-bold text-[#059669] dark:text-emerald-400 text-right shrink-0">
-                +2
-              </span>
-            </li>
-            <li className="flex items-center justify-between py-2">
-              <span className="text-[#475569] dark:text-slate-300">Quiz question incorrect</span>
+              <span className="text-[#475569] dark:text-slate-300">Quiz Question Incorrect</span>
               <span className="font-mono font-bold text-[#E11D48] dark:text-rose-400 text-right shrink-0">
-                -1
+                −2
               </span>
             </li>
             <li className="flex items-center justify-between py-2">
-              <span className="text-[#475569] dark:text-slate-300">Quiz Category Cap</span>
+              <span className="text-[#475569] dark:text-slate-300">Quiz Timeout / Unanswered</span>
+              <span className="font-mono font-bold text-slate-400 dark:text-slate-500 text-right shrink-0">
+                0
+              </span>
+            </li>
+            <li className="flex items-center justify-between py-2">
+              <span className="text-[#475569] dark:text-slate-300">Quiz Maximum Positive Cap</span>
               <span className="font-mono font-bold text-[#0F172A] dark:text-slate-200 text-right shrink-0">
-                Max 20
+                Max 30
               </span>
             </li>
             <li className="flex items-center justify-between py-2">
               <span className="text-[#475569] dark:text-slate-300">Use Hint (per actual use)</span>
               <span className="font-mono font-bold text-[#E11D48] dark:text-rose-400 text-right shrink-0">
-                -2
+                −2
               </span>
             </li>
             <li className="flex items-center justify-between py-2">
               <span className="text-[#475569] dark:text-slate-300">Use Guided Solve (per actual use)</span>
               <span className="font-mono font-bold text-[#E11D48] dark:text-rose-400 text-right shrink-0">
-                -3
+                −4
+              </span>
+            </li>
+            <li className="flex items-center justify-between py-2">
+              <span className="text-[#475569] dark:text-slate-300">Learn / Theory Section</span>
+              <span className="font-mono font-bold text-slate-400 dark:text-slate-500 text-right shrink-0">
+                0 pts
               </span>
             </li>
             <li className="flex items-center justify-between py-2">
@@ -261,7 +252,7 @@ export const PointsView: React.FC = () => {
           </ul>
 
           <div className="pt-2 text-[11px] text-[#64748B] dark:text-slate-400 leading-relaxed font-sans">
-            Completion rewards are awarded once per unique module or level. Hints and Guided Solves deduct points for every actual use, including repeated uses in the same level. The total reflects all earned points and deductions.
+            Completion rewards are awarded once per unique video or level. Hints (−2 pts) and Guided Solves (−4 pts) deduct points for every actual use. Quiz questions award +3 for correct, −2 for wrong, and 0 for timeouts. The total reflects all earned points and deductions out of 100.
           </div>
         </section>
       </div>

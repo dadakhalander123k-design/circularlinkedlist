@@ -1,21 +1,20 @@
 /**
- * Centralized Points System for AlgoLearn
+ * Centralized Points System for Circular Linked List (CLL) - AlgoLearn
  *
- * Implements a strict, single-source-of-truth Points management engine
- * with a 100-point total distribution scale:
- * - Theory:          17 modules × 2 pts  = 34 pts max
- * - Visualize/Video:  2 modules × 3 pts  =  6 pts max
- * - Game:             5 levels × 8 pts   = 40 pts max
- * - Quiz:            +2 correct, -1 wrong = 20 pts max
+ * Implements the updated CLL 100-Point Architecture:
+ * - Theory/Learn:      0 pts (Contributes zero points to the scoring system)
+ * - Visualization:    2 videos × 10 pts    =  20 pts max
+ * - Game:             5 levels × 10 pts    =  50 pts max
+ * - Quiz:            +3 correct, -2 wrong  =  30 pts max (+30 cap)
  * ----------------------------------------------------
- * TOTAL:                                 100 pts max
+ * TOTAL:                                     100 pts max
  *
  * Penalties:
  * - Use Hint:         -2 pts per genuine use
- * - Use Guided Solve: -3 pts per genuine use
+ * - Use Guided Solve: -4 pts per genuine use
  *
- * Governs all points rewards, penalties, activity logging, idempotency checks,
- * non-negative balance enforcement (min 0, max 100), and persistence.
+ * Enforces single-source-of-truth points management, idempotency,
+ * category capping, negative balance support, and persistence.
  */
 
 export type PointEventType =
@@ -26,25 +25,27 @@ export type PointEventType =
   | 'HINT_USED'
   | 'GUIDED_SOLVE_USED'
   | 'QUIZ_CORRECT'
-  | 'QUIZ_WRONG';
+  | 'QUIZ_WRONG'
+  | 'QUIZ_TIMEOUT';
 
 export const CATEGORY_CAPS = {
-  THEORY: 34,
-  QUIZ: 20,
-  VISUALIZE: 6,
-  GAME: 40,
+  THEORY: 0,
+  QUIZ: 30,
+  VISUALIZE: 20,
+  GAME: 50,
   TOTAL: 100,
 } as const;
 
 export const POINT_VALUES: Record<PointEventType, number> = {
-  THEORY_COMPLETED: 2,
-  VISUALIZE_COMPLETED: 3,
-  VIDEO_COMPLETED: 3,
-  GAME_COMPLETED: 8,
-  QUIZ_CORRECT: 2,
-  QUIZ_WRONG: -1,
+  THEORY_COMPLETED: 0,
+  VISUALIZE_COMPLETED: 10,
+  VIDEO_COMPLETED: 10,
+  GAME_COMPLETED: 10,
+  QUIZ_CORRECT: 3,
+  QUIZ_WRONG: -2,
+  QUIZ_TIMEOUT: 0,
   HINT_USED: -2,
-  GUIDED_SOLVE_USED: -3,
+  GUIDED_SOLVE_USED: -4,
 } as const;
 
 export interface PointActivity {
@@ -52,9 +53,9 @@ export interface PointActivity {
   type: PointEventType;
   sourceId: string;
   description: string;
-  points: number;       // Requested points change (+2, +3, +8, +2, -1, -2, -3)
-  actualDelta: number;  // Actual balance change after applying 0 floor and 100 cap
-  balanceAfter: number; // Balance after the event (always 0 <= balance <= 100)
+  points: number;       // Requested points change (+10, +3, -2, -2, -4, 0)
+  actualDelta: number;  // Actual balance change after applying category and total caps
+  balanceAfter: number; // Balance after the event
   timestamp: number;
 }
 
@@ -88,10 +89,10 @@ export interface PointChangeEventDetail {
   totalPoints: number;
 }
 
-const STORAGE_KEY = 'queue-learning-points';
+const STORAGE_KEY = 'cll-learning-points-v5';
 
 const INITIAL_POINTS_STATE: PointsState = {
-  version: 4,
+  version: 5,
   totalPoints: 0,
   rewardedItems: {},
   activities: [],
@@ -129,7 +130,7 @@ class PointsManager {
         return INITIAL_POINTS_STATE;
       }
       const parsed = JSON.parse(raw);
-      if (typeof parsed !== 'object' || parsed === null) {
+      if (typeof parsed !== 'object' || parsed === null || parsed.version < 5) {
         return INITIAL_POINTS_STATE;
       }
 
@@ -157,7 +158,7 @@ class PointsManager {
         : [];
 
       return {
-        version: parsed.version || 4,
+        version: 5,
         totalPoints,
         rewardedItems,
         activities,
@@ -219,27 +220,30 @@ class PointsManager {
     for (const act of this.state.activities) {
       switch (act.type) {
         case 'THEORY_COMPLETED':
-          theory += act.points;
+          // Theory contributes 0 points
           break;
         case 'VISUALIZE_COMPLETED':
         case 'VIDEO_COMPLETED':
           visualization += act.points;
           break;
         case 'GAME_COMPLETED':
+        case 'HINT_USED':
+        case 'GUIDED_SOLVE_USED':
           game += act.points;
           break;
         case 'QUIZ_CORRECT':
         case 'QUIZ_WRONG':
+        case 'QUIZ_TIMEOUT':
           quiz += act.points;
           break;
       }
     }
 
     return {
-      theory: Math.min(CATEGORY_CAPS.THEORY, Math.max(0, theory)),
+      theory: 0,
       visualization: Math.min(CATEGORY_CAPS.VISUALIZE, Math.max(0, visualization)),
-      game: Math.min(CATEGORY_CAPS.GAME, Math.max(0, game)),
-      quiz: Math.min(CATEGORY_CAPS.QUIZ, Math.max(0, quiz)),
+      game: Math.min(CATEGORY_CAPS.GAME, game),
+      quiz: Math.min(CATEGORY_CAPS.QUIZ, quiz),
     };
   }
 
@@ -280,8 +284,7 @@ class PointsManager {
     if (requestedPoints > 0) {
       const contributions = this.getCategoryContributions();
       if (type === 'THEORY_COMPLETED') {
-        const remaining = Math.max(0, CATEGORY_CAPS.THEORY - contributions.theory);
-        effectivePoints = Math.min(requestedPoints, remaining);
+        effectivePoints = 0; // Theory contributes 0
       } else if (type === 'VISUALIZE_COMPLETED' || type === 'VIDEO_COMPLETED') {
         const remaining = Math.max(0, CATEGORY_CAPS.VISUALIZE - contributions.visualization);
         effectivePoints = Math.min(requestedPoints, remaining);
@@ -298,7 +301,7 @@ class PointsManager {
       this.state.rewardedItems[sourceId] = true;
     }
 
-    // Allow score to become negative while enforcing the 100 upper cap
+    // Allow score to become negative if deductions occur, while enforcing 100 upper cap
     const prevBalance = this.state.totalPoints;
     const newBalance = Math.min(CATEGORY_CAPS.TOTAL, prevBalance + effectivePoints);
     const actualDelta = newBalance - prevBalance;
@@ -336,51 +339,48 @@ class PointsManager {
   }
 
   /**
-   * Theory Module Completion: +2 Points (17 modules × 2 pts = 34 pts max, one-time each)
+   * Theory Module Completion: 0 Points (Learn/Theory contributes 0 points to new system)
    */
   public awardTheoryCompletion(chapterId: string, description?: string): boolean {
     const sourceId = `theory:${chapterId}`;
-    const result = this.triggerEvent('THEORY_COMPLETED', {
-      sourceId,
-      description: description || 'Theory Module Completed',
-      isOneTimeReward: true,
-    });
-    return result.success;
+    this.state.rewardedItems[sourceId] = true;
+    this.saveState();
+    return true;
   }
 
   /**
-   * Video / Visualization Module Completion: +3 Points (2 modules × 3 pts = 6 pts max, one-time each)
+   * Video / Visualization Module Completion: +10 Points (2 modules × 10 pts = 20 pts max, one-time each)
    */
   public awardVideoCompletion(videoId: string, description?: string): boolean {
     const sourceId = `video:${videoId}`;
     const result = this.triggerEvent('VIDEO_COMPLETED', {
       sourceId,
-      description: description || 'Visualization Completed',
+      description: description || 'Visualization Completed (+10 pts)',
       isOneTimeReward: true,
     });
     return result.success;
   }
 
   /**
-   * Game Level Completion: +8 Points (5 levels × 8 pts = 40 pts max, one-time each)
+   * Game Level Completion: +10 Points (5 levels × 10 pts = 50 pts max, one-time each)
    */
   public awardGameCompletion(levelId: number, description?: string): boolean {
     const sourceId = `game:level-${levelId}`;
     const result = this.triggerEvent('GAME_COMPLETED', {
       sourceId,
-      description: description || 'Game Level Completed',
+      description: description || `Game Level ${levelId} Completed (+10 pts)`,
       isOneTimeReward: true,
     });
     return result.success;
   }
 
   /**
-   * Use Guided Solve: -3 Points (Per Genuine Use)
+   * Use Guided Solve: -4 Points (Per Genuine Use)
    */
   public deductGuidedSolve(sourceId: string = 'game', description?: string): boolean {
     const result = this.triggerEvent('GUIDED_SOLVE_USED', {
       sourceId,
-      description: description || 'Guided Solve Used',
+      description: description || 'Guided Solve Used (-4 pts)',
       isOneTimeReward: false,
     });
     return result.success;
@@ -392,7 +392,7 @@ class PointsManager {
   public deductHint(sourceId: string = 'game', description?: string): boolean {
     const result = this.triggerEvent('HINT_USED', {
       sourceId,
-      description: description || 'Hint Used',
+      description: description || 'Hint Used (-2 pts)',
       isOneTimeReward: false,
     });
     return result.success;
@@ -406,7 +406,7 @@ class PointsManager {
   }
 
   /**
-   * Quiz Question Answer Submission: Correct -> +2, Wrong -> -1 (Quiz max 20 pts)
+   * Quiz Question Answer Submission: Correct -> +3, Wrong -> -2 (Quiz max 30 pts)
    * Guaranteed duplicate-protection per question in current quiz session.
    */
   public recordQuizAnswer(questionId: number, isCorrect: boolean, description?: string): boolean {
@@ -416,11 +416,30 @@ class PointsManager {
     this.quizAnsweredInSession.add(questionId);
 
     const type: PointEventType = isCorrect ? 'QUIZ_CORRECT' : 'QUIZ_WRONG';
-    const desc = description || (isCorrect ? 'Correct Answer!' : 'Incorrect Answer');
+    const defaultDesc = isCorrect ? 'Correct Answer! (+3 pts)' : 'Incorrect Answer (-2 pts)';
+    const desc = description || defaultDesc;
 
     const result = this.triggerEvent(type, {
       sourceId: `quiz:q-${questionId}`,
       description: desc,
+      isOneTimeReward: false,
+    });
+
+    return result.success;
+  }
+
+  /**
+   * Quiz Question Timeout: 0 Points
+   */
+  public recordQuizTimeout(questionId: number, description?: string): boolean {
+    if (this.quizAnsweredInSession.has(questionId)) {
+      return false;
+    }
+    this.quizAnsweredInSession.add(questionId);
+
+    const result = this.triggerEvent('QUIZ_TIMEOUT', {
+      sourceId: `quiz:q-${questionId}`,
+      description: description || `Quiz Question ${questionId}: Timed out (0 pts)`,
       isOneTimeReward: false,
     });
 
@@ -435,7 +454,7 @@ class PointsManager {
     this.quizAnsweredInSession.clear();
     let priorQuizScore = 0;
     this.state.activities = this.state.activities.filter((act) => {
-      if (act.type === 'QUIZ_CORRECT' || act.type === 'QUIZ_WRONG') {
+      if (act.type === 'QUIZ_CORRECT' || act.type === 'QUIZ_WRONG' || act.type === 'QUIZ_TIMEOUT') {
         priorQuizScore += act.points;
         return false;
       }
@@ -454,7 +473,6 @@ class PointsManager {
    * Calculates the full Points Breakdown dynamically from state activities.
    */
   public getBreakdown(): PointsBreakdown {
-    let theory = 0;
     let visualization = 0;
     let games = 0;
     let quizCorrect = 0;
@@ -465,7 +483,6 @@ class PointsManager {
     for (const act of this.state.activities) {
       switch (act.type) {
         case 'THEORY_COMPLETED':
-          theory += act.points;
           break;
         case 'VISUALIZE_COMPLETED':
         case 'VIDEO_COMPLETED':
@@ -478,27 +495,26 @@ class PointsManager {
           quizCorrect += act.points;
           break;
         case 'QUIZ_WRONG':
-          quizPenalties += act.points; // Negative values, e.g. -1, -2...
+          quizPenalties += act.points; // Negative values, e.g. -2, -4...
           break;
         case 'HINT_USED':
           hintPenalties += act.points; // Negative values, e.g. -2, -4...
           break;
         case 'GUIDED_SOLVE_USED':
-          guidedSolvePenalties += act.points; // Negative values, e.g. -3, -6...
+          guidedSolvePenalties += act.points; // Negative values, e.g. -4, -8...
           break;
       }
     }
 
-    const cappedTheory = Math.min(CATEGORY_CAPS.THEORY, Math.max(0, theory));
-    const cappedVis = Math.min(CATEGORY_CAPS.VISUALIZE, Math.max(0, visualization));
-    const cappedGames = Math.min(CATEGORY_CAPS.GAME, Math.max(0, games));
-    const netQuiz = Math.min(CATEGORY_CAPS.QUIZ, Math.max(0, quizCorrect + quizPenalties));
+    const cappedVis = Math.min(CATEGORY_CAPS.VISUALIZE, visualization);
+    const netGames = Math.min(CATEGORY_CAPS.GAME, games + hintPenalties + guidedSolvePenalties);
+    const netQuiz = Math.min(CATEGORY_CAPS.QUIZ, quizCorrect + quizPenalties);
     const totalGrossPenalties = quizPenalties + hintPenalties + guidedSolvePenalties;
 
     return {
-      theory: cappedTheory,
+      theory: 0,
       visualization: cappedVis,
-      games: cappedGames,
+      games: netGames,
       quiz: netQuiz,
       quizCorrect,
       quizPenalties,
@@ -518,7 +534,7 @@ class PointsManager {
     this.quizAnsweredInSession.clear();
     this.lastActionTimestamps.clear();
     this.state = {
-      version: 4,
+      version: 5,
       totalPoints: 0,
       rewardedItems: {},
       activities: [],

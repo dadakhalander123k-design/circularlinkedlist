@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Sparkles,
   ArrowRight,
-  RotateCcw,
   Trophy,
   BookOpen,
   Gamepad2,
@@ -14,14 +13,17 @@ import {
   TrendingUp,
   Eye,
   Brain,
+  Clock,
+  XCircle,
 } from 'lucide-react';
 import { progressManager } from '../utils/progressManager';
 import { pointsManager, CATEGORY_CAPS } from '../utils/pointsManager';
 import { ModuleRecord, ModuleStatus, UserProgressState, MainViewTab } from '../types/game';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { CompletionCelebrationModal } from './CompletionCelebrationModal';
-import { ResetProgressModal } from './ResetProgressModal';
 import { soundManager } from '../utils/audio';
+import { GAME_LEVELS } from '../data/levels';
+import { QUIZ_QUESTIONS } from './QuizView';
 
 interface MyProgressViewProps {
   onNavigateToTab: (tab: ModuleRecord['targetTab'] | MainViewTab, levelId?: number, chapterId?: string) => void;
@@ -32,7 +34,6 @@ export const MyProgressView: React.FC<MyProgressViewProps> = ({ onNavigateToTab 
   const [progressState, setProgressState] = useState<UserProgressState>(progressManager.getState());
   const [pointsState, setPointsState] = useState(() => pointsManager.getState());
   const [breakdown, setBreakdown] = useState(() => pointsManager.getBreakdown());
-  const [showResetConfirm, setShowResetConfirm] = useState<boolean>(false);
   const [showCertificateModal, setShowCertificateModal] = useState<boolean>(false);
   const [activeFilter, setActiveFilter] = useState<'ALL' | 'FUNDAMENTALS' | 'OPERATIONS' | 'ANALYSIS'>('ALL');
 
@@ -56,6 +57,16 @@ export const MyProgressView: React.FC<MyProgressViewProps> = ({ onNavigateToTab 
   const modules = progressManager.getModules();
   const is100Percent = stats.percentage === 100;
 
+  const studentAnswers = useMemo<Record<number, any>>(() => {
+    try {
+      const stored = localStorage.getItem('hash_quest_quiz_answers_v4') || localStorage.getItem('cll_quiz_answers_v1');
+      if (stored) return JSON.parse(stored);
+    } catch {
+      // fallback
+    }
+    return {};
+  }, [pointsState]);
+
   const filteredModules = activeFilter === 'ALL'
     ? modules
     : activeFilter === 'FUNDAMENTALS'
@@ -64,21 +75,10 @@ export const MyProgressView: React.FC<MyProgressViewProps> = ({ onNavigateToTab 
         ? modules.filter((m) => m.category === 'OPERATIONS')
         : modules.filter((m) => ['ANALYSIS', 'APPLICATIONS', 'COMPLEXITY'].includes(m.category));
 
-  const handleReset = () => {
-    soundManager.playReset();
-    progressManager.resetProgress();
-    pointsManager.reset();
-    setPointsState(pointsManager.getState());
-    setBreakdown(pointsManager.getBreakdown());
-    setShowResetConfirm(false);
-  };
+  const visualizeMax = CATEGORY_CAPS.VISUALIZE; // 20
+  const gameMax = CATEGORY_CAPS.GAME; // 50
+  const quizMax = CATEGORY_CAPS.QUIZ; // 30
 
-  const learnMax = CATEGORY_CAPS.THEORY;
-  const visualizeMax = CATEGORY_CAPS.VISUALIZE;
-  const gameMax = CATEGORY_CAPS.GAME;
-  const quizMax = CATEGORY_CAPS.QUIZ;
-
-  const learnPercent = Math.min(100, Math.max(0, Math.round((breakdown.theory / learnMax) * 100)));
   const visualizePercent = Math.min(100, Math.max(0, Math.round((breakdown.visualization / visualizeMax) * 100)));
   const gamePercent = Math.min(100, Math.max(0, Math.round((breakdown.games / gameMax) * 100)));
   const quizPercent = Math.min(100, Math.max(0, Math.round((breakdown.quiz / quizMax) * 100)));
@@ -144,18 +144,6 @@ export const MyProgressView: React.FC<MyProgressViewProps> = ({ onNavigateToTab 
             Last synced: {new Date(progressState.lastActiveTimestamp).toLocaleDateString()}
           </span>
         </div>
-
-        <button
-          id="btn-reset-progress-dialog"
-          onClick={() => {
-            soundManager.playModalOpen();
-            setShowResetConfirm(true);
-          }}
-          className="text-xs font-medium text-slate-500 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-400 flex items-center gap-1.5 cursor-pointer transition-colors"
-        >
-          <RotateCcw className="w-3.5 h-3.5" />
-          <span>Reset Progress</span>
-        </button>
       </div>
 
       {/* 100% Completion Golden Banner if Completed */}
@@ -289,46 +277,12 @@ export const MyProgressView: React.FC<MyProgressViewProps> = ({ onNavigateToTab 
           </div>
         </div>
 
-        {/* Four Category Cards — Exact Order: 1. Learn, 2. Visualize, 3. Game, 4. Quiz */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-          {/* 1. Learn Card */}
-          <div
-            id="category-card-learn"
-            onClick={() => onNavigateToTab('THEORY', undefined, 'theory-01')}
-            className="bg-slate-50/80 dark:bg-[#070D1A] border border-slate-200/80 dark:border-slate-800/80 hover:border-[#2563EB]/50 dark:hover:border-blue-500/40 rounded-2xl p-4 sm:p-5 flex flex-col justify-between transition-all duration-200 cursor-pointer group shadow-xs dark:shadow-none"
-          >
-            <div>
-              <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-xl bg-blue-100/80 dark:bg-blue-950/70 border border-blue-200 dark:border-blue-500/30 text-[#2563EB] dark:text-blue-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                  <BookOpen className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="text-xs font-semibold text-slate-600 dark:text-slate-300">Learn</div>
-                  <div className="text-base sm:text-lg font-extrabold font-mono text-slate-900 dark:text-white leading-tight">
-                    {breakdown.theory} / {learnMax}
-                  </div>
-                </div>
-              </div>
+        {/* Three Category Cards — Exact Order: 1. Visualize (20), 2. Game (50), 3. Quiz (30) */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+          {/* Hidden Learn Card for selector compatibility */}
+          <div id="category-card-learn" className="hidden" aria-hidden="true" />
 
-              <div className="flex items-center gap-2.5 mt-4">
-                <div className="flex-1 bg-slate-200/80 dark:bg-slate-800/90 rounded-full h-2 overflow-hidden">
-                  <div
-                    className="bg-[#2563EB] dark:bg-blue-500 h-full rounded-full transition-all duration-300"
-                    style={{ width: `${learnPercent}%` }}
-                  />
-                </div>
-                <span className="text-xs font-bold font-mono text-[#2563EB] dark:text-blue-400 shrink-0">
-                  {learnPercent}%
-                </span>
-              </div>
-            </div>
-
-            <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-3">
-              Complete learning modules
-            </p>
-          </div>
-
-          {/* 2. Visualize Card */}
+          {/* 1. Visualize Card (20 pts) */}
           <div
             id="category-card-visualize"
             onClick={() => onNavigateToTab('VIDEO')}
@@ -361,11 +315,11 @@ export const MyProgressView: React.FC<MyProgressViewProps> = ({ onNavigateToTab 
             </div>
 
             <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-3">
-              Complete visualizations & videos
+              2 visualization videos (10 pts each)
             </p>
           </div>
 
-          {/* 3. Game Card */}
+          {/* 2. Game Card (50 pts) */}
           <div
             id="category-card-game"
             onClick={() => onNavigateToTab('GAME', 1)}
@@ -398,11 +352,11 @@ export const MyProgressView: React.FC<MyProgressViewProps> = ({ onNavigateToTab 
             </div>
 
             <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-3">
-              Complete game levels
+              5 game levels (10 pts each, Hint −2, Guided −4)
             </p>
           </div>
 
-          {/* 4. Quiz Card */}
+          {/* 3. Quiz Card (30 pts) */}
           <div
             id="category-card-quiz"
             onClick={() => onNavigateToTab('QUIZ')}
@@ -435,7 +389,7 @@ export const MyProgressView: React.FC<MyProgressViewProps> = ({ onNavigateToTab 
             </div>
 
             <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-3">
-              Answer quiz questions
+              10 quiz questions (+3 correct, −2 wrong, 0 timeout)
             </p>
           </div>
         </div>
@@ -560,6 +514,140 @@ export const MyProgressView: React.FC<MyProgressViewProps> = ({ onNavigateToTab 
         </div>
       </div>
 
+      {/* Game Levels Progress Card */}
+      <div className="bg-white dark:bg-[#0B132B] border border-slate-200 dark:border-slate-800/80 rounded-2xl p-5 mb-8 shadow-xs dark:shadow-xl reveal-on-scroll">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-500/30">
+              <Gamepad2 className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-xs sm:text-sm font-bold font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                GAME LEVELS
+              </div>
+              <h4 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                5 LEVELS ({progressState.levelsCompleted.length} / 5 Completed)
+              </h4>
+            </div>
+          </div>
+
+          <button
+            onClick={() => {
+              soundManager.playNav();
+              onNavigateToTab('GAME');
+            }}
+            className="text-xs sm:text-sm font-bold text-[#2563EB] dark:text-[#3B82F6] hover:text-[#1D4ED8] dark:hover:text-[#3B82F6] flex items-center gap-1.5 self-start sm:self-auto cursor-pointer transition-colors"
+          >
+            <span>Play Game</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+          {GAME_LEVELS.map((lvl) => {
+            const isCompleted = progressState.levelsCompleted.includes(lvl.id);
+            return (
+              <div
+                key={lvl.id}
+                className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 dark:bg-[#070D1A] border border-slate-200/80 dark:border-slate-800"
+              >
+                <div className="flex flex-col pr-2">
+                  <span className="text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200">
+                    {lvl.title}
+                  </span>
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                    +10 pts reward
+                  </span>
+                </div>
+                {isCompleted ? (
+                  <span className="inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-emerald-600 dark:text-emerald-400 shrink-0">
+                    <Check className="w-4 h-4 stroke-[2.5]" /> Completed
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 text-xs sm:text-sm text-slate-400 shrink-0">
+                    <Circle className="w-3.5 h-3.5" /> Not completed
+                  </span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Quiz Questions Progress Card */}
+      <div className="bg-white dark:bg-[#0B132B] border border-slate-200 dark:border-slate-800/80 rounded-2xl p-5 mb-8 shadow-xs dark:shadow-xl reveal-on-scroll">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-500/30">
+              <Brain className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-xs sm:text-sm font-bold font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                QUIZ ASSESSMENT
+              </div>
+              <h4 className="text-lg sm:text-xl font-bold text-slate-900 dark:text-white">
+                10 QUESTIONS ({Object.keys(studentAnswers).length} / 10 Evaluated)
+              </h4>
+            </div>
+          </div>
+
+          <button
+            onClick={() => {
+              soundManager.playNav();
+              onNavigateToTab('QUIZ');
+            }}
+            className="text-xs sm:text-sm font-bold text-[#2563EB] dark:text-[#3B82F6] hover:text-[#1D4ED8] dark:hover:text-[#3B82F6] flex items-center gap-1.5 self-start sm:self-auto cursor-pointer transition-colors"
+          >
+            <span>Open Quiz</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+          {QUIZ_QUESTIONS.map((q, idx) => {
+            const ans = studentAnswers[q.id];
+            const isAnswered = ans !== undefined;
+            const isTimeout = ans?.isTimeout;
+            const isCorrect = ans?.isCorrect;
+
+            return (
+              <div
+                key={q.id}
+                className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50 dark:bg-[#070D1A] border border-slate-200/80 dark:border-slate-800"
+              >
+                <div className="flex flex-col pr-2 min-w-0">
+                  <span className="text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200 truncate">
+                    Q{idx + 1}: {q.question}
+                  </span>
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                    {q.techniqueCode || 'CLL Concept'}
+                  </span>
+                </div>
+                {isAnswered ? (
+                  isTimeout ? (
+                    <span className="inline-flex items-center gap-1 text-xs font-bold text-amber-600 dark:text-amber-400 shrink-0">
+                      <Clock className="w-3.5 h-3.5" /> Timed Out (0 pts)
+                    </span>
+                  ) : isCorrect ? (
+                    <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-600 dark:text-emerald-400 shrink-0">
+                      <Check className="w-3.5 h-3.5 stroke-[2.5]" /> +3 pts Correct
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 text-xs font-bold text-rose-600 dark:text-rose-400 shrink-0">
+                      <XCircle className="w-3.5 h-3.5" /> −2 pts Wrong
+                    </span>
+                  )
+                ) : (
+                  <span className="inline-flex items-center gap-1 text-xs text-slate-400 shrink-0">
+                    <Circle className="w-3.5 h-3.5" /> Unanswered
+                  </span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Filter Tabs */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 dark:border-blue-500/20 pb-3 mb-6">
         <div className="flex items-center gap-2 overflow-x-auto py-1">
@@ -667,13 +755,6 @@ export const MyProgressView: React.FC<MyProgressViewProps> = ({ onNavigateToTab 
           );
         })}
       </div>
-
-      {/* Centered Confirmation Modal for Reset */}
-      <ResetProgressModal
-        isOpen={showResetConfirm}
-        onClose={() => setShowResetConfirm(false)}
-        onConfirm={handleReset}
-      />
 
       {/* 100% Completion Certificate Modal */}
       <CompletionCelebrationModal
