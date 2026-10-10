@@ -572,7 +572,7 @@ export const QuizView: React.FC<QuizViewProps> = ({
     handleTimeoutRef.current = handleTimeout;
   });
 
-  const QUESTION_TIME_LIMIT = 30;
+  const QUESTION_TIME_LIMIT = 20;
   const [timeLeft, setTimeLeft] = useState<number>(QUESTION_TIME_LIMIT);
 
   // Handle starting the quiz countdown
