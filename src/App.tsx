@@ -217,9 +217,18 @@ export default function App() {
     };
     window.addEventListener('cll_reset_progress', handleGlobalReset);
 
+    const handleUserChanged = () => {
+      syncProgress();
+      setCurrentLevelIndex(0);
+      setGameViewMode('SELECTION');
+      initLevel(0);
+    };
+    window.addEventListener('cll_user_changed', handleUserChanged);
+
     return () => {
       unsubscribe();
       window.removeEventListener('cll_reset_progress', handleGlobalReset);
+      window.removeEventListener('cll_user_changed', handleUserChanged);
     };
   }, []);
 
